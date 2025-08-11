@@ -41,7 +41,6 @@ module.exports = {
     // 범위(scope)는 소문자, 알파벳, 숫자, 하이픈, 언더스코어만 허용
     'scope-case': [2, 'always', 'lower-case'],
 
-    // 범위는 옵션이지만 있으면 형식 맞춰야 함
-    'scope-empty': [2, 'never'],
+    'scope-empty': [0], // scope 비필수로 설정 (off)
   },
 }
