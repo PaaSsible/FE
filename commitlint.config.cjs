@@ -1,6 +1,18 @@
 module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
+    // --- 예시 커밋 메시지 ---
+    // feat(auth): 로그인 기능 구현
+    // fix(api): 사용자 데이터 로딩 오류 수정
+    // docs(readme): README 오타 수정
+    // style: 코드 포맷팅 적용
+    // refactor(cart): 장바구니 모듈 리팩토링
+    // perf: 쿼리 성능 개선
+    // test(user): 회원가입 테스트 추가
+    // chore: 패키지 버전 업데이트
+    // ci: GitHub Actions 워크플로우 수정
+    // build: Webpack 설정 변경
+
     // 타입은 아래 값만 허용 (feat, fix, docs, style, refactor, perf, test, chore)
     'type-enum': [
       2,
