@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type JSX } from 'react'
 
 import { Button } from './Button'
 import './header.css'
@@ -14,7 +14,7 @@ export interface HeaderProps {
   onCreateAccount?: () => void
 }
 
-export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps) => (
+export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps): JSX.Element => (
   <header>
     <div className="storybook-header">
       <div>
