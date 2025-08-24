@@ -29,6 +29,13 @@ export default tseslint.config(
         react: {
           version: 'detect', // React 버전 자동 감지
         },
+        'import/resolver': {
+          // tsconfig paths와 alias를 참조
+          typescript: {
+            alwaysTryTypes: true,
+            project: './tsconfig.json',
+          },
+        },
       },
       languageOptions: {
         ecmaVersion: 2020, // 최신 JS 문법 지원
