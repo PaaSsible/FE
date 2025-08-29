@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: contest-18/frontend:fe-{BUILD_DATE_TIME} # 파이프라인에서 치환
+          image: jimin980915/contest-18-image-frontend:fe-{BUILD_DATE_TIME}
           imagePullPolicy: Always
           ports:
             - containerPort: 80
