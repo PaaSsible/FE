@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { userSchema } from '../user/user.schema'
+import { userSchema } from '../user/user.schemas'
 
 export const stackSchema = z.object({ id: z.bigint(), name: z.string() })
 
