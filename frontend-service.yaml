@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: frontend-service
+---
 # frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -25,7 +30,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: frontend-svc
   namespace: frontend-service
 spec:
   selector:
