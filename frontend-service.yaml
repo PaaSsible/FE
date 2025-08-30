@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: paasSible
+  name: paassible
 ---
 # frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
-  namespace: paasSible
+  namespace: paassible
   labels:
     app: frontend
 spec:
@@ -33,7 +33,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend-svc
-  namespace: paasSible
+  namespace: paassible
 spec:
   selector:
     app: frontend
@@ -48,7 +48,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontend-ingress
-  namespace: paasSible
+  namespace: paassible
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: / # SPA index.html로 포워딩
 spec:
