@@ -14,7 +14,6 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  base: '/frontend/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
