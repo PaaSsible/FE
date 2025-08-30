@@ -1,14 +1,16 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: frontend-service
+  name: paasSible
 ---
 # frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
-  namespace: frontend-service
+  namespace: paasSible
+  labels:
+    app: frontend
 spec:
   replicas: 2
   selector:
@@ -21,7 +23,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: jimin980915/contest-18-image-frontend:fe-{BUILD_DATE_TIME}
+          image: jimin980915/contest-18-image-frontend:fe-{BUILD_DATE_TIME} # CI/CD에서 치환
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -31,7 +33,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend-svc
-  namespace: frontend-service
+  namespace: paasSible
 spec:
   selector:
     app: frontend
@@ -41,12 +43,14 @@ spec:
       targetPort: 80
   type: ClusterIP
 ---
-# frontend-ingress.yaml
+# frontend-ingress.yaml (SPA rewrite 포함)
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontend-ingress
-  namespace: frontend-service
+  namespace: paasSible
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / # SPA index.html로 포워딩
 spec:
   ingressClassName: nginx
   rules:
