@@ -47,6 +47,8 @@ kind: Ingress
 metadata:
   name: frontend-ingress
   namespace: frontend-service
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
