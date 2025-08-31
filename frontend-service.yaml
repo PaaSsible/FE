@@ -1,65 +1,71 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: paassible
+  name: frontend
 ---
 # frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
-  namespace: paassible
+  name: frontend-app-deployment # Deployment 이름 구분
+  namespace: frontend
   labels:
-    app: frontend
+    app: frontend-app # Deployment 라벨
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: frontend
+      app: frontend-app # Pod 선택용 selector
   template:
     metadata:
       labels:
-        app: frontend
+        app: frontend-app # Pod 라벨
     spec:
       containers:
-        - name: frontend
-          image: jimin980915/contest-18-image-frontend:fe-{BUILD_DATE_TIME} # CI/CD에서 치환
+        - name: frontend-container
+          image: jimin980915/contest-18-image-frontend:fe-{BUILD_DATE_TIME} # CI/CD 치환
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+          resources:
+            limits:
+              cpu: '500m'
+              memory: '512Mi'
+            requests:
+              cpu: '200m'
+              memory: '256Mi'
 ---
 # frontend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-svc
-  namespace: paassible
+  name: frontend-app-svc # Service 이름 구분
+  namespace: frontend
 spec:
   selector:
-    app: frontend
+    app: frontend-app # Deployment Pod 라벨과 매칭
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
   type: ClusterIP
 ---
-# frontend-ingress.yaml (SPA rewrite 포함)
+# frontend-ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: frontend-ingress
-  namespace: paassible
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: / # SPA index.html로 포워딩
+  name: frontend-app-ingress # Ingress 이름 구분
+  namespace: frontend
 spec:
   ingressClassName: nginx
   rules:
     - http:
         paths:
-          - path: /frontend
+          # SPA 루트 경로
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: frontend-svc
+                name: frontend-app-svc
                 port:
                   number: 80
