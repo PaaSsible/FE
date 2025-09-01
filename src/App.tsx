@@ -21,9 +21,7 @@ function App(): JSX.Element {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more this is tesssstr 나는 자동배포테스트s
-      </p>
+      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
     </>
   )
 }
