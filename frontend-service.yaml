@@ -59,7 +59,8 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - http:
+    - hosts: paassible.kro.kr
+      http:
         paths:
           # SPA 루트 경로
           - path: /
