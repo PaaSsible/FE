@@ -22,7 +22,7 @@ function App(): JSX.Element {
         </p>
       </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more this is tesssstr 나는 자동배포
+        Click on the Vite and React logos to learn more this is tesssstr 나는 자동배포ㄴ
       </p>
     </>
   )
