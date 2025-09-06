@@ -7,38 +7,29 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardVariable.woff2') format('woff2');
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/Roboto-VariableFont_wdth,wght.ttf') format('ttf');
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+@theme {
+  --font-roboto: 'Roboto', sans-serif;
+
+  --text-roboto-medium: 0.875rem;
+  --text-roboto-medium--leading: 1.25rem;
+  --text-roboto-medium--font-weight: 500;
+  --text-roboto-medium--letter-spacing: 0.0156rem;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+@theme {
+  --color-google-button: #f2f2f2;
 }
