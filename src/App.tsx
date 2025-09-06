@@ -1,28 +1,20 @@
-import { useState, type JSX } from 'react'
-
-import reactLogo from '@/assets/react.svg'
-
+import { type JSX } from 'react'
 import '@/styles/App.css'
+import { BrowserRouter, Route, Routes } from 'react-router'
+
+import AuthCallBackPage from './pages/AuthCallBackPage'
+import HomePage from './pages/HomePage'
+import StartPage from './pages/StartPage'
 
 function App(): JSX.Element {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/start" element={<StartPage />} />
+        <Route path="/login/oauth2/code/google" element={<AuthCallBackPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

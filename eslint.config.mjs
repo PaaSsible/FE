@@ -2,8 +2,6 @@
 // Storybook, React, TypeScript, Prettier 환경을 통합한 ESLint 설정
 import storybook from 'eslint-plugin-storybook'
 import react from 'eslint-plugin-react'
-import js from '@eslint/js'
-import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
@@ -19,8 +17,7 @@ export default tseslint.config(
     {
       files: ['**/*.{ts,tsx}'], // TS/TSX 파일만 적용
       extends: [
-        js.configs.recommended, // JS 기본 룰
-        tseslint.configs.recommended, // TS 기본 룰
+        ...tseslint.configs.recommendedTypeChecked,
         reactHooks.configs['recommended-latest'], // React Hooks 룰
         reactRefresh.configs.vite, // Vite + React Refresh 룰
         react.configs.flat.recommended, // React JSX/Props 관련 룰
@@ -38,8 +35,10 @@ export default tseslint.config(
         },
       },
       languageOptions: {
-        ecmaVersion: 2020, // 최신 JS 문법 지원
-        globals: globals.browser, // 브라우저 전역 변수 허용 (window, document 등)
+        parserOptions: {
+          project: ['./tsconfig.node.json', './tsconfig.app.json'],
+          tsconfigRootDir: import.meta.dirname,
+        },
       },
       plugins: {
         import: importPlugin, // import 정렬/검사 플러그인
