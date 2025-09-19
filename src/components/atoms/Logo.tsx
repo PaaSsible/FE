@@ -1,19 +1,17 @@
 import React from 'react'
+import logo from '../../assets/logo.svg'
 
 interface LogoProps {
-  width?: number
   height?: number
   onClick?: () => void
 }
 
-const Logo: React.FC<LogoProps> = ({ width = 72, height = 58, onClick }) => {
+const Logo: React.FC<LogoProps> = ({ onClick }) => {
   return (
     <img
-      src="../../assets/logo.svg"
+      src={logo}
       alt="로컬잇 로고"
-      width={width}
-      height={height}
-      style={{ cursor: onClick ? 'pointer' : 'default' }}
+      style={{ height: 'auto', width: '72px', cursor: onClick ? 'pointer' : 'default' }}
       onClick={onClick}
     />
   )
