@@ -14,7 +14,7 @@ import {
  */
 export const getBoardListSchema = {
   query: z.object({
-    status: z.enum(boardStatusArray),
+    status: z.enum(boardStatusArray).optional(),
     keyword: z.string().optional(),
   }),
   response: z.object({
