@@ -3,7 +3,7 @@ import z from 'zod'
 import {
   taskStatusChartDataSchema,
   weeklyGoalAchievementSchema,
-} from '@/types/components/chart.schemas'
+} from '@/types/components/chart/chart.schemas'
 import {
   boardSchema,
   commentSchema,

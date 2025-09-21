@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { taskSchema } from '../entities/board/board.entities.schemas'
+import { taskSchema } from '@/types/entities/board/board.entities.schemas'
 
 /**
  * @name 업무상태차트
