@@ -1,6 +1,9 @@
 import z from 'zod'
 
-import { taskStatusChartDataSchema, weeklyGoalAchievementSchema } from '@/types/components/chart'
+import {
+  taskStatusChartDataSchema,
+  weeklyGoalAchievementSchema,
+} from '@/types/components/chart.schemas'
 import {
   boardSchema,
   commentSchema,
