@@ -42,10 +42,21 @@ export const taskSchema = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string().nullable(),
-  dueDate: z.preprocess(
-    (val) => (val instanceof Date ? val : val ? new Date(val as string) : null),
-    z.date().nullable(),
-  ),
+  dueDate: z.string(),
   status: z.enum(taskStatusArray),
+  boardId: boardSchema.shape.id,
+  assignee: z.array(z.object({ userId: userSchema.shape.id, name: userSchema.shape.nickname })),
+  positions: z.array(z.string()), // '백엔드', '프론트엔드', '디자이너' ...
 })
+
+export const commentSchema = z.object({
+  id: z.number(),
+  taskId: taskSchema.shape.id,
+  userId: userSchema.shape.id,
+  userName: userSchema.shape.nickname,
+  profileImageUrl: userSchema.shape.profileImageUrl,
+  comment: z.string(),
+  createdAt: z.string(),
+})
+
 export const meetingSchema = z.object({ id: z.number(), title: z.string(), content: z.string() })

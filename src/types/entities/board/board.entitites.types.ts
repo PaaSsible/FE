@@ -5,6 +5,7 @@ import type {
   boardMemberSchema,
   boardSchema,
   boardStatusArray,
+  commentSchema,
   detailTypeArray,
   linkSchema,
   meetingSchema,
@@ -14,10 +15,11 @@ import type {
 
 export type BoardStatus = z.infer<typeof boardStatusArray>
 export type ActivityType = z.infer<typeof activityTypeArray>
-export type detailType = z.infer<typeof detailTypeArray>
+export type DetailType = z.infer<typeof detailTypeArray>
 export type Board = z.infer<typeof boardSchema>
 export type BoardMember = z.infer<typeof boardMemberSchema>
 export type Link = z.infer<typeof linkSchema>
 export type TaskStatus = z.infer<typeof taskStatusArray>
 export type Task = z.infer<typeof taskSchema>
+export type Comment = z.infer<typeof commentSchema>
 export type Meeting = z.infer<typeof meetingSchema>
