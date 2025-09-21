@@ -21,6 +21,10 @@ export const taskStatusChartDataSchema = z.object({
   tasks: z.array(taskStatusChartItemSchema),
 })
 
+/**
+ * @name 주간목표달성률
+ * @description 주간 목표 달성률 스키마
+ */
 export const weeklyGoalAchievementSchema = z.object({
   weeklyGoalRate: z.number(),
 })
