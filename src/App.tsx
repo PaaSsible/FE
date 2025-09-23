@@ -24,35 +24,39 @@ import ProjectBoardPage from './pages/projects/ProjectBoardPage'
 import ProjectStatusPage from './pages/projects/ProjectStatusPage'
 import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
 import ProjectChatPage from './pages/projects/ProjectChatPage'
+import Layout from './components/common/Layout'
 
 function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         {/* Public */}
-        <Route path="/" element={<HomePage />} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login/oauth2/code/google" element={<AuthCallBackPage />} />
+
+          {/* Boards */}
+          <Route path="/boards" element={<BoardsPage />} />
+          <Route path="/boards/:category" element={<BoardsPage />} />
+          <Route path="/boards/:category/new" element={<BoardNewPage />} />
+          <Route path="/boards/:category/:postId" element={<BoardDetailPage />} />
+          <Route path="/boards/:category/:postId/edit" element={<BoardEditPage />} />
+          <Route path="/boards/:category/:postId/applicants" element={<ApplicantsPage />} />
+          <Route path="/boards/mine" element={<MyBoardsPage />} />
+
+          {/* Projects */}
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/projects/new" element={<ProjectNewPage />} />
+          <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
+          <Route path="/projects/:projectId/edit" element={<ProjectEditPage />} />
+          <Route path="/projects/:projectId/board" element={<ProjectBoardPage />} />
+          <Route path="/projects/:projectId/status" element={<ProjectStatusPage />} />
+          <Route path="/projects/:projectId/meeting" element={<ProjectMeetingPage />} />
+          <Route path="/projects/:projectId/meeting/:roomId" element={<ProjectMeetingPage />} />
+          <Route path="/projects/:projectId/chat" element={<ProjectChatPage />} />
+        </Route>
+
         <Route path="/start" element={<StartPage />} />
-        <Route path="/login/oauth2/code/google" element={<AuthCallBackPage />} />
-
-        {/* Boards */}
-        <Route path="/boards" element={<BoardsPage />} />
-        <Route path="/boards/:category" element={<BoardsPage />} />
-        <Route path="/boards/:category/new" element={<BoardNewPage />} />
-        <Route path="/boards/:category/:postId" element={<BoardDetailPage />} />
-        <Route path="/boards/:category/:postId/edit" element={<BoardEditPage />} />
-        <Route path="/boards/:category/:postId/applicants" element={<ApplicantsPage />} />
-        <Route path="/boards/mine" element={<MyBoardsPage />} />
-
-        {/* Projects */}
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/projects/new" element={<ProjectNewPage />} />
-        <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
-        <Route path="/projects/:projectId/edit" element={<ProjectEditPage />} />
-        <Route path="/projects/:projectId/board" element={<ProjectBoardPage />} />
-        <Route path="/projects/:projectId/status" element={<ProjectStatusPage />} />
-        <Route path="/projects/:projectId/meeting" element={<ProjectMeetingPage />} />
-        <Route path="/projects/:projectId/meeting/:roomId" element={<ProjectMeetingPage />} />
-        <Route path="/projects/:projectId/chat" element={<ProjectChatPage />} />
       </Routes>
     </BrowserRouter>
   )
