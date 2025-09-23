@@ -7,7 +7,7 @@ interface ChipProps {
   onClick?: () => void
 }
 
-const Chip: React.FC<ChipProps> = ({ label, selected = false, onClick }) => {
+const ChipComponent: React.FC<ChipProps> = ({ label, selected = false, onClick }) => {
   return (
     <button
       type="button"
@@ -23,5 +23,7 @@ const Chip: React.FC<ChipProps> = ({ label, selected = false, onClick }) => {
     </button>
   )
 }
+
+export const Chip = React.memo(ChipComponent)
 
 export default Chip

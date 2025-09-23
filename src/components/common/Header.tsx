@@ -7,8 +7,10 @@ interface HeaderProps {
   isLoggedIn: boolean
 }
 
+type MenuType = '팀원 모집하기' | '프로젝트 대시보드' | '마이페이지'
+
 const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
-  const [activeMenu, setActiveMenu] = useState('')
+  const [activeMenu, setActiveMenu] = useState<MenuType | ''>('')
 
   return (
     <header className="bg-gray-0 flex h-[70px] w-full items-center justify-between border-b px-12">
@@ -16,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
 
       {isLoggedIn ? (
         <nav className="flex items-center gap-[35px]">
-          {['팀원 모집하기', '프로젝트 대시보드', '마이페이지'].map((menu) => (
+          {(['팀원 모집하기', '프로젝트 대시보드', '마이페이지'] as MenuType[]).map((menu) => (
             <MenuItem
               key={menu}
               label={menu}
