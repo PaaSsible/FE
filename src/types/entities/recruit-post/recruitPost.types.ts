@@ -1,11 +1,13 @@
+import type z from 'zod'
+
 import type {
-  applicationSchema,
-  applicationStatusArray,
-  commentSchema,
-  positionSchema,
-  recruitPostSchema,
   stackSchema,
-} from './recruitPost.schema'
+  positionSchema,
+  commentSchema,
+  applicationStatusArray,
+  applicationSchema,
+  recruitPostSchema,
+} from './recruitPost.schemas'
 
 export type Stack = z.infer<typeof stackSchema>
 export type Position = z.infer<typeof positionSchema>
