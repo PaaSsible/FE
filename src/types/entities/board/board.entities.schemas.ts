@@ -18,7 +18,7 @@ export const detailTypeArray = [
   'STUDY_FE',
   'STUDY_BE',
   'STUDY_ETC',
-]
+] as const
 export const boardSchema = z.object({
   id: z.number(),
   name: z.string(),
