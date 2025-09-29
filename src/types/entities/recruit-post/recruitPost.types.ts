@@ -1,15 +1,21 @@
+import type z from 'zod'
+
 import type {
-  applicationSchema,
-  applicationStatusArray,
-  commentSchema,
-  positionSchema,
-  recruitPostSchema,
   stackSchema,
-} from './recruitPost.schema'
+  positionSchema,
+  applicationStatusArray,
+  applicationSchema,
+  recruitPostSchema,
+  projectDurationSchema,
+  applicantSchema,
+  recruitCommentSchema,
+} from './recruitPost.schemas'
 
 export type Stack = z.infer<typeof stackSchema>
 export type Position = z.infer<typeof positionSchema>
-export type Comment = z.infer<typeof commentSchema>
+export type ProjectDuration = z.infer<typeof projectDurationSchema>
+export type Comment = z.infer<typeof recruitCommentSchema>
 export type ApplicationStatus = (typeof applicationStatusArray)[number]
 export type Application = z.infer<typeof applicationSchema>
+export type Applicant = z.infer<typeof applicantSchema>
 export type RecruitPost = z.infer<typeof recruitPostSchema>
