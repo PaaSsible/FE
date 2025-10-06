@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
   const [activeMenu, setActiveMenu] = useState<MenuType | ''>('')
 
   return (
-    <header className="bg-gray-0 flex h-[70px] w-full items-center justify-between border-b px-12">
+    <header className="bg-gray-0 relative z-10 flex h-[70px] w-full items-center justify-between px-12 shadow-[0_4px_20px_0_rgba(242,242,242,1)]">
       <Logo onClick={() => (window.location.href = '/')} />
 
       {isLoggedIn ? (
