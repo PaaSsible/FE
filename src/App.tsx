@@ -25,16 +25,22 @@ import ProjectStatusPage from './pages/projects/ProjectStatusPage'
 import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
 import ProjectChatPage from './pages/projects/ProjectChatPage'
 import Layout from './components/common/Layout'
+import LandingPage from './pages/LandingPage'
+import TermsPage from './pages/policy/TermsPage'
+import PrivacyPage from './pages/policy/PrivacyPage'
 
 function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         {/* Public */}
-        <Route element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login/oauth2/code/google" element={<AuthCallBackPage />} />
+        <Route element={<Layout isLoggedIn={false} />}>
+          <Route path="/" element={<LandingPage />} />
+        </Route>
 
+        <Route element={<Layout isLoggedIn={true} />}>
+          <Route path="/policy/privacy" element={<PrivacyPage />}></Route>
+          <Route path="/policy/terms" element={<TermsPage />}></Route>
           {/* Boards */}
           <Route path="/boards" element={<BoardsPage />} />
           <Route path="/boards/:category" element={<BoardsPage />} />
@@ -57,6 +63,7 @@ function App(): JSX.Element {
         </Route>
 
         <Route path="/start" element={<StartPage />} />
+        <Route path="/login/oauth2/code/google" element={<AuthCallBackPage />} />
       </Routes>
     </BrowserRouter>
   )
