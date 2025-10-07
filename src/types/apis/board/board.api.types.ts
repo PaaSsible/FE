@@ -2,6 +2,7 @@ import z from 'zod'
 
 import type {
   deleteBoardMemberSchema,
+  deleteBoardSchema,
   getBoardDetailSchema,
   getBoardListSchema,
   getBoardMemberSchema,
@@ -22,9 +23,9 @@ export type GetBoardList = {
 }
 
 /**
- * @name 보드수정
- * @method PUT
- * @path `/boards/{boardId}`
+ * @name 보드생성
+ * @method Post
+ * @path `/boards`
  * @description 보드 수정하는 API의 타입
  */
 export type PostBoard = {
@@ -33,14 +34,26 @@ export type PostBoard = {
 }
 
 /**
+ * @name 보드수정
+ * @method Put
+ * @path `/boards/{boardId}`
+ * @description 보드 수정하는 API의 타입
+ */
+export type PutBoard = {
+  Path: z.infer<typeof putBoardSchema.path>
+  Body: z.infer<typeof putBoardSchema.body>
+  Response: z.infer<typeof putBoardSchema.response>
+}
+
+/**
  * @name 보드삭제
  * @method DELETE
  * @path `/boards/{boardId}`
  * @description 보드 삭제하는 API의 타입
  */
-export type PutBoard = {
-  Path: z.infer<typeof putBoardSchema.path>
-  Body: z.infer<typeof putBoardSchema.body>
+export type DeleteBoard = {
+  Path: z.infer<typeof deleteBoardSchema.path>
+  Response: z.infer<typeof deleteBoardSchema.response>
 }
 
 /**
@@ -49,7 +62,7 @@ export type PutBoard = {
  * @path `/boards/{boardId}`
  * @description 보드 상세 정보를 조회하는 API의 타입
  */
-export type GetBoard = {
+export type GetBoardDetail = {
   Path: z.infer<typeof getBoardDetailSchema.path>
   Response: z.infer<typeof getBoardDetailSchema.response>
 }
@@ -60,7 +73,7 @@ export type GetBoard = {
  * @path `/boards/{boardId}/members`
  * @description 보드 멤버를 조회하는 API의 스키마
  */
-export type GetBoardMemeber = {
+export type GetBoardMember = {
   Path: z.infer<typeof getBoardMemberSchema.path>
   Response: z.infer<typeof getBoardMemberSchema.response>
 }

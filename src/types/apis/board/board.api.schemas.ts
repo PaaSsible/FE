@@ -38,13 +38,13 @@ export const postBoardSchema = {
     activityType: true,
     detailType: true,
   }),
-  response: {
+  response: z.object({
     success: z.boolean(),
     message: z.string(),
     data: z.string().nullable(),
     code: z.string(),
     errors: z.string().nullable(),
-  },
+  }),
 }
 
 /**
@@ -62,13 +62,13 @@ export const putBoardSchema = {
     activityType: true,
     detailType: true,
   }),
-  response: {
+  response: z.object({
     success: z.boolean(),
     message: z.string(),
     data: z.string().nullable(),
     code: z.string(),
     errors: z.string().nullable(),
-  },
+  }),
 }
 
 /**
@@ -81,13 +81,13 @@ export const deleteBoardSchema = {
   path: z.object({
     boardId: boardSchema.shape.id,
   }),
-  response: {
+  response: z.object({
     success: z.boolean(),
     message: z.string(),
     data: z.string().nullable(),
     code: z.string(),
     errors: z.string().nullable(),
-  },
+  }),
 }
 
 /**
@@ -100,7 +100,7 @@ export const getBoardDetailSchema = {
   path: z.object({
     boardId: boardSchema.shape.id,
   }),
-  response: {},
+  response: z.object({}),
 }
 
 /**
@@ -113,13 +113,13 @@ export const getBoardMemberSchema = {
   path: z.object({
     boardId: boardSchema.shape.id,
   }),
-  response: {
+  response: z.object({
     success: z.boolean(),
     message: z.string(),
     data: z.array(boardMemberSchema),
     code: z.string(),
     errors: z.string().nullable(),
-  },
+  }),
 }
 
 /**
