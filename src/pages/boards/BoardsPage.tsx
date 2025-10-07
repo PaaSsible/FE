@@ -95,7 +95,9 @@ const BoardsPage: React.FC = () => {
             />
           ))}
         </div>
-        <Button variant="secondary">내 모집글 관리</Button>
+        <Button variant="secondary" size="big" className="!text-b4-medium !h-[40px] !border">
+          내 모집글 관리
+        </Button>
       </div>
 
       {/* 필터 Chip 리스트 */}
