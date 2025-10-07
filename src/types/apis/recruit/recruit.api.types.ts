@@ -7,6 +7,7 @@ import type {
   getPositionsSchema,
   getRecruitApplicantsSchema,
   getRecruitCommentsSchema,
+  getRecruitDetailSchema,
   getRecruitsSchema,
   getStacksSchema,
   postRecruitApplicantAcceptSchema,
@@ -18,11 +19,11 @@ import type {
 } from './recruit.api.schemas'
 
 export type GetPositions = {
-  Response: z.infer<typeof getPositionsSchema>
+  Response: z.infer<typeof getPositionsSchema.response>
 }
 
 export type GetStacks = {
-  Response: z.infer<typeof getStacksSchema>
+  Response: z.infer<typeof getStacksSchema.response>
 }
 
 export type PostRecruit = {
@@ -44,8 +45,8 @@ export type PutRecruit = {
 }
 
 export type GetRecruitDetail = {
-  Path: z.infer<typeof getRecruitsSchema.query>
-  Response: z.infer<typeof getRecruitsSchema.response>
+  Path: z.infer<typeof getRecruitDetailSchema.path>
+  Response: z.infer<typeof getRecruitDetailSchema.response>
 }
 
 export type DeleteRecruit = {
@@ -83,7 +84,7 @@ export type PutRecruitComment = {
   Body: z.infer<typeof putRecruitCommentSchema.body>
 }
 
-export type deleteRecruitComment = {
+export type DeleteRecruitComment = {
   Path: z.infer<typeof deleteRecruitCommentSchema.path>
   Response: z.infer<typeof deleteRecruitCommentSchema.response>
 }

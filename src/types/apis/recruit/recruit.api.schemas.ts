@@ -13,6 +13,8 @@ import {
 
 /**
  * @name 포지션목록조회
+ * @method GET
+ * @path `/recruits/positions`
  */
 export const getPositionsSchema = {
   response: z.object({
@@ -26,6 +28,8 @@ export const getPositionsSchema = {
 
 /**
  * @name 기술스택목록조회
+ * @method GET
+ * @path `/recruits/stacks`
  */
 export const getStacksSchema = {
   response: z.object({
@@ -39,6 +43,7 @@ export const getStacksSchema = {
 
 /**
  * @name 모집공고생성
+ * @path `/recruits`
  */
 export const postRecruitSchema = {
   body: recruitPostSchema
@@ -64,6 +69,7 @@ export const postRecruitSchema = {
 export const sortArray = ['RECENT', 'DEADLINE', 'POPULAR'] as const
 /**
  * @name 모집공고목록조회
+ * @path `/recruits`
  */
 export const getRecruitsSchema = {
   query: z.object({
@@ -117,6 +123,7 @@ export const getRecruitsSchema = {
 }
 /**
  * @name 모집공고수정
+ * @path `/recruits/{postId}`
  */
 export const putRecruitSchema = {
   path: z.object({
@@ -144,6 +151,7 @@ export const putRecruitSchema = {
 
 /**
  * @name 모집공고상세조회
+ * @path `/recruits/{postId}`
  */
 export const getRecruitDetailSchema = {
   path: z.object({
@@ -159,7 +167,8 @@ export const getRecruitDetailSchema = {
 }
 
 /**
-@name 모집공고삭제
+ * @name 모집공고삭제
+ * @path `/recruits/{postId}`
  */
 export const deleteRecruitSchema = {
   path: z.object({
@@ -175,7 +184,8 @@ export const deleteRecruitSchema = {
 }
 
 /**
-@name 지원자목록조회
+ * @name 지원자목록조회
+ * @path `/recruits/{postId}/applications`
  */
 export const getRecruitApplicantsSchema = {
   path: z.object({
@@ -187,7 +197,8 @@ export const getRecruitApplicantsSchema = {
 }
 
 /**
-@name 지원수락
+ *@name 지원수락
+ *@path `/recruits/{postId}/applications/{applicationId}/accept`
  */
 export const postRecruitApplicantAcceptSchema = {
   path: z.object({
@@ -201,7 +212,8 @@ export const postRecruitApplicantAcceptSchema = {
 }
 
 /**
-@name 나의모집글조회
+ *@name 나의모집글조회
+ *@path `/recruits/me/posts`
  */
 export const getMyRecruitSchema = {
   query: z.object({ page: z.int(), size: z.int() }),
@@ -209,7 +221,8 @@ export const getMyRecruitSchema = {
 }
 
 /**
-@name 댓글작성
+ *@name 댓글작성
+ *@path `/recruits/{postId}/comments`
  */
 export const postRecruitCommentSchema = {
   path: z.object({
@@ -222,7 +235,8 @@ export const postRecruitCommentSchema = {
 }
 
 /**
-@name 댓글조회
+ *@name 댓글조회
+ *@path `/recruits/{postId}/comments`
  */
 export const getRecruitCommentsSchema = {
   path: z.object({
@@ -241,7 +255,8 @@ export const getRecruitCommentsSchema = {
 }
 
 /**
-@name 댓글수정
+ *@name 댓글수정
+ *@path `/recruits/comments/{commentId}`
  */
 export const putRecruitCommentSchema = {
   path: z.object({
@@ -253,7 +268,8 @@ export const putRecruitCommentSchema = {
 }
 
 /**
-@name 댓글삭제
+ *@name 댓글삭제
+ *@path `/recruits/comments/{commentId}`
  */
 export const deleteRecruitCommentSchema = {
   path: z.object({
