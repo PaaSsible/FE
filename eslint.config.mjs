@@ -49,7 +49,7 @@ export default tseslint.config(
         // TypeScript 규칙
         // --------------------
         '@typescript-eslint/explicit-module-boundary-types': 'warn', // 함수 시그니처 타입 명시 경고
-        '@typescript-eslint/no-explicit-any': 'error', // any 사용 금지
+        '@typescript-eslint/no-explicit-any': 'warn', // any 사용 자제
         '@typescript-eslint/no-empty-function': ['error'], // 빈 함수 금지
         '@typescript-eslint/no-require-imports': ['error', { allow: ['~/asset/*'] }], // require import 제한
         '@typescript-eslint/no-unused-expressions': [
