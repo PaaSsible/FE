@@ -44,7 +44,7 @@ function App(): JSX.Element {
           {/* Boards */}
           <Route path="/boards" element={<BoardsPage />} />
           <Route path="/boards/:category" element={<BoardsPage />} />
-          <Route path="/boards/:category/new" element={<BoardNewPage />} />
+          <Route path="/boards/new" element={<BoardNewPage />} />
           <Route path="/boards/:category/:postId" element={<BoardDetailPage />} />
           <Route path="/boards/:category/:postId/edit" element={<BoardEditPage />} />
           <Route path="/boards/:category/:postId/applicants" element={<ApplicantsPage />} />
