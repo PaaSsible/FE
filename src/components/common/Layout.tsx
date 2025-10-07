@@ -2,11 +2,15 @@ import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = () => (
+interface LayoutProps {
+  isLoggedIn: boolean
+}
+
+const Layout: React.FC<LayoutProps> = ({ isLoggedIn }) => (
   <div className="font-pretendard flex min-h-screen flex-col">
-    <Header isLoggedIn={true} />
-    <main className="flex-1">
-      <Outlet /> {/* 여기서 하위 라우트가 바뀜 */}
+    <Header isLoggedIn={isLoggedIn} />
+    <main className="flex-1 bg-gray-50">
+      <Outlet />
     </main>
     <Footer />
   </div>
