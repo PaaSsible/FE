@@ -1,17 +1,13 @@
 import React from 'react'
 import clsx from 'clsx'
 
-interface CategoryMenuItemProps {
+interface TabProps {
   label: string
   selected?: boolean
   onClick?: () => void
 }
 
-const CategoryMenuItem: React.FC<CategoryMenuItemProps> = ({
-  label,
-  selected = false,
-  onClick,
-}) => {
+const Tab: React.FC<TabProps> = ({ label, selected = false, onClick }) => {
   return (
     <div
       onClick={onClick}
@@ -33,4 +29,4 @@ const CategoryMenuItem: React.FC<CategoryMenuItemProps> = ({
   )
 }
 
-export default CategoryMenuItem
+export default Tab
