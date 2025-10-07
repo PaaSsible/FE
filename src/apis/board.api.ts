@@ -11,7 +11,7 @@ export const getBoardList = async (
 ): Promise<BoardAPITypes.GetBoardList['Response']> => {
   const parsedQuery = boardAPISchemas.getBoardListSchema.query.parse(query)
   const res = await PaaSsible.get(`/boards`, { params: parsedQuery })
-  return boardAPISchemas.getBoardListSchema.response.parse(res)
+  return boardAPISchemas.getBoardListSchema.response.parse(res.data)
 }
 
 /**
@@ -23,7 +23,7 @@ export const postBoard = async (
 ): Promise<BoardAPITypes.PostBoard['Response']> => {
   const parsedBody = boardAPISchemas.postBoardSchema.body.parse(body)
   const res = await PaaSsible.post(`/boards`, parsedBody)
-  return boardAPISchemas.postBoardSchema.response.parse(res)
+  return boardAPISchemas.postBoardSchema.response.parse(res.data)
 }
 
 /**
@@ -38,7 +38,7 @@ export const putBoard = async (
   const parsedPath = boardAPISchemas.putBoardSchema.path.parse(path)
   const parsedBody = boardAPISchemas.putBoardSchema.path.parse(body)
   const res = await PaaSsible.put(`/boards/${parsedPath.boardId}`, parsedBody)
-  return boardAPISchemas.putBoardSchema.response.parse(res)
+  return boardAPISchemas.putBoardSchema.response.parse(res.data)
 }
 
 /**
@@ -50,7 +50,7 @@ export const deleteBoard = async (
 ): Promise<BoardAPITypes.DeleteBoard['Response']> => {
   const parsedPath = boardAPISchemas.deleteBoardSchema.path.parse(path)
   const res = await PaaSsible.delete(`/boards/${parsedPath.boardId}`)
-  return boardAPISchemas.deleteBoardSchema.response.parse(res)
+  return boardAPISchemas.deleteBoardSchema.response.parse(res.data)
 }
 
 /**
@@ -62,7 +62,7 @@ export const getBoardDetail = async (
 ): Promise<BoardAPITypes.GetBoardDetail['Response']> => {
   const parsedPath = boardAPISchemas.getBoardDetailSchema.path.parse(path)
   const res = await PaaSsible.get(`/boards/${parsedPath.boardId}`)
-  return boardAPISchemas.getBoardDetailSchema.response.parse(res)
+  return boardAPISchemas.getBoardDetailSchema.response.parse(res.data)
 }
 
 /**
@@ -74,7 +74,7 @@ export const getBoardMember = async (
 ): Promise<BoardAPITypes.GetBoardMember['Response']> => {
   const parsedPath = boardAPISchemas.getBoardMemberSchema.path.parse(path)
   const res = await PaaSsible.get(`/boards/${parsedPath.boardId}/members`)
-  return boardAPISchemas.getBoardMemberSchema.response.parse(res)
+  return boardAPISchemas.getBoardMemberSchema.response.parse(res.data)
 }
 
 /**
@@ -86,7 +86,7 @@ export const deleteBoardMember = async (
 ): Promise<BoardAPITypes.DeleteBoardMember['Response']> => {
   const parsedPath = boardAPISchemas.deleteBoardMemberSchema.path.parse(path)
   const res = await PaaSsible.delete(`/boards/${parsedPath.boardId}/members`)
-  return boardAPISchemas.deleteBoardMemberSchema.response.parse(res)
+  return boardAPISchemas.deleteBoardMemberSchema.response.parse(res.data)
 }
 
 /**
@@ -105,5 +105,5 @@ export const patchBoardMember = async (
     {},
     { params: parsedQuery },
   )
-  return boardAPISchemas.patchBoardMemberSchema.response.parse(res)
+  return boardAPISchemas.patchBoardMemberSchema.response.parse(res.data)
 }

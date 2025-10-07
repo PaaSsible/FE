@@ -11,5 +11,5 @@ export const getContributionScores = async (
 ): Promise<GetContributionScores['response']> => {
   const parsedPath = getContributionScoresSchema.path.parse(path)
   const res = await PaaSsible.get(`/boards/${parsedPath.boardId}/members/scores`)
-  return getContributionScoresSchema.response.parse(res)
+  return getContributionScoresSchema.response.parse(res.data)
 }
