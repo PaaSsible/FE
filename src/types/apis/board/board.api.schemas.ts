@@ -20,7 +20,7 @@ export const getBoardListSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
-    data: z.array(boardSchema),
+    data: z.array(boardSchema.extend({ content: z.string() })),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -55,7 +55,7 @@ export const postBoardSchema = {
  */
 export const putBoardSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
   }),
   body: boardSchema.pick({
     name: true,
@@ -79,7 +79,7 @@ export const putBoardSchema = {
  */
 export const deleteBoardSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
   }),
   response: z.object({
     success: z.boolean(),
@@ -98,7 +98,7 @@ export const deleteBoardSchema = {
  */
 export const getBoardDetailSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
   }),
   response: z.object({}),
 }
@@ -111,7 +111,7 @@ export const getBoardDetailSchema = {
  */
 export const getBoardMemberSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
   }),
   response: z.object({
     success: z.boolean(),
@@ -130,7 +130,7 @@ export const getBoardMemberSchema = {
  */
 export const deleteBoardMemberSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
   }),
   response: z.object({
     success: z.boolean(),
@@ -149,7 +149,7 @@ export const deleteBoardMemberSchema = {
  */
 export const patchBoardMemberSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
   }),
   query: z.object({
     positionId: z

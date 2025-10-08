@@ -19,8 +19,9 @@ export const detailTypeArray = [
   'STUDY_BE',
   'STUDY_ETC',
 ] as const
+
 export const boardSchema = z.object({
-  id: z.number(),
+  boardId: z.number(),
   name: z.string(),
   activityType: z.string().nullable(),
   detailType: z.string().nullable(),
@@ -44,7 +45,7 @@ export const taskSchema = z.object({
   description: z.string().nullable(),
   dueDate: z.string(),
   status: z.enum(taskStatusArray),
-  boardId: boardSchema.shape.id,
+  boardId: boardSchema.shape.boardId,
   assignee: z.array(z.object({ userId: userSchema.shape.id, name: userSchema.shape.nickname })),
   positions: z.array(z.string()), // '백엔드', '프론트엔드', '디자이너' ...
 })
