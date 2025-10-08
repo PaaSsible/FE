@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import CategoryMenuItem from '@/components/atoms/CategoryItem'
 import Chip from '@/components/atoms/Chip'
 import BoardItem from '@/components/feature/boards/BoardItem'
 import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
 import { Pagination } from '@/components/feature/boards/Pagination'
 import Button from '@/components/atoms/Button'
 import Dropdown from '@/components/atoms/Dropdown'
+import Tab from '@/components/atoms/Tab'
 
 const BoardsPage: React.FC = () => {
   // 상단 탭
-  const categories = ['공모전/대회', '사이드 프로젝트', '스터디', '기타']
-  const [selectedCategory, setSelectedCategory] = useState(categories[0])
+  const tabs = ['공모전/대회', '사이드 프로젝트', '스터디', '기타'] as const
+  type Tab = (typeof tabs)[number]
+  const [selectedTab, setSelectedTab] = useState<Tab>(tabs[0])
 
   // 필터 Chip
-  const chipLabels = ['개발 중심', '기획+디자인', '디자인 중심', '융합 프로젝트']
-  const [selectedChip, setSelectedChip] = useState('개발 중심')
+  const chipLabels = [
+    '기획 중심',
+    '기획+디자인',
+    '디자인 중심',
+    '개발 중심',
+    '융합 프로젝트',
+    '기타',
+  ] as const
+  type ChipLabel = (typeof chipLabels)[number]
+  const [selectedChip, setSelectedChip] = useState<ChipLabel>(chipLabels[0])
 
   // 검색어 상태
   const [searchValue, setSearchValue] = useState('')
@@ -86,12 +95,12 @@ const BoardsPage: React.FC = () => {
       {/* 카테고리 탭 */}
       <div className="border-gray-250 mt-6 flex justify-between border-b-[1.5px] pb-3">
         <div className="flex gap-[25px]">
-          {categories.map((cat) => (
-            <CategoryMenuItem
-              key={cat}
-              label={cat}
-              selected={selectedCategory === cat}
-              onClick={() => setSelectedCategory(cat)}
+          {tabs.map((tab) => (
+            <Tab
+              key={tab}
+              label={tab}
+              selected={selectedTab === tab}
+              onClick={() => setSelectedTab(tab)}
             />
           ))}
         </div>
