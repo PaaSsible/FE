@@ -19,7 +19,7 @@ import { userSchema } from '@/types/entities/user/user.schemas'
  * @description 업무 목록을 조회하는 API의 스키마
  */
 export const getTaskListSchema = {
-  query: z.object({
+  path: z.object({
     boardId: boardSchema.shape.id,
   }),
   response: z.object({

@@ -26,7 +26,7 @@ import {
  * @description 업무 목록을 조회하는 API의 타입
  */
 export type GetTaskList = {
-  Query: z.infer<typeof getTaskListSchema.query>
+  Path: z.infer<typeof getTaskListSchema.path>
   Response: z.infer<typeof getTaskListSchema.response>
 }
 
@@ -163,7 +163,7 @@ export type GetTaskStatusChart = {
  * @path `/boards/{boardId}/reports/weekly`
  * @description 주간 목표 달성률을 조회하는 API의 타입
  */
-export type GetWeeklyGoalAchievementSchema = {
+export type GetWeeklyGoalAchievement = {
   Path: z.infer<typeof getWeeklyGoalAchievementSchema.path>
   Response: z.infer<typeof getWeeklyGoalAchievementSchema.response>
 }
@@ -174,7 +174,7 @@ export type GetWeeklyGoalAchievementSchema = {
  * @path `/boards/{boardId}/shortcuts`
  * @description 외부 링크를 조회하는 API의 타입
  */
-export type GetExternalLinksSchema = {
+export type GetExternalLinks = {
   Path: z.infer<typeof getExternalLinksSchema.path>
   Response: z.infer<typeof getExternalLinksSchema.response>
 }
@@ -185,7 +185,7 @@ export type GetExternalLinksSchema = {
  * @path `/boards/{boardId}/shortcuts`
  * @description 외부 링크를 생성하는 API의 타입
  */
-export type PostExternalLinkSchema = {
+export type PostExternalLink = {
   Path: z.infer<typeof postExternalLinkSchema.path>
   Body: z.infer<typeof postExternalLinkSchema.body>
   Response: z.infer<typeof postExternalLinkSchema.response>
@@ -197,7 +197,7 @@ export type PostExternalLinkSchema = {
  * @path `/boards/{boardId}/shortcuts/{shortcutId}`
  * @description 외부 링크를 삭제하는 API의 타입
  */
-export type DeleteExternalLinkSchema = {
+export type DeleteExternalLink = {
   Path: z.infer<typeof deleteExternalLinkSchema.path>
   Response: z.infer<typeof deleteExternalLinkSchema.response>
 }
