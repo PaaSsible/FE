@@ -20,7 +20,7 @@ import { userSchema } from '@/types/entities/user/user.schemas'
  */
 export const getTaskListSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
   }),
   response: z.object({
     success: z.boolean(),
@@ -38,7 +38,7 @@ export const getTaskListSchema = {
  * @description 업무 생성하는 API의 스키마
  */
 export const postTaskSchema = {
-  path: z.object({ boardId: boardSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId }),
   body: taskSchema
     .pick({ title: true, dueDate: true })
     .extend({ assigneeIds: z.array(userSchema.shape.id), positionIds: z.array(z.number()) }),
@@ -57,7 +57,7 @@ export const postTaskSchema = {
  * @description 업무 수정하는 API의 스키마
  */
 export const patchTaskSchema = {
-  path: z.object({ boardId: boardSchema.shape.id, taskId: taskSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId, taskId: taskSchema.shape.id }),
   body: taskSchema
     .pick({ title: true, dueDate: true })
     .extend({ assigneeIds: z.array(userSchema.shape.id), positionIds: z.array(z.number()) }),
@@ -76,7 +76,7 @@ export const patchTaskSchema = {
  * @description 업무 설명 수정하는 API의 스키마
  */
 export const patchTaskDescriptionSchema = {
-  path: z.object({ boardId: boardSchema.shape.id, taskId: taskSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId, taskId: taskSchema.shape.id }),
   body: z.object({ description: taskSchema.shape.description }),
   response: z.object({
     success: z.boolean(),
@@ -93,7 +93,7 @@ export const patchTaskDescriptionSchema = {
  * @description 업무 상태 수정하는 API의 스키마
  */
 export const patchTaskStatusSchema = {
-  path: z.object({ boardId: boardSchema.shape.id, taskId: taskSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId, taskId: taskSchema.shape.id }),
   body: z.object({ status: taskSchema.shape.status }),
   response: z.object({
     success: z.boolean(),
@@ -110,7 +110,7 @@ export const patchTaskStatusSchema = {
  * @description 업무 삭제하는 API의 스키마
  */
 export const deleteTaskSchema = {
-  path: z.object({ boardId: boardSchema.shape.id, taskId: taskSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId, taskId: taskSchema.shape.id }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
@@ -126,7 +126,7 @@ export const deleteTaskSchema = {
  * @description 업무 상세 정보를 조회하는 API의 스키마
  */
 export const getTaskDetailSchema = {
-  path: z.object({ boardId: boardSchema.shape.id, taskId: taskSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId, taskId: taskSchema.shape.id }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
@@ -143,7 +143,7 @@ export const getTaskDetailSchema = {
  * @description 업무 상세 댓글을 조회하는 API의 스키마
  */
 export const getTaskDetailCommentsSchema = {
-  path: z.object({ boardId: boardSchema.shape.id, taskId: taskSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId, taskId: taskSchema.shape.id }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
@@ -160,7 +160,7 @@ export const getTaskDetailCommentsSchema = {
  * @description 업무 상세 댓글을 생성하는 API의 스키마
  */
 export const postTaskDetailCommentSchema = {
-  path: z.object({ boardId: boardSchema.shape.id, taskId: taskSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId, taskId: taskSchema.shape.id }),
   body: z.object({ comment: commentSchema.shape.comment }),
   response: z.object({
     success: z.boolean(),
@@ -178,7 +178,7 @@ export const postTaskDetailCommentSchema = {
  */
 export const patchTaskDetailCommentSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
     taskId: taskSchema.shape.id,
     commentId: commentSchema.shape.id,
   }),
@@ -199,7 +199,7 @@ export const patchTaskDetailCommentSchema = {
  */
 export const deleteTaskDetailCommentSchema = {
   path: z.object({
-    boardId: boardSchema.shape.id,
+    boardId: boardSchema.shape.boardId,
     taskId: taskSchema.shape.id,
     commentId: commentSchema.shape.id,
   }),
@@ -218,7 +218,7 @@ export const deleteTaskDetailCommentSchema = {
  * @description 업무 상태 차트 데이터를 조회하는 API의 스키마
  */
 export const getTaskStatusChartSchema = {
-  path: z.object({ boardId: boardSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
@@ -235,7 +235,7 @@ export const getTaskStatusChartSchema = {
  * @description 주간 목표 달성률을 조회하는 API의 스키마
  */
 export const getWeeklyGoalAchievementSchema = {
-  path: z.object({ boardId: boardSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
@@ -252,7 +252,7 @@ export const getWeeklyGoalAchievementSchema = {
  * @description 외부 링크를 조회하는 API의 스키마
  */
 export const getExternalLinksSchema = {
-  path: z.object({ boardId: boardSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
@@ -269,7 +269,7 @@ export const getExternalLinksSchema = {
  * @description 외부 링크를 생성하는 API의 스키마
  */
 export const postExternalLinkSchema = {
-  path: z.object({ boardId: boardSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId }),
   body: linkSchema.pick({ title: true, url: true }),
   response: z.object({
     success: z.boolean(),
@@ -286,7 +286,7 @@ export const postExternalLinkSchema = {
  * @description 외부 링크를 삭제하는 API의 스키마
  */
 export const deleteExternalLinkSchema = {
-  path: z.object({ boardId: boardSchema.shape.id, shortcutId: linkSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId, shortcutId: linkSchema.shape.id }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
