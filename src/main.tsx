@@ -14,11 +14,7 @@ const enableMocking = async () => {
 
 enableMocking()
   .then(() => {
-    createRoot(document.getElementById('root')!).render(
-      <StrictMode>
-        <App />
-      </StrictMode>,
-    )
+    createRoot(document.getElementById('root')!).render(<App />)
   })
   .catch((err) => {
     console.error('MSW initialization failed', err)
