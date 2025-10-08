@@ -95,9 +95,9 @@ const BoardsPage: React.FC = () => {
       {/* 카테고리 탭 */}
       <div className="border-gray-250 mt-6 flex justify-between border-b-[1.5px] pb-3">
         <div className="flex gap-[25px]">
-          {tabs.map((tab) => (
+          {tabs.map((tab, idx) => (
             <Tab
-              key={tab}
+              key={idx}
               label={tab}
               selected={selectedTab === tab}
               onClick={() => setSelectedTab(tab)}
@@ -111,9 +111,9 @@ const BoardsPage: React.FC = () => {
 
       {/* 필터 Chip 리스트 */}
       <div className="border-gray-250 flex flex-wrap justify-start gap-[10px] border-b-[1.5px] py-3">
-        {chipLabels.map((label) => (
+        {chipLabels.map((label, idx) => (
           <Chip
-            key={label}
+            key={idx}
             label={label}
             selected={selectedChip === label}
             onClick={() => setSelectedChip(label)}
