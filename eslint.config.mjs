@@ -1,4 +1,3 @@
-// .eslintrc.js
 // Storybook, React, TypeScript, Prettier 환경을 통합한 ESLint 설정
 import storybook from 'eslint-plugin-storybook'
 import react from 'eslint-plugin-react'
@@ -96,7 +95,17 @@ export default tseslint.config(
     },
     {
       files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'], // 테스트 파일
-      env: { jest: true }, // Jest 환경 적용
+      languageOptions: {
+        globals: {
+          describe: 'readonly',
+          it: 'readonly',
+          test: 'readonly',
+          expect: 'readonly',
+          beforeEach: 'readonly',
+          afterEach: 'readonly',
+          vi: 'readonly', // Vitest mock, spy 등
+        },
+      },
       rules: {
         '@typescript-eslint/no-explicit-any': 'off', // 테스트에서는 any 허용
       },
