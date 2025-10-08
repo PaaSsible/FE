@@ -22,6 +22,20 @@ export default defineConfig({
   },
   test: {
     projects: [
+      // vitest
+      {
+        test: {
+          name: 'unit',
+          globals: true,
+          environment: 'node',
+          alias: {
+            '@': path.resolve(__dirname, './src'),
+          },
+          exclude: ['**/node_modules/**', '**/src/stories/**'],
+          setupFiles: ['./mocks/vitest.setup.ts'],
+        },
+      },
+      // storybook
       {
         extends: true,
         plugins: [
