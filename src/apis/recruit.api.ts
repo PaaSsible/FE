@@ -1,4 +1,4 @@
-import PaaSsible from '@/config/interceptor'
+import PaaSsibleRecruit from '@/config/interceptors/recruit.interceptor'
 import {
   deleteRecruitCommentSchema,
   deleteRecruitSchema,
@@ -36,7 +36,7 @@ import type {
  * @name 포지션목록조회
  */
 export const getPositions = async (): Promise<GetPositions['Response']> => {
-  const res = await PaaSsible.get('/recruits/positions')
+  const res = await PaaSsibleRecruit.get('/recruits/positions')
   return getPositionsSchema.response.parse(res.data)
 }
 
@@ -44,7 +44,7 @@ export const getPositions = async (): Promise<GetPositions['Response']> => {
  * @name 기술스택목록조회
  */
 export const getStacks = async (): Promise<GetStacks['Response']> => {
-  const res = await PaaSsible.get('/recruits/stacks')
+  const res = await PaaSsibleRecruit.get('/recruits/stacks')
   return getStacksSchema.response.parse(res.data)
 }
 
@@ -54,7 +54,7 @@ export const getStacks = async (): Promise<GetStacks['Response']> => {
  */
 export const postRecruit = async (body: PostRecruit['Body']): Promise<PostRecruit['Response']> => {
   const parsedBody = postRecruitSchema.body.parse(body)
-  const res = await PaaSsible.post(`/recruits`, parsedBody)
+  const res = await PaaSsibleRecruit.post(`/recruits`, parsedBody)
   return postRecruitSchema.response.parse(res.data)
 }
 
@@ -66,7 +66,7 @@ export const getRecruits = async (
   query: GetRecruits['Query'],
 ): Promise<GetRecruits['Response']> => {
   const parsedQuery = getRecruitsSchema.query.parse(query)
-  const res = await PaaSsible.get(`/recruits`, { params: parsedQuery })
+  const res = await PaaSsibleRecruit.get(`/recruits`, { params: parsedQuery })
   return getRecruitsSchema.response.parse(res.data)
 }
 
@@ -81,7 +81,7 @@ export const putRecruit = async (
 ): Promise<PutRecruit['Response']> => {
   const parsedPath = putRecruitSchema.path.parse(path)
   const parsedBody = putRecruitSchema.body.parse(body)
-  const res = await PaaSsible.put(`/recruits/${parsedPath.postId}`, parsedBody)
+  const res = await PaaSsibleRecruit.put(`/recruits/${parsedPath.postId}`, parsedBody)
   return putRecruitSchema.response.parse(res.data)
 }
 
@@ -93,7 +93,7 @@ export const getRecruitDetail = async (
   path: GetRecruitDetail['Path'],
 ): Promise<GetRecruitDetail['Response']> => {
   const parsedPath = getRecruitDetailSchema.path.parse(path)
-  const res = await PaaSsible.get(`/recruits/${parsedPath.postId}`)
+  const res = await PaaSsibleRecruit.get(`/recruits/${parsedPath.postId}`)
   return getRecruitDetailSchema.response.parse(res.data)
 }
 
@@ -105,7 +105,7 @@ export const deleteRecruit = async (
   path: DeleteRecruit['Path'],
 ): Promise<DeleteRecruit['Response']> => {
   const parsedPath = deleteRecruitSchema.path.parse(path)
-  const res = await PaaSsible.delete(`/recruits/${parsedPath.postId}`)
+  const res = await PaaSsibleRecruit.delete(`/recruits/${parsedPath.postId}`)
   return deleteRecruitSchema.response.parse(res.data)
 }
 
@@ -117,7 +117,7 @@ export const getRecruitApplicants = async (
   path: GetRecruitApplicants['Path'],
 ): Promise<GetRecruitApplicants['Response']> => {
   const parsedPath = getRecruitApplicantsSchema.path.parse(path)
-  const res = await PaaSsible.get(`/recruits/${parsedPath.postId}/applications`)
+  const res = await PaaSsibleRecruit.get(`/recruits/${parsedPath.postId}/applications`)
   return getRecruitApplicantsSchema.response.parse(res.data)
 }
 
@@ -133,7 +133,7 @@ export const postRecruitApplicantAccept = async (
 ): Promise<any> => {
   const parsedPath = postRecruitApplicantAcceptSchema.path.parse(path)
   const parsedBody = postRecruitApplicantAcceptSchema.body.parse(body)
-  const res = await PaaSsible.post(
+  const res = await PaaSsibleRecruit.post(
     `/recruits/${parsedPath.postId}/applications/${parsedPath.applicationId}/accept`,
     parsedBody,
   )
@@ -148,7 +148,7 @@ export const getMyRecruit = async (
   query: GetMyRecruit['Query'],
 ): Promise<GetMyRecruit['Response']> => {
   const parsedQuery = getMyRecruitSchema.query.parse(query)
-  const res = await PaaSsible.get(`/recruits/me/posts`, { params: parsedQuery })
+  const res = await PaaSsibleRecruit.get(`/recruits/me/posts`, { params: parsedQuery })
   return getMyRecruitSchema.response.parse(res.data)
 }
 
@@ -163,7 +163,7 @@ export const postRecruitComment = async (
 ): Promise<any> => {
   const parsedPath = postRecruitCommentSchema.path.parse(path)
   const parsedBody = postRecruitCommentSchema.body.parse(body)
-  const res = await PaaSsible.post(`/recruits/${parsedPath.postId}/comments`, parsedBody)
+  const res = await PaaSsibleRecruit.post(`/recruits/${parsedPath.postId}/comments`, parsedBody)
   return res.data
 }
 
@@ -175,7 +175,7 @@ export const getRecruitComment = async (
   path: GetRecruitComments['Path'],
 ): Promise<GetRecruitComments['Response']> => {
   const parsedPath = getRecruitCommentsSchema.path.parse(path)
-  const res = await PaaSsible.get(`/recruits/${parsedPath.postId}/comments`)
+  const res = await PaaSsibleRecruit.get(`/recruits/${parsedPath.postId}/comments`)
   return getRecruitCommentsSchema.response.parse(res.data)
 }
 
@@ -190,7 +190,7 @@ export const putRecruitComment = async (
 ): Promise<any> => {
   const parsedPath = putRecruitCommentSchema.path.parse(path)
   const parsedBody = putRecruitCommentSchema.body.parse(body)
-  const res = await PaaSsible.put(`/recruits/comments/${parsedPath.commentId}`, parsedBody)
+  const res = await PaaSsibleRecruit.put(`/recruits/comments/${parsedPath.commentId}`, parsedBody)
   return res.data
 }
 /**
@@ -201,6 +201,6 @@ export const deleteRecruitComment = async (
   path: DeleteRecruitComment['Path'],
 ): Promise<DeleteRecruitComment['Response']> => {
   const parsedPath = deleteRecruitCommentSchema.path.parse(path)
-  const res = await PaaSsible.delete(`/recruits/comments/${parsedPath.commentId}`)
+  const res = await PaaSsibleRecruit.delete(`/recruits/comments/${parsedPath.commentId}`)
   return deleteRecruitCommentSchema.response.parse(res.data)
 }

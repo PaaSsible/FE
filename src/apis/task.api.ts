@@ -1,4 +1,4 @@
-import PaaSsible from '@/config/interceptor'
+import PaaSsibleBoard from '@/config/interceptors/board.interceptor'
 import * as taskAPISchemas from '@/types/apis/board/task.api.schemas'
 import * as TaskAPITypes from '@/types/apis/board/task.api.types'
 
@@ -10,7 +10,7 @@ export const getTaskList = async (
   path: TaskAPITypes.GetTaskList['Path'],
 ): Promise<TaskAPITypes.GetTaskList['Response']> => {
   const parsedPath = taskAPISchemas.getTaskListSchema.path.parse(path)
-  const res = await PaaSsible.get(`/boards/${parsedPath.boardId}/tasks`)
+  const res = await PaaSsibleBoard.get(`/boards/${parsedPath.boardId}/tasks`)
   return taskAPISchemas.getTaskListSchema.response.parse(res.data)
 }
 
@@ -25,7 +25,7 @@ export const postTask = async (
 ): Promise<TaskAPITypes.PostTask['Response']> => {
   const parsedPath = taskAPISchemas.postTaskSchema.path.parse(path)
   const parsedBody = taskAPISchemas.postTaskSchema.body.parse(body)
-  const res = await PaaSsible.post(`/boards/${parsedPath.boardId}/tasks`, parsedBody)
+  const res = await PaaSsibleBoard.post(`/boards/${parsedPath.boardId}/tasks`, parsedBody)
   return taskAPISchemas.postTaskSchema.response.parse(res.data)
 }
 
@@ -40,7 +40,7 @@ export const patchTask = async (
 ): Promise<TaskAPITypes.PatchTask['Response']> => {
   const parsedPath = taskAPISchemas.patchTaskSchema.path.parse(path)
   const parsedBody = taskAPISchemas.patchTaskSchema.body.parse(body)
-  const res = await PaaSsible.patch(
+  const res = await PaaSsibleBoard.patch(
     `/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}`,
     parsedBody,
   )
@@ -58,7 +58,7 @@ export const patchTaskDescription = async (
 ): Promise<TaskAPITypes.PatchTaskDescription['Response']> => {
   const parsedPath = taskAPISchemas.patchTaskDescriptionSchema.path.parse(path)
   const parsedBody = taskAPISchemas.patchTaskDescriptionSchema.body.parse(body)
-  const res = await PaaSsible.patch(
+  const res = await PaaSsibleBoard.patch(
     `/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}/description`,
     parsedBody,
   )
@@ -76,7 +76,7 @@ export const patchTaskStatus = async (
 ): Promise<TaskAPITypes.PatchTaskDescription['Response']> => {
   const parsedPath = taskAPISchemas.patchTaskStatusSchema.path.parse(path)
   const parsedBody = taskAPISchemas.patchTaskStatusSchema.body.parse(body)
-  const res = await PaaSsible.patch(
+  const res = await PaaSsibleBoard.patch(
     `/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}/status`,
     parsedBody,
   )
@@ -91,7 +91,9 @@ export const deleteTask = async (
   path: TaskAPITypes.DeleteTask['Path'],
 ): Promise<TaskAPITypes.DeleteTask['Response']> => {
   const parsedPath = taskAPISchemas.deleteTaskSchema.path.parse(path)
-  const res = await PaaSsible.delete(`/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}`)
+  const res = await PaaSsibleBoard.delete(
+    `/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}`,
+  )
   return taskAPISchemas.deleteTaskSchema.response.parse(res.data)
 }
 
@@ -103,7 +105,7 @@ export const getTaskDetail = async (
   path: TaskAPITypes.GetTaskDetail['Path'],
 ): Promise<TaskAPITypes.GetTaskDetail['Response']> => {
   const parsedPath = taskAPISchemas.getTaskDetailSchema.path.parse(path)
-  const res = await PaaSsible.get(`/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}`)
+  const res = await PaaSsibleBoard.get(`/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}`)
   return taskAPISchemas.getTaskDetailSchema.response.parse(res.data)
 }
 
@@ -115,7 +117,7 @@ export const getTaskDetailComments = async (
   path: TaskAPITypes.GetTaskDetailComments['Path'],
 ): Promise<TaskAPITypes.GetTaskDetailComments['Response']> => {
   const parsedPath = taskAPISchemas.getTaskDetailCommentsSchema.path.parse(path)
-  const res = await PaaSsible.get(
+  const res = await PaaSsibleBoard.get(
     `/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}/comments`,
   )
   return taskAPISchemas.getTaskDetailCommentsSchema.response.parse(res.data)
@@ -132,7 +134,7 @@ export const postTaskDetailComment = async (
 ): Promise<TaskAPITypes.PostTaskDetailComment['Response']> => {
   const parsedPath = taskAPISchemas.postTaskDetailCommentSchema.path.parse(path)
   const parsedBody = taskAPISchemas.postTaskDetailCommentSchema.body.parse(body)
-  const res = await PaaSsible.post(
+  const res = await PaaSsibleBoard.post(
     `/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}/comments`,
     parsedBody,
   )
@@ -150,7 +152,7 @@ export const patchTaskDetailComment = async (
 ): Promise<TaskAPITypes.PatchTaskDetailComment['Response']> => {
   const parsedPath = taskAPISchemas.patchTaskDetailCommentSchema.path.parse(path)
   const parsedBody = taskAPISchemas.patchTaskDetailCommentSchema.body.parse(body)
-  const res = await PaaSsible.patch(
+  const res = await PaaSsibleBoard.patch(
     `/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}/comments/${parsedPath.commentId}`,
     parsedBody,
   )
@@ -165,7 +167,7 @@ export const deleteTaskDetailComment = async (
   path: TaskAPITypes.DeleteTaskDetailComment['Path'],
 ): Promise<TaskAPITypes.DeleteTaskDetailComment['Response']> => {
   const parsedPath = taskAPISchemas.deleteTaskDetailCommentSchema.path.parse(path)
-  const res = await PaaSsible.delete(
+  const res = await PaaSsibleBoard.delete(
     `/boards/${parsedPath.boardId}/tasks/${parsedPath.taskId}/comments/${parsedPath.commentId}`,
   )
   return taskAPISchemas.deleteTaskDetailCommentSchema.response.parse(res.data)
@@ -179,7 +181,7 @@ export const getTaskStatusChart = async (
   path: TaskAPITypes.GetTaskStatusChart['Path'],
 ): Promise<TaskAPITypes.GetTaskStatusChart['Response']> => {
   const parsedPath = taskAPISchemas.getTaskStatusChartSchema.path.parse(path)
-  const res = await PaaSsible.get(`/boards/${parsedPath.boardId}/tasks/visualization`)
+  const res = await PaaSsibleBoard.get(`/boards/${parsedPath.boardId}/tasks/visualization`)
   return taskAPISchemas.getTaskStatusChartSchema.response.parse(res.data)
 }
 
@@ -191,7 +193,7 @@ export const getWeeklyGoalAchievement = async (
   path: TaskAPITypes.GetWeeklyGoalAchievement['Path'],
 ): Promise<TaskAPITypes.GetWeeklyGoalAchievement['Response']> => {
   const parsedPath = taskAPISchemas.getWeeklyGoalAchievementSchema.path.parse(path)
-  const res = await PaaSsible.get(`/boards/${parsedPath.boardId}/reports/weekly`)
+  const res = await PaaSsibleBoard.get(`/boards/${parsedPath.boardId}/reports/weekly`)
   return taskAPISchemas.getWeeklyGoalAchievementSchema.response.parse(res.data)
 }
 
@@ -203,7 +205,7 @@ export const getExternalLinks = async (
   path: TaskAPITypes.GetExternalLinks['Path'],
 ): Promise<TaskAPITypes.GetExternalLinks['Response']> => {
   const parsedPath = taskAPISchemas.getExternalLinksSchema.path.parse(path)
-  const res = await PaaSsible.get(`/boards/${parsedPath.boardId}/shortcuts`)
+  const res = await PaaSsibleBoard.get(`/boards/${parsedPath.boardId}/shortcuts`)
   return taskAPISchemas.getExternalLinksSchema.response.parse(res.data)
 }
 
@@ -218,7 +220,7 @@ export const postExternalLink = async (
 ): Promise<TaskAPITypes.PostExternalLink['Response']> => {
   const parsedPath = taskAPISchemas.postExternalLinkSchema.path.parse(path)
   const parsedBody = taskAPISchemas.postExternalLinkSchema.body.parse(body)
-  const res = await PaaSsible.post(`/boards/${parsedPath.boardId}/shortcuts`, parsedBody)
+  const res = await PaaSsibleBoard.post(`/boards/${parsedPath.boardId}/shortcuts`, parsedBody)
   return taskAPISchemas.postExternalLinkSchema.response.parse(res.data)
 }
 
@@ -230,7 +232,7 @@ export const deleteExternalLink = async (
   path: TaskAPITypes.DeleteExternalLink['Path'],
 ): Promise<TaskAPITypes.DeleteExternalLink['Response']> => {
   const parsedPath = taskAPISchemas.deleteExternalLinkSchema.path.parse(path)
-  const res = await PaaSsible.delete(
+  const res = await PaaSsibleBoard.delete(
     `/boards/${parsedPath.boardId}/shortcuts/${parsedPath.shortcutId}`,
   )
   return taskAPISchemas.deleteExternalLinkSchema.response.parse(res.data)
