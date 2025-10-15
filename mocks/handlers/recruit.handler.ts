@@ -383,7 +383,7 @@ export const recruitHandlers: HttpHandler[] = [
       const applicationId = params.applicationId
       const body = (await request.clone().json()) as RecruitTypes.PostRecruitApplicantAccept['Body']
 
-      return HttpResponse.json({}, { status: 200 })
+      return HttpResponse.json(null, { status: 200 })
     },
   ),
 
@@ -472,7 +472,7 @@ export const recruitHandlers: HttpHandler[] = [
       const postId = params.postId
       const body = (await request.clone().json()) as RecruitTypes.PostRecruitComment['Body']
 
-      return HttpResponse.json({}, { status: 200 })
+      return HttpResponse.json(null, { status: 200 })
     },
   ),
 
@@ -523,7 +523,7 @@ export const recruitHandlers: HttpHandler[] = [
       const { commentId } = params
       const body = (await request.clone().json()) as RecruitTypes.PutRecruitComment['Body']
 
-      return HttpResponse.json({}, { status: 200 })
+      return HttpResponse.json(null, { status: 200 })
     },
   ),
 
@@ -538,5 +538,7 @@ export const recruitHandlers: HttpHandler[] = [
       code: 'DELETED',
       errors: null,
     }
+
+    return HttpResponse.json(data)
   }),
 ]
