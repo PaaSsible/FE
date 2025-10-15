@@ -8,7 +8,7 @@ import { boardSchema } from '@/types/entities/board/board.entities.schemas'
  * @path `/boards/{boardId}/members/scores`
  */
 export const getContributionScoresSchema = {
-  path: z.object({ boardId: boardSchema.shape.id }),
+  path: z.object({ boardId: boardSchema.shape.boardId }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
