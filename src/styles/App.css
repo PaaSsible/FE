@@ -1,9 +1,9 @@
 @import 'tailwindcss';
 
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
 }
 
@@ -21,6 +21,7 @@
   src: url('../assets/fonts/RobotoVariable.ttf') format('ttf');
 }
 
+/* Font */
 @theme {
   --font-pretendard: 'Pretendard', san-serif;
   --font-roboto: 'Roboto', sans-serif;
@@ -29,8 +30,338 @@
   --text-roboto-medium--leading: 1.25rem;
   --text-roboto-medium--font-weight: 500;
   --text-roboto-medium--letter-spacing: 0.0156rem;
+
+  /* D1 (72/100) */
+  --text-d1-extrabold: 4.5rem;
+  --text-d1-extrabold--leading: 6.25rem;
+  --text-d1-extrabold--font-weight: 800;
+  --text-d1-bold: 4.5rem;
+  --text-d1-bold--leading: 6.25rem;
+  --text-d1-bold--font-weight: 700;
+  --text-d1-medium: 4.5rem;
+  --text-d1-medium--leading: 6.25rem;
+  --text-d1-medium--font-weight: 500;
+  --text-d1-regular: 4.5rem;
+  --text-d1-regular--leading: 6.25rem;
+  --text-d1-regular--font-weight: 400;
+
+  /* D2 (60/84) */
+  --text-d2-extrabold: 3.75rem;
+  --text-d2-extrabold--leading: 5.25rem;
+  --text-d2-extrabold--font-weight: 800;
+  --text-d2-bold: 3.75rem;
+  --text-d2-bold--leading: 5.25rem;
+  --text-d2-bold--font-weight: 700;
+  --text-d2-medium: 3.75rem;
+  --text-d2-medium--leading: 5.25rem;
+  --text-d2-medium--font-weight: 500;
+  --text-d2-regular: 3.75rem;
+  --text-d2-regular--leading: 5.25rem;
+  --text-d2-regular--font-weight: 400;
+
+  /* D3 (58/80) */
+  --text-d3-extrabold: 3.625rem;
+  --text-d3-extrabold--leading: 5rem;
+  --text-d3-extrabold--font-weight: 800;
+  --text-d3-bold: 3.625rem;
+  --text-d3-bold--leading: 5rem;
+  --text-d3-bold--font-weight: 700;
+  --text-d3-medium: 3.625rem;
+  --text-d3-medium--leading: 5rem;
+  --text-d3-medium--font-weight: 500;
+  --text-d3-regular: 3.625rem;
+  --text-d3-regular--leading: 5rem;
+  --text-d3-regular--font-weight: 400;
+
+  /* ---------------- H1 ---------------- */
+  --text-h1-extrabold: 3.25rem;
+  --text-h1-extrabold--leading: 4.5rem;
+  --text-h1-extrabold--font-weight: 800;
+  --text-h1-bold: 3.25rem;
+  --text-h1-bold--leading: 4.5rem;
+  --text-h1-bold--font-weight: 700;
+  --text-h1-medium: 3.25rem;
+  --text-h1-medium--leading: 4.5rem;
+  --text-h1-medium--font-weight: 500;
+  --text-h1-regular: 3.25rem;
+  --text-h1-regular--leading: 4.5rem;
+  --text-h1-regular--font-weight: 400;
+
+  /* ---------------- H2 ---------------- */
+  --text-h2-extrabold: 3rem;
+  --text-h2-extrabold--leading: 4.125rem;
+  --text-h2-extrabold--font-weight: 800;
+  --text-h2-bold: 3rem;
+  --text-h2-bold--leading: 4.125rem;
+  --text-h2-bold--font-weight: 700;
+  --text-h2-medium: 3rem;
+  --text-h2-medium--leading: 4.125rem;
+  --text-h2-medium--font-weight: 500;
+  --text-h2-regular: 3rem;
+  --text-h2-regular--leading: 4.125rem;
+  --text-h2-regular--font-weight: 400;
+
+  /* ---------------- H3 ---------------- */
+  --text-h3-extrabold: 2.75rem;
+  --text-h3-extrabold--leading: 3.875rem;
+  --text-h3-extrabold--font-weight: 800;
+  --text-h3-bold: 2.75rem;
+  --text-h3-bold--leading: 3.875rem;
+  --text-h3-bold--font-weight: 700;
+  --text-h3-medium: 2.75rem;
+  --text-h3-medium--leading: 3.875rem;
+  --text-h3-medium--font-weight: 500;
+  --text-h3-regular: 2.75rem;
+  --text-h3-regular--leading: 3.875rem;
+  --text-h3-regular--font-weight: 400;
+
+  /* ---------------- T1 ---------------- */
+  --text-t1-extrabold: 2.625rem;
+  --text-t1-extrabold--leading: 3.625rem;
+  --text-t1-extrabold--font-weight: 800;
+  --text-t1-bold: 2.625rem;
+  --text-t1-bold--leading: 3.625rem;
+  --text-t1-bold--font-weight: 700;
+  --text-t1-medium: 2.625rem;
+  --text-t1-medium--leading: 3.625rem;
+  --text-t1-medium--font-weight: 500;
+  --text-t1-regular: 2.625rem;
+  --text-t1-regular--leading: 3.625rem;
+  --text-t1-regular--font-weight: 400;
+
+  /* ---------------- T2 ---------------- */
+  --text-t2-extrabold: 2.5rem;
+  --text-t2-extrabold--leading: 3.5rem;
+  --text-t2-extrabold--font-weight: 800;
+  --text-t2-bold: 2.5rem;
+  --text-t2-bold--leading: 3.5rem;
+  --text-t2-bold--font-weight: 700;
+  --text-t2-medium: 2.5rem;
+  --text-t2-medium--leading: 3.5rem;
+  --text-t2-medium--font-weight: 500;
+  --text-t2-regular: 2.5rem;
+  --text-t2-regular--leading: 3.5rem;
+  --text-t2-regular--font-weight: 400;
+
+  /* ---------------- T3 ---------------- */
+  --text-t3-extrabold: 2.25rem;
+  --text-t3-extrabold--leading: 3.125rem;
+  --text-t3-extrabold--font-weight: 800;
+  --text-t3-bold: 2.25rem;
+  --text-t3-bold--leading: 3.125rem;
+  --text-t3-bold--font-weight: 700;
+  --text-t3-medium: 2.25rem;
+  --text-t3-medium--leading: 3.125rem;
+  --text-t3-medium--font-weight: 500;
+  --text-t3-regular: 2.25rem;
+  --text-t3-regular--leading: 3.125rem;
+  --text-t3-regular--font-weight: 400;
+
+  /* ---------------- S1 ---------------- */
+  --text-s1-extrabold: 2rem;
+  --text-s1-extrabold--leading: 2.75rem;
+  --text-s1-extrabold--font-weight: 800;
+  --text-s1-bold: 2rem;
+  --text-s1-bold--leading: 2.75rem;
+  --text-s1-bold--font-weight: 700;
+  --text-s1-medium: 2rem;
+  --text-s1-medium--leading: 2.75rem;
+  --text-s1-medium--font-weight: 500;
+  --text-s1-regular: 2rem;
+  --text-s1-regular--leading: 2.75rem;
+  --text-s1-regular--font-weight: 400;
+
+  /* ---------------- S2 ---------------- */
+  --text-s2-extrabold: 1.75rem;
+  --text-s2-extrabold--leading: 2.375rem;
+  --text-s2-extrabold--font-weight: 800;
+  --text-s2-bold: 1.75rem;
+  --text-s2-bold--leading: 2.375rem;
+  --text-s2-bold--font-weight: 700;
+  --text-s2-medium: 1.75rem;
+  --text-s2-medium--leading: 2.375rem;
+  --text-s2-medium--font-weight: 500;
+  --text-s2-regular: 1.75rem;
+  --text-s2-regular--leading: 2.375rem;
+  --text-s2-regular--font-weight: 400;
+
+  /* ---------------- B1 (24/38) ---------------- */
+  --text-b1-extrabold: 1.5rem;
+  --text-b1-extrabold--leading: 2.375rem;
+  --text-b1-extrabold--font-weight: 800;
+  --text-b1-bold: 1.5rem;
+  --text-b1-bold--leading: 2.375rem;
+  --text-b1-bold--font-weight: 700;
+  --text-b1-medium: 1.5rem;
+  --text-b1-medium--leading: 2.375rem;
+  --text-b1-medium--font-weight: 500;
+  --text-b1-regular: 1.5rem;
+  --text-b1-regular--leading: 2.375rem;
+  --text-b1-regular--font-weight: 400;
+
+  /* ---------------- B2 (22/34) ---------------- */
+  --text-b2-extrabold: 1.375rem;
+  --text-b2-extrabold--leading: 2.125rem;
+  --text-b2-extrabold--font-weight: 800;
+  --text-b2-bold: 1.375rem;
+  --text-b2-bold--leading: 2.125rem;
+  --text-b2-bold--font-weight: 700;
+  --text-b2-medium: 1.375rem;
+  --text-b2-medium--leading: 2.125rem;
+  --text-b2-medium--font-weight: 500;
+  --text-b2-regular: 1.375rem;
+  --text-b2-regular--leading: 2.125rem;
+  --text-b2-regular--font-weight: 400;
+
+  /* ---------------- B3 (20/32) ---------------- */
+  --text-b3-extrabold: 1.25rem;
+  --text-b3-extrabold--leading: 2rem;
+  --text-b3-extrabold--font-weight: 800;
+  --text-b3-bold: 1.25rem;
+  --text-b3-bold--leading: 2rem;
+  --text-b3-bold--font-weight: 700;
+  --text-b3-medium: 1.25rem;
+  --text-b3-medium--leading: 2rem;
+  --text-b3-medium--font-weight: 500;
+  --text-b3-regular: 1.25rem;
+  --text-b3-regular--leading: 2rem;
+  --text-b3-regular--font-weight: 400;
+
+  /* ---------------- B4 (18/28) ---------------- */
+  --text-b4-extrabold: 1.125rem;
+  --text-b4-extrabold--leading: 1.75rem;
+  --text-b4-extrabold--font-weight: 800;
+  --text-b4-bold: 1.125rem;
+  --text-b4-bold--leading: 1.75rem;
+  --text-b4-bold--font-weight: 700;
+  --text-b4-medium: 1.125rem;
+  --text-b4-medium--leading: 1.75rem;
+  --text-b4-medium--font-weight: 500;
+  --text-b4-regular: 1.125rem;
+  --text-b4-regular--leading: 1.75rem;
+  --text-b4-regular--font-weight: 400;
+
+  /* ---------------- B5 (16/26) ---------------- */
+  --text-b5-extrabold: 1rem;
+  --text-b5-extrabold--leading: 1.625rem;
+  --text-b5-extrabold--font-weight: 800;
+  --text-b5-bold: 1rem;
+  --text-b5-bold--leading: 1.625rem;
+  --text-b5-bold--font-weight: 700;
+  --text-b5-medium: 1rem;
+  --text-b5-medium--leading: 1.625rem;
+  --text-b5-medium--font-weight: 500;
+  --text-b5-regular: 1rem;
+  --text-b5-regular--leading: 1.625rem;
+  --text-b5-regular--font-weight: 400;
+
+  /* ---------------- L1 (14/22) ---------------- */
+  --text-l1-extrabold: 0.875rem;
+  --text-l1-extrabold--leading: 1.375rem;
+  --text-l1-extrabold--font-weight: 800;
+  --text-l1-bold: 0.875rem;
+  --text-l1-bold--leading: 1.375rem;
+  --text-l1-bold--font-weight: 700;
+  --text-l1-medium: 0.875rem;
+  --text-l1-medium--leading: 1.375rem;
+  --text-l1-medium--font-weight: 500;
+  --text-l1-regular: 0.875rem;
+  --text-l1-regular--leading: 1.375rem;
+  --text-l1-regular--font-weight: 400;
+
+  /* ---------------- L2 (12/18) ---------------- */
+  --text-l2-extrabold: 0.75rem;
+  --text-l2-extrabold--leading: 1.125rem;
+  --text-l2-extrabold--font-weight: 800;
+  --text-l2-bold: 0.75rem;
+  --text-l2-bold--leading: 1.125rem;
+  --text-l2-bold--font-weight: 700;
+  --text-l2-medium: 0.75rem;
+  --text-l2-medium--leading: 1.125rem;
+  --text-l2-medium--font-weight: 500;
+  --text-l2-regular: 0.75rem;
+  --text-l2-regular--leading: 1.125rem;
+  --text-l2-regular--font-weight: 400;
 }
 
+/* Colors (Figma 기반) */
 @theme {
   --color-google-button: #f2f2f2;
+  --color-locallit-red-50: #fff3f1;
+  --color-locallit-red-100: #ffe4df;
+  --color-locallit-red-200: #ffcec5;
+  --color-locallit-red-300: #ffac9c;
+  --color-locallit-red-400: #ff7c64;
+  --color-locallit-red-500: #ff6348;
+  --color-locallit-red-600: #ed3516;
+  --color-locallit-red-700: #c8290d;
+  --color-locallit-red-800: #a5250f;
+  --color-locallit-red-900: #882715;
+  --color-locallit-red-950: #4c0f04;
+  --color-gray-0: #ffffff;
+  --color-gray-50: #fcfcfc;
+  --color-gray-100: #f7f5f5;
+  --color-gray-200: #f2f0f0;
+  --color-gray-250: #ece8e7;
+  --color-gray-300: #e1dddc;
+  --color-gray-400: #c9c4c3;
+  --color-gray-500: #928d8c;
+  --color-gray-550: #7e7574;
+  --color-gray-600: #645d5c;
+  --color-gray-700: #494443;
+  --color-gray-800: #2c2928;
+  --color-gray-850: #232120;
+  --color-gray-900: #181616;
+  --color-gray-1000: #000000;
+  --color-green-50: #f3faf2;
+  --color-green-100: #e3f5e3;
+  --color-green-200: #c9eac9;
+  --color-green-300: #9cd89f;
+  --color-green-400: #69be6d;
+  --color-green-500: #4eb251;
+  --color-green-600: #358438;
+  --color-green-700: #2b692f;
+  --color-green-800: #265429;
+  --color-green-900: #234525;
+  --color-green-950: #0f2510;
+  --color-red-50: #fef1f0;
+  --color-red-100: #ffdddd;
+  --color-red-200: #ffc0c1;
+  --color-red-300: #ff9595;
+  --color-red-400: #ff5959;
+  --color-red-500: #ff2525;
+  --color-red-600: #fc0706;
+  --color-red-700: #ec0001;
+  --color-red-800: #af0604;
+  --color-red-900: #900c0d;
+  --color-red-950: #500000;
+
+  /* Primary Colors */
+  --color-primary-background: var(--color-locallit-red-200);
+  --color-primary-base: var(--color-locallit-red-300);
+  --color-primary-default: var(--color-locallit-red-500);
+  --color-primary-hover: var(--color-locallit-red-600);
+  --color-primary-press: var(--color-locallit-red-800);
+
+  /* Gray Colors */
+  --color-gray-background: var(--color-gray-0);
+  --color-gray-divider: var(--color-gray-50);
+  --color-gray-accent-line: var(--color-gray-250);
+  --color-gray-line: var(--color-gray-400);
+  --color-gray-label: var(--color-gray-550);
+  --color-gray-subtitle: var(--color-gray-800);
+  --color-gray-title: var(--color-gray-900);
+
+  /* Success Colors */
+  --color-success-background: var(--color-green-200);
+  --color-success-base: var(--color-green-300);
+  --color-success-default: var(--color-green-500);
+
+  /* Error Colors */
+  --color-error-background: var(--color-red-200);
+  --color-error-base: var(--color-red-300);
+  --color-error-default: var(--color-red-500);
+
+  /* Dim Colors */
+  --color-dim: rgba(24, 19, 18, 0.8);
 }
