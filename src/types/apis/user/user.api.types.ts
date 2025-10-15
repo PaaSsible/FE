@@ -1,6 +1,11 @@
 import z from 'zod'
 
-import type { postLoginSchema, postLogoutSchema, postReissueSchema } from './user.api.schemas'
+import type {
+  patchUserTermsSchema,
+  postLoginSchema,
+  postLogoutSchema,
+  postReissueSchema,
+} from './user.api.schemas'
 
 export type PostLogin = {
   Body: z.infer<typeof postLoginSchema.body>
@@ -13,4 +18,8 @@ export type PostLogout = {
 
 export type PostReissue = {
   Response: z.infer<typeof postReissueSchema.response>
+}
+
+export type PatchUserTerms = {
+  Response: z.infer<typeof patchUserTermsSchema.response>
 }
