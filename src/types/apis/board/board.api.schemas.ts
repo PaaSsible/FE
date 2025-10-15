@@ -100,7 +100,13 @@ export const getBoardDetailSchema = {
   path: z.object({
     boardId: boardSchema.shape.boardId,
   }),
-  response: z.object({}),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string(),
+    data: z.object({ boardId: boardSchema.shape.boardId, positionId: z.number().nullable() }),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
 }
 
 /**
