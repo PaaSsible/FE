@@ -1,14 +1,18 @@
 import axios, { AxiosError, type AxiosInstance } from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_API_BOARD_URL
 
-const PaaSsible: AxiosInstance = axios.create({
+export const PaaSsibleBoardTest: AxiosInstance = axios.create({
+  baseURL: API_URL,
+})
+
+const PaaSsibleBoard: AxiosInstance = axios.create({
   baseURL: API_URL,
   timeout: 30000,
   withCredentials: true,
 })
 
-PaaSsible.interceptors.request.use(
+PaaSsibleBoard.interceptors.request.use(
   (config) => {
     return config
   },
@@ -17,7 +21,7 @@ PaaSsible.interceptors.request.use(
   },
 )
 
-PaaSsible.interceptors.response.use(
+PaaSsibleBoard.interceptors.response.use(
   (response) => {
     return response
   },
@@ -29,7 +33,7 @@ PaaSsible.interceptors.response.use(
 
         // 원래 요청 다시 시도
         if (error.config) {
-          return PaaSsible(error.config)
+          return PaaSsibleBoard(error.config)
         }
       } catch (refreshError) {
         // refresh도 실패 → 로그아웃 처리
@@ -42,4 +46,4 @@ PaaSsible.interceptors.response.use(
   },
 )
 
-export default PaaSsible
+export default PaaSsibleBoard

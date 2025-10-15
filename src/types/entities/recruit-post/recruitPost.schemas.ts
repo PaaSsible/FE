@@ -35,6 +35,7 @@ export const stacksArray = [
   'Zeplin',
   'Jest',
   'Svelte',
+  'Go',
 ] as const
 
 export const stackSchema = z
@@ -85,6 +86,7 @@ export const recruitCommentSchema = z.object({
   id: z.number(),
   content: z.string().min(1, { error: '내용은 최소 1자 이상이여야합니다.' }),
   writerId: userSchema.shape.id,
+  deleted: z.boolean(),
   parentId: z.number().optional(),
   get children() {
     return z.array(recruitCommentSchema)
@@ -108,7 +110,7 @@ export const applicantSchema = z.object({
 
 export const recruitPostSchema = z.object({
   mainCategory: z.enum(activityTypeArray),
-  subcategory: z.enum(detailTypeArray),
+  subCategory: z.enum(detailTypeArray),
   postId: z.number(),
   title: z.string().min(1, { error: '제목은 최소 1자 이상이여야합니다.' }),
   content: z.string().min(1, { error: '내용은 최소 1자 이상이여야합니다.' }),
@@ -116,7 +118,9 @@ export const recruitPostSchema = z.object({
   projectDuration: z.enum(projectDurationArray),
   writerId: userSchema.shape.id,
   writerName: userSchema.shape.nickname,
-  recruitment: z
+  viewCount: z.number(),
+  applicationCount: z.number(),
+  recruits: z
     .array(
       z.object({
         position: positionSchema.shape.id,

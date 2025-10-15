@@ -2,7 +2,7 @@ import z from 'zod'
 
 export const postLoginSchema = {
   body: z.object({
-    authorizationCode: z.string(),
+    code: z.string(),
   }),
   response: z.object({
     success: z.boolean(),
@@ -12,7 +12,7 @@ export const postLoginSchema = {
       expiresAt: z.number(),
     }),
     code: z.string(),
-    error: z.string().nullable(),
+    errors: z.string().nullable(),
   }),
 }
 
@@ -22,7 +22,7 @@ export const postLogoutSchema = {
     message: z.string().nullable(),
     data: z.null(),
     code: z.string(),
-    error: z.string().nullable(),
+    errors: z.string().nullable(),
   }),
 }
 
@@ -35,6 +35,18 @@ export const postReissueSchema = {
       expiresAt: z.number(),
     }),
     code: z.string(),
-    error: z.string().nullable(),
+    errors: z.string().nullable(),
+  }),
+}
+
+export const putWithdrawalSchema = {}
+
+export const patchUserTermsSchema = {
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.null(),
+    code: z.string(),
+    errors: z.string().nullable(),
   }),
 }

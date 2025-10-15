@@ -4,7 +4,6 @@ import { activityTypeArray, detailTypeArray } from '@/types/entities/board/board
 import {
   applicantSchema,
   applicationSchema,
-  applicationStatusArray,
   positionSchema,
   recruitCommentSchema,
   recruitPostSchema,
@@ -92,19 +91,19 @@ export const getRecruitsSchema = {
             postId: true,
             title: true,
             mainCategory: true,
-            subcategory: true,
+            subCategory: true,
             deadline: true,
           })
           .extend({
-            createdAt: z.date(),
-            modifiedAt: z.date(),
+            createdAt: z.preprocess((val) => new Date(val as string), z.date()),
+            modifiedAt: z.preprocess((val) => new Date(val as string), z.date()),
             viewCount: z.int(),
             applicationCount: z.int(),
             recruitments: z.array(
               z.object({
                 recruitmentId: z.int(),
                 positionId: positionSchema.shape.id,
-                stackId: stackSchema.shape.id,
+                stackIds: z.array(stackSchema.shape.id),
               }),
             ),
           }),
@@ -116,9 +115,9 @@ export const getRecruitsSchema = {
         size: z.int(),
         hasNext: z.boolean(),
       }),
-      code: z.string(),
-      errors: z.string().nullable(),
     }),
+    code: z.string(),
+    errors: z.string().nullable(),
   }),
 }
 /**
@@ -192,7 +191,17 @@ export const getRecruitApplicantsSchema = {
     postId: recruitPostSchema.shape.postId,
   }),
   response: z.object({
-    data: z.array(applicantSchema),
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.array(
+      z.object({
+        id: z.number(),
+        postId: recruitPostSchema.shape.postId,
+        applicantId: applicantSchema.shape.applicantId,
+      }),
+    ),
+    code: z.string(),
+    errors: z.string().nullable(),
   }),
 }
 
@@ -206,7 +215,6 @@ export const postRecruitApplicantAcceptSchema = {
     applicationId: applicationSchema.shape.id,
   }),
   body: z.object({
-    status: z.enum(applicationStatusArray),
     reason: z.string(),
   }),
 }
@@ -216,7 +224,7 @@ export const postRecruitApplicantAcceptSchema = {
  *@path `/recruits/me/posts`
  */
 export const getMyRecruitSchema = {
-  query: z.object({ page: z.int(), size: z.int() }),
+  query: z.object({ page: z.number(), size: z.number() }),
   response: getRecruitsSchema.response,
 }
 
@@ -280,6 +288,6 @@ export const deleteRecruitCommentSchema = {
     message: z.string(),
     data: z.null(),
     code: z.string(),
-    errors: z.string(),
+    errors: z.string().nullable(),
   }),
 }
