@@ -45,6 +45,7 @@ export const postTaskSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -64,6 +65,7 @@ export const patchTaskSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -81,6 +83,7 @@ export const patchTaskDescriptionSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -98,6 +101,7 @@ export const patchTaskStatusSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -114,6 +118,7 @@ export const deleteTaskSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -165,6 +170,7 @@ export const postTaskDetailCommentSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -186,6 +192,7 @@ export const patchTaskDetailCommentSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -206,6 +213,7 @@ export const deleteTaskDetailCommentSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -274,6 +282,7 @@ export const postExternalLinkSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -290,6 +299,7 @@ export const deleteExternalLinkSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
