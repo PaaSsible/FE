@@ -1,5 +1,5 @@
 import React from 'react'
-import SearchBar from '../common/SearchBar'
+import SearchBar from '../../common/SearchBar'
 import Button from '@/components/atoms/Button'
 import { ChevronLeft } from 'lucide-react'
 
