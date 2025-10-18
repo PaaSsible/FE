@@ -33,6 +33,24 @@ const boardHandlers: HttpHandler[] = [
         status: 'ONGOING',
         owner: '박채은',
       },
+      {
+        boardId: 2,
+        name: '보드2',
+        content: '보드2입니다',
+        activityType: 'CONTEST',
+        detailType: 'CONTEST_DEV',
+        status: 'COMPLETED',
+        owner: '박채은',
+      },
+      {
+        boardId: 4,
+        name: '보드2',
+        content: '보드2입니다',
+        activityType: 'CONTEST',
+        detailType: 'CONTEST_DEV',
+        status: 'ONGOING',
+        owner: '박채은',
+      },
     ]
 
     // 쿼리 기반 필터링
