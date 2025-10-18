@@ -6,7 +6,7 @@ import { Pagination } from '@/components/common/Pagination'
 import Button from '@/components/atoms/Button'
 import Dropdown from '@/components/atoms/Dropdown'
 import Tab from '@/components/atoms/Tab'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 const BoardsPage: React.FC = () => {
   const navigate = useNavigate()
