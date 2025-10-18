@@ -2,16 +2,25 @@ import React, { useState, useEffect } from 'react'
 import Chip from '@/components/atoms/Chip'
 import BoardItem from '@/components/feature/boards/BoardItem'
 import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
-import { Pagination } from '@/components/feature/boards/Pagination'
+import { Pagination } from '@/components/common/Pagination'
 import Button from '@/components/atoms/Button'
 import Dropdown from '@/components/atoms/Dropdown'
 import Tab from '@/components/atoms/Tab'
+import { useNavigate } from 'react-router-dom'
 
 const BoardsPage: React.FC = () => {
+  const navigate = useNavigate()
   // 상단 탭
   const tabs = ['공모전/대회', '사이드 프로젝트', '스터디', '기타'] as const
   type Tab = (typeof tabs)[number]
   const [selectedTab, setSelectedTab] = useState<Tab>(tabs[0])
+
+  const categorySegments: Record<Tab, string> = {
+    '공모전/대회': 'contest',
+    '사이드 프로젝트': 'side-project',
+    스터디: 'study',
+    기타: 'etc',
+  }
 
   // 필터 Chip
   const chipLabels = [
@@ -158,7 +167,7 @@ const BoardsPage: React.FC = () => {
               tags={post.tags}
               views={post.views}
               bookmarks={post.bookmarks}
-              onClick={() => console.log(`${post.title} 클릭`)}
+              onClick={() => navigate(`/boards/${categorySegments[selectedTab]}/${post.id}`)}
             />
           ))
         ) : (
