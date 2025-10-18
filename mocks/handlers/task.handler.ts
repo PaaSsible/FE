@@ -2,7 +2,7 @@ import { http, HttpResponse, type HttpHandler } from 'msw'
 
 import * as TaskAPITypes from '@/types/apis/board/task.api.types'
 
-import { API_URL } from '.'
+const API_URL = import.meta.env.VITE_API_BOARD_URL
 
 const taskHandlers: HttpHandler[] = [
   //업무 목록 조회

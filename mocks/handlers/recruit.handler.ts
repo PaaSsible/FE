@@ -2,7 +2,7 @@ import { http, HttpResponse, type HttpHandler } from 'msw'
 
 import type * as RecruitTypes from '@/types/apis/recruit/recruit.api.types'
 
-import { API_URL } from '.'
+const API_URL = import.meta.env.VITE_API_RECRUIT_URL
 
 export const recruitHandlers: HttpHandler[] = [
   // 포지션 목록 조회

@@ -2,7 +2,7 @@ import { http, HttpResponse, type HttpHandler } from 'msw'
 
 import type { GetContributionScores } from '@/types/apis/board/contribution.api.types'
 
-import { API_URL } from '.'
+const API_URL = import.meta.env.VITE_API_BOARD_URL
 
 const contributionHandlers: HttpHandler[] = [
   http.get<{ boardId: string }>(`${API_URL}/boards/:boardId/members/scores`, ({ params }) => {
