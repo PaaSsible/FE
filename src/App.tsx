@@ -1,6 +1,7 @@
 import { type JSX } from 'react'
 import '@/styles/App.css'
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { Toaster } from 'react-hot-toast'
 
 // Public
 import AuthCallBackPage from './pages/AuthCallBackPage'
@@ -32,6 +33,25 @@ import PrivacyPage from './pages/policy/PrivacyPage'
 function App(): JSX.Element {
   return (
     <BrowserRouter>
+      <Toaster
+        position="top-right"
+        containerStyle={{
+          top: '100px',
+          right: '40px',
+        }}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#FFFFFF',
+            color: '#000000',
+            borderRadius: '4px',
+            boxShadow: '0px 0px 20px 0px #00000026',
+            fontSize: '14px',
+            padding: '12px 16px',
+          },
+        }}
+      />
+
       <Routes>
         {/* Public */}
         <Route element={<Layout isLoggedIn={false} />}>
