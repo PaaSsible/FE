@@ -7,7 +7,9 @@ import toast from 'react-hot-toast'
 export default function MyBoardsPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-  const handleBackClick = () => {}
+  const handleBackClick = () => {
+    window.history.back()
+  }
 
   const handleConfirm = () => {
     setIsDeleteModalOpen(false)

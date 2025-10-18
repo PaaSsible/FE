@@ -43,12 +43,12 @@ export default function MyBoardItem({
       <div className="flex flex-col items-end justify-between gap-4">
         {/* 조회수 / 지원자수 */}
         <div className="text-l1-medium flex items-center gap-[17px] text-gray-600">
-          <div className="flex gap-[10px]">
-            <Eye className="h-6 w-6" />
+          <div className="flex gap-[10px]" aria-label={`조회수 ${views}`}>
+            <Eye className="h-6 w-6" aria-hidden="true" />
             {views}
           </div>
-          <div className="flex gap-[10px]">
-            <File className="h-6 w-6" />
+          <div className="flex gap-[10px]" aria-label={`지원자수 ${applicants}`}>
+            <File className="h-6 w-6" aria-hidden="true" />
             {applicants}
           </div>
         </div>
