@@ -1,6 +1,6 @@
 import { type JSX } from 'react'
 import '@/styles/App.css'
-import { BrowserRouter, Route, Routes } from 'react-router'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
 // Public
@@ -55,35 +55,37 @@ function App(): JSX.Element {
       <Routes>
         {/* Public */}
         <Route element={<Layout isLoggedIn={false} />}>
-          <Route path="/" element={<LandingPage />} />
+          <Route index element={<LandingPage />} />
         </Route>
 
         <Route element={<Layout isLoggedIn={true} />}>
-          <Route path="/policy/privacy" element={<PrivacyPage />}></Route>
-          <Route path="/policy/terms" element={<TermsPage />}></Route>
+          {/* Policy */}
+          <Route path="policy/privacy" element={<PrivacyPage />} />
+          <Route path="policy/terms" element={<TermsPage />} />
+
           {/* Boards */}
-          <Route path="/boards" element={<BoardsPage />} />
-          <Route path="/boards/:category" element={<BoardsPage />} />
-          <Route path="/boards/new" element={<BoardNewPage />} />
-          <Route path="/boards/:category/:postId" element={<BoardDetailPage />} />
-          <Route path="/boards/:category/:postId/edit" element={<BoardEditPage />} />
-          <Route path="/boards/:category/:postId/applicants" element={<ApplicantsPage />} />
-          <Route path="/boards/mine" element={<MyBoardsPage />} />
+          <Route path="boards" element={<BoardsPage />} />
+          <Route path="boards/new" element={<BoardNewPage />} />
+          <Route path="boards/mine" element={<MyBoardsPage />} />
+          <Route path="boards/:category" element={<BoardsPage />} />
+          <Route path="boards/:category/:postId" element={<BoardDetailPage />} />
+          <Route path="boards/:category/:postId/edit" element={<BoardEditPage />} />
+          <Route path="boards/:category/:postId/applicants" element={<ApplicantsPage />} />
 
           {/* Projects */}
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/projects/new" element={<ProjectNewPage />} />
-          <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
-          <Route path="/projects/:projectId/edit" element={<ProjectEditPage />} />
-          <Route path="/projects/:projectId/board" element={<ProjectBoardPage />} />
-          <Route path="/projects/:projectId/status" element={<ProjectStatusPage />} />
-          <Route path="/projects/:projectId/meeting" element={<ProjectMeetingPage />} />
-          <Route path="/projects/:projectId/meeting/:roomId" element={<ProjectMeetingPage />} />
-          <Route path="/projects/:projectId/chat" element={<ProjectChatPage />} />
+          <Route path="projects" element={<ProjectsPage />} />
+          <Route path="projects/new" element={<ProjectNewPage />} />
+          <Route path="projects/:projectId" element={<ProjectDetailPage />} />
+          <Route path="projects/:projectId/edit" element={<ProjectEditPage />} />
+          <Route path="projects/:projectId/board" element={<ProjectBoardPage />} />
+          <Route path="projects/:projectId/status" element={<ProjectStatusPage />} />
+          <Route path="projects/:projectId/meeting" element={<ProjectMeetingPage />} />
+          <Route path="projects/:projectId/meeting/:roomId" element={<ProjectMeetingPage />} />
+          <Route path="projects/:projectId/chat" element={<ProjectChatPage />} />
         </Route>
 
-        <Route path="/start" element={<StartPage />} />
-        <Route path="/login/oauth2/code/google" element={<AuthCallBackPage />} />
+        <Route path="start" element={<StartPage />} />
+        <Route path="login/oauth2/code/google" element={<AuthCallBackPage />} />
       </Routes>
     </BrowserRouter>
   )
