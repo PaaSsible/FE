@@ -2,7 +2,7 @@ import { http, HttpResponse, type HttpHandler } from 'msw'
 
 import type * as UserTypes from '@/types/apis/user/user.api.types'
 
-import { API_URL } from '.'
+const API_URL = import.meta.env.VITE_API_USER_URL
 
 export const userHandlers: HttpHandler[] = [
   //로그인(토큰 발급)

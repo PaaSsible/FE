@@ -2,7 +2,7 @@ import { http, HttpHandler, HttpResponse } from 'msw'
 
 import * as BoardAPITypes from '@/types/apis/board/board.api.types'
 
-import { API_URL } from '.'
+const API_URL = import.meta.env.VITE_API_BOARD_URL
 
 const boardHandlers: HttpHandler[] = [
   //보드 목록 조회
