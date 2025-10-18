@@ -16,7 +16,7 @@ export function Tag({ label, onRemove, className, withXIcon = false }: TagProps)
 
   return (
     <div className={clsx(base, withXIcon ? withXIconStyle : withoutXIconStyle, className)}>
-      <span className={clsx(withXIcon ? 'font-b4-medium' : 'font-l2-medium', 'text-gray-600')}>
+      <span className={clsx(withXIcon ? 'font-b4-medium' : 'font-l2-medium', 'text-gray-900')}>
         {label}
       </span>
 

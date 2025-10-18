@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Calendar } from 'lucide-react'
 import clsx from 'clsx'
 import { format, isValid, parse } from 'date-fns'
-import { CalendarDropdown } from '@/components/feature/boards/CalendarDropdown'
+import { CalendarDropdown } from '@/components/feature/boards/boardNew/CalendarDropdown'
 import { Tag } from '@/components/atoms/Tag'
 
 type InputFieldVariant = 'default' | 'selected' | 'techTag' | 'error'
@@ -114,12 +114,7 @@ export function InputField({
       {variant === 'techTag' && (
         <div className="flex flex-wrap gap-[10px] rounded-lg bg-gray-200 px-[20px] py-[14px]">
           {tags.map((tag) => (
-            <Tag
-              key={tag}
-              label={tag}
-              onRemove={() => onRemoveTag?.(tag)}
-              withXIcon={Boolean(onRemoveTag)}
-            />
+            <Tag key={tag} label={tag} withXIcon={Boolean(onRemoveTag)} />
           ))}
         </div>
       )}
