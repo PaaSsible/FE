@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Calendar } from 'lucide-react'
 import clsx from 'clsx'
 import { format, isValid, parse } from 'date-fns'
-import { CalendarDropdown } from '@/components/feature/boards/boardNew/CalendarDropdown'
+import { Calendar } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+
 import { Tag } from '@/components/atoms/Tag'
+import { CalendarDropdown } from '@/components/feature/boards/boardNew/CalendarDropdown'
 
 type InputFieldVariant = 'default' | 'selected' | 'techTag' | 'error'
 

@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import { Check, ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
+import { Check, ChevronDown } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
 interface MultiSelectDropdownProps {
   placeholder: string

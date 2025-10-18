@@ -1,6 +1,6 @@
+import { ImageResize } from 'quill-image-resize-module-ts'
 import { useMemo, forwardRef } from 'react'
 import ReactQuill, { Quill } from 'react-quill-new'
-import { ImageResize } from 'quill-image-resize-module-ts'
 import 'react-quill-new/dist/quill.snow.css'
 
 Quill.register('modules/imageResize', ImageResize)
@@ -44,5 +44,5 @@ const TextEditor = forwardRef<ReactQuill, TextEditorProps>(({ value, onChange },
     </div>
   )
 })
-
+TextEditor.displayName = 'TextEditor'
 export default TextEditor

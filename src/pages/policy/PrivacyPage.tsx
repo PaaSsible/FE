@@ -1,4 +1,5 @@
 import { ChevronLeft } from 'lucide-react'
+
 import Button from '@/components/atoms/Button'
 
 export default function PrivacyPage() {
@@ -18,9 +19,9 @@ export default function PrivacyPage() {
       {/* 본문 영역 */}
       <main className="flex flex-col gap-11 leading-relaxed text-gray-900">
         <p>
-          로컬잇(LocallIT, 이하 "회사")은 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를
-          보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이
-          개인정보처리방침을 수립·공개합니다.
+          로컬잇(LocallIT, 이하 &quot;회사&quot;)은 「개인정보 보호법」 제30조에 따라 정보주체의
+          개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여
+          다음과 같이 개인정보처리방침을 수립·공개합니다.
         </p>
 
         {/* 제1조 */}
@@ -277,7 +278,7 @@ export default function PrivacyPage() {
           <ol className="text-b5-medium space-y-2">
             <li>
               ① 회사는 이용자에게 개별적인 맞춤서비스를 제공하기 위해 이용정보를 저장하고 수시로
-              불러오는 '쿠키(cookie)'를 사용합니다.
+              불러오는 &apos;쿠키(cookie)&apos;를 사용합니다.
             </li>
             <li>
               ② 쿠키는 웹사이트를 운영하는데 이용되는 서버(http)가 이용자의 컴퓨터 브라우저에게

@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react'
-import Avatar from '@/components/atoms/Avatar'
 import { MessageCircle, Pencil, Trash2 } from 'lucide-react'
-import CommentTextareaPanel from './CommentTextareaPanel'
-import Modal from '@/components/common/Modal'
+import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
+
+import Avatar from '@/components/atoms/Avatar'
+import Modal from '@/components/common/Modal'
+
+import CommentTextareaPanel from './CommentTextareaPanel'
 
 interface CommentBase {
   id: number

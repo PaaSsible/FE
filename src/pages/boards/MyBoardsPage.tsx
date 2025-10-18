@@ -1,8 +1,9 @@
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+
 import Modal from '@/components/common/Modal'
 import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
 import MyBoardList from '@/components/feature/boards/myBoards/MyBoardList'
-import { useState } from 'react'
-import toast from 'react-hot-toast'
 
 export default function MyBoardsPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -13,6 +14,7 @@ export default function MyBoardsPage() {
 
   const handleConfirm = () => {
     setIsDeleteModalOpen(false)
+    //toast.success('모집글이 삭제되었습니다.')
     toast.success('모집글이 삭제되었습니다.')
   }
 

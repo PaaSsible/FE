@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Logo from '../atoms/Logo'
 
 const Footer: React.FC = () => {

@@ -1,7 +1,9 @@
-import React from 'react'
-import SearchBar from '../../common/SearchBar'
-import Button from '@/components/atoms/Button'
 import { ChevronLeft } from 'lucide-react'
+import React from 'react'
+
+import Button from '@/components/atoms/Button'
+
+import SearchBar from '../../common/SearchBar'
 
 interface BoardsPageHeaderProps {
   /** 중앙에 표시될 페이지 제목 */

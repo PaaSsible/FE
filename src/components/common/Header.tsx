@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+
+import Button from '../atoms/Button'
 import Logo from '../atoms/Logo'
 import MenuItem from '../atoms/MenuItem'
-import Button from '../atoms/Button'
 
 interface HeaderProps {
   isLoggedIn: boolean

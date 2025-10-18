@@ -1,8 +1,9 @@
+import { useRef } from 'react'
+import type ReactQuill from 'react-quill-new'
+
 import TextEditor from '@/components/common/TextEditor'
 import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
 import { useBoardFormStore } from '@/stores/boardFormStore'
-import { useRef } from 'react'
-import type ReactQuill from 'react-quill-new'
 
 interface PostEditorSectionProps {
   showErrors?: boolean

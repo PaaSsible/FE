@@ -1,5 +1,5 @@
-import { X } from 'lucide-react'
 import clsx from 'clsx'
+import { X } from 'lucide-react'
 
 interface TagProps {
   label: string

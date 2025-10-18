@@ -1,34 +1,32 @@
 import { type JSX } from 'react'
 import '@/styles/App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 // Public
+import Layout from './components/common/Layout'
 import AuthCallBackPage from './pages/AuthCallBackPage'
 import HomePage from './pages/HomePage'
+import LandingPage from './pages/LandingPage'
 import StartPage from './pages/StartPage'
-
 // Boards
-import BoardsPage from './pages/boards/BoardsPage'
-import BoardNewPage from './pages/boards/BoardNewPage'
+import ApplicantsPage from './pages/boards/ApplicantsPage'
 import BoardDetailPage from './pages/boards/BoardDetailPage'
 import BoardEditPage from './pages/boards/BoardEditPage'
-import ApplicantsPage from './pages/boards/ApplicantsPage'
+import BoardNewPage from './pages/boards/BoardNewPage'
+import BoardsPage from './pages/boards/BoardsPage'
 import MyBoardsPage from './pages/boards/MyBoardsPage'
-
 // Projects
-import ProjectsPage from './pages/projects/ProjectsPage'
-import ProjectNewPage from './pages/projects/ProjectNewPage'
+import PrivacyPage from './pages/policy/PrivacyPage'
+import TermsPage from './pages/policy/TermsPage'
+import ProjectBoardPage from './pages/projects/ProjectBoardPage'
+import ProjectChatPage from './pages/projects/ProjectChatPage'
 import ProjectDetailPage from './pages/projects/ProjectDetailPage'
 import ProjectEditPage from './pages/projects/ProjectEditPage'
-import ProjectBoardPage from './pages/projects/ProjectBoardPage'
-import ProjectStatusPage from './pages/projects/ProjectStatusPage'
 import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
-import ProjectChatPage from './pages/projects/ProjectChatPage'
-import Layout from './components/common/Layout'
-import LandingPage from './pages/LandingPage'
-import TermsPage from './pages/policy/TermsPage'
-import PrivacyPage from './pages/policy/PrivacyPage'
+import ProjectNewPage from './pages/projects/ProjectNewPage'
+import ProjectStatusPage from './pages/projects/ProjectStatusPage'
+import ProjectsPage from './pages/projects/ProjectsPage'
 
 function App(): JSX.Element {
   return (
