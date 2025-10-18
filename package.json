@@ -5,6 +5,7 @@
   "type": "module",
   "lint-staged": {
     "**/*.ts": [
+      "eslint ./src/**/*.{ts,tsx}",
       "prettier --write",
       "eslint --fix"
     ]

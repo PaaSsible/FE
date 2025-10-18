@@ -1,5 +1,6 @@
-import React from 'react'
 import { Eye, File } from 'lucide-react'
+import React from 'react'
+
 import { Tag } from '@/components/atoms/Tag'
 
 interface BoardItemProps {

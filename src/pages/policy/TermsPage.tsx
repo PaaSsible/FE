@@ -1,4 +1,5 @@
 import { ChevronLeft } from 'lucide-react'
+
 import Button from '@/components/atoms/Button'
 
 export default function TermsPage() {
@@ -21,9 +22,9 @@ export default function TermsPage() {
         <section>
           <h2 className="text-b3-bold mb-3">제1조 (목적)</h2>
           <p className="text-b5-medium">
-            본 약관은 로컬잇(LocallIT, 이하 "회사")이 제공하는 지방 대학생 IT 활동 지원 플랫폼
-            서비스(이하 "서비스")의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을
-            규정함을 목적으로 합니다.
+            본 약관은 로컬잇(LocallIT, 이하 &quot;회사&quot;)이 제공하는 지방 대학생 IT 활동 지원
+            플랫폼 서비스(이하 &quot;서비스&quot;)의 이용과 관련하여 회사와 이용자 간의 권리, 의무
+            및 책임사항을 규정함을 목적으로 합니다.
           </p>
         </section>
 
@@ -31,10 +32,10 @@ export default function TermsPage() {
         <section>
           <h2 className="text-b3-bold mb-3">제2조 (정의)</h2>
           <ol className="text-b5-medium list-decimal space-y-2 pl-5">
-            <li>"회사"라 함은 로컬잇(LocallIT) 서비스를 운영하는 사업자를 의미합니다.</li>
+            <li>&quot;회사&quot;라 함은 로컬잇(LocallIT) 서비스를 운영하는 사업자를 의미합니다.</li>
             <li>
-              "서비스"라 함은 지방 대학생들의 IT 활동을 지원하기 위해 회사가 제공하는 다음의
-              서비스를 의미합니다:
+              &quot;서비스&quot;라 함은 지방 대학생들의 IT 활동을 지원하기 위해 회사가 제공하는
+              다음의 서비스를 의미합니다:
               <ul className="mt-1 list-disc space-y-1 pl-5">
                 <li>팀원 모집 및 매칭 서비스</li>
                 <li>프로젝트 보드 제작 및 관리 기능</li>
@@ -45,12 +46,12 @@ export default function TermsPage() {
               </ul>
             </li>
             <li>
-              "이용자"라 함은 본 약관에 동의하고 회사가 제공하는 서비스를 이용하는 지방 대학생을
-              포함한 모든 사용자를 의미합니다.
+              &quot;이용자&quot;라 함은 본 약관에 동의하고 회사가 제공하는 서비스를 이용하는 지방
+              대학생을 포함한 모든 사용자를 의미합니다.
             </li>
             <li>
-              "회원"이라 함은 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의 서비스를
-              지속적으로 이용할 수 있는 자를 의미합니다.
+              &quot;회원&quot;이라 함은 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의
+              서비스를 지속적으로 이용할 수 있는 자를 의미합니다.
             </li>
           </ol>
         </section>

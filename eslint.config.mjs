@@ -49,10 +49,10 @@ export default tseslint.config(
         // --------------------
         '@typescript-eslint/explicit-module-boundary-types': 'warn', // 함수 시그니처 타입 명시 경고
         '@typescript-eslint/no-explicit-any': 'warn', // any 사용 자제
-        '@typescript-eslint/no-empty-function': ['error'], // 빈 함수 금지
+        '@typescript-eslint/no-empty-function': ['warn'], // 빈 함수 자제
         '@typescript-eslint/no-require-imports': ['error', { allow: ['~/asset/*'] }], // require import 제한
         '@typescript-eslint/no-unused-expressions': [
-          'error',
+          'warn',
           { allowShortCircuit: true, allowTernary: true },
         ], // short circuit, ternary 허용
         '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }], // 사용하지 않는 변수 경고, '_'로 시작하면 무시

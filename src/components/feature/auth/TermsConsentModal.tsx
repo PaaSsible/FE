@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import Modal from '@/components/common/Modal'
+
 import Checkbox from '@/components/atoms/Checkbox'
+import Modal from '@/components/common/Modal'
 
 interface TermsConsentModalProps {
   isOpen: boolean

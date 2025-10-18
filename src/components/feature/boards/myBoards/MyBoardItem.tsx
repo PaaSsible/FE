@@ -1,6 +1,8 @@
 import { Eye, File } from 'lucide-react'
-import BoardActionButtons from './BoardActionButtons'
+
 import { Tag } from '@/components/atoms/Tag'
+
+import BoardActionButtons from './BoardActionButtons'
 
 interface MyBoardItemProps {
   title: string

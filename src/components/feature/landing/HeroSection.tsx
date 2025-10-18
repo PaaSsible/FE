@@ -1,8 +1,11 @@
-import Button from '@/components/atoms/Button'
 import React, { useState } from 'react'
-import ScrollDown from './ScrollDown'
+
+import Button from '@/components/atoms/Button'
+
 import { InputField } from '../../common/InputField'
 import { Pagination } from '../../common/Pagination'
+
+import ScrollDown from './ScrollDown'
 
 interface HeroSectionProps {
   onScrollDown: () => void

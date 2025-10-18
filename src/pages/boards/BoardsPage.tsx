@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import Chip from '@/components/atoms/Chip'
-import BoardItem from '@/components/feature/boards/BoardItem'
-import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
-import { Pagination } from '@/components/common/Pagination'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router'
+
 import Button from '@/components/atoms/Button'
+import Chip from '@/components/atoms/Chip'
 import Dropdown from '@/components/atoms/Dropdown'
 import Tab from '@/components/atoms/Tab'
-import { useNavigate } from 'react-router-dom'
+import { Pagination } from '@/components/common/Pagination'
+import BoardItem from '@/components/feature/boards/BoardItem'
+import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
 
 const BoardsPage: React.FC = () => {
   const navigate = useNavigate()
@@ -167,12 +168,14 @@ const BoardsPage: React.FC = () => {
               tags={post.tags}
               views={post.views}
               bookmarks={post.bookmarks}
-              onClick={() => navigate(`/boards/${categorySegments[selectedTab]}/${post.id}`)}
+              onClick={() => void navigate(`/boards/${categorySegments[selectedTab]}/${post.id}`)}
             />
           ))
         ) : (
           <div className="flex h-[500px] flex-col justify-center gap-[29px] text-center">
-            <p className="text-s1-bold text-gray-1000">'{searchValue}' 검색 결과가 없습니다.</p>
+            <p className="text-s1-bold text-gray-1000">
+              &apos;{searchValue}&apos; 검색 결과가 없습니다.
+            </p>
             <p className="text-b2-medium text-gray-500">
               다른 카테고리에서 확인해 보시거나 다른 키워드로 검색해 보세요.
             </p>

@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react'
-import { ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
+import { ChevronDown } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
 
 interface DropdownProps {
   placeholder: string

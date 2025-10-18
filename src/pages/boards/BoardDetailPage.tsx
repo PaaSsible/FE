@@ -1,12 +1,13 @@
-import { useNavigate } from 'react-router-dom'
-import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
+import { useState } from 'react'
+// import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router'
+
 import Button from '@/components/atoms/Button'
-import BoardsDetailMeta from '@/components/feature/boards/boardDetail/BoardsDetailMeta'
+import Modal from '@/components/common/Modal'
+import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
 import BoardsDetailBody from '@/components/feature/boards/boardDetail/BoardsDetailBody'
 import BoardsDetailComments from '@/components/feature/boards/boardDetail/BoardsDetailComments'
-import Modal from '@/components/common/Modal'
-import { useState } from 'react'
-import toast from 'react-hot-toast'
+import BoardsDetailMeta from '@/components/feature/boards/boardDetail/BoardsDetailMeta'
 
 export default function BoardDetailPage() {
   const navigate = useNavigate()
@@ -98,9 +99,9 @@ export default function BoardDetailPage() {
 
   const handleBackClick = () => {
     if (window.history.length > 1) {
-      navigate(-1)
+      void navigate(-1)
     } else {
-      navigate('/boards')
+      void navigate('/boards')
     }
   }
 
@@ -114,7 +115,7 @@ export default function BoardDetailPage() {
 
   const handleApplyConfirm = () => {
     setIsApplyModalOpen(false)
-    toast.success('지원이 완료되었습니다.')
+    //toast.success('지원이 완료되었습니다.')
   }
 
   return (

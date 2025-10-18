@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react'
+
+import TermsConsentModal from '@/components/feature/auth/TermsConsentModal'
 import HeroSection from '@/components/feature/landing/HeroSection'
 import ServiceIntro from '@/components/feature/landing/ServiceIntro'
-import TermsConsentModal from '@/components/feature/auth/TermsConsentModal'
 
 const LandingPage: React.FC = () => {
   const introRef = useRef<HTMLDivElement | null>(null)

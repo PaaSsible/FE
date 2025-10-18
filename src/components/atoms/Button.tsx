@@ -1,5 +1,5 @@
-import React from 'react'
 import clsx from 'clsx'
+import React from 'react'
 
 type ButtonSize = 'medium' | 'big'
 type ButtonVariant = 'primary' | 'secondary'

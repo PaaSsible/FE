@@ -1,11 +1,12 @@
-import Tab from '@/components/atoms/Tab'
+import { useEffect, useMemo, useState } from 'react'
+
+import Button from '@/components/atoms/Button'
 import Chip from '@/components/atoms/Chip'
 import Dropdown from '@/components/atoms/Dropdown'
 import MultiSelectDropdown from '@/components/atoms/MultiSelectDropdown'
-import Button from '@/components/atoms/Button'
-import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
+import Tab from '@/components/atoms/Tab'
 import { InputField } from '@/components/common/InputField'
-import { useEffect, useMemo, useState } from 'react'
+import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
 import { useBoardFormStore } from '@/stores/boardFormStore'
 
 interface RecruitInfoSectionProps {

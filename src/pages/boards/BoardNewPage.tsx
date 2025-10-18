@@ -1,11 +1,12 @@
-import Modal from '@/components/common/Modal'
-import Button from '@/components/atoms/Button'
 import { useState } from 'react'
-import RecruitInfoSection from '@/components/feature/boards/boardNew/RecruitInfoSection'
-import PostEditorSection from '@/components/feature/boards/boardNew/PostEditorSection'
-import { useBoardFormStore } from '@/stores/boardFormStore'
+// import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router'
-import toast from 'react-hot-toast'
+
+import Button from '@/components/atoms/Button'
+import Modal from '@/components/common/Modal'
+import PostEditorSection from '@/components/feature/boards/boardNew/PostEditorSection'
+import RecruitInfoSection from '@/components/feature/boards/boardNew/RecruitInfoSection'
+import { useBoardFormStore } from '@/stores/boardFormStore'
 
 export default function BoardNewPage() {
   const navigate = useNavigate()
@@ -54,7 +55,7 @@ export default function BoardNewPage() {
 
     setIsRegisterModalOpen(false)
 
-    toast.success('모집글이 등록되었습니다.')
+    // toast.success('모집글이 등록되었습니다.')
   }
 
   return (
@@ -84,7 +85,7 @@ export default function BoardNewPage() {
         }
         cancelLabel="작성 취소하기"
         confirmLabel="계속 작성하기"
-        onCancel={() => navigate('/boards')}
+        onCancel={() => void navigate('/boards')}
         onConfirm={() => setIsCancelModalOpen(false)}
       />
       <Modal

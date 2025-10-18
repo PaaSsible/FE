@@ -1,5 +1,5 @@
-import React from 'react'
 import { Square, CheckSquare } from 'lucide-react'
+import React from 'react'
 
 type CheckboxSize = 'small' | 'medium' | 'large'
 
