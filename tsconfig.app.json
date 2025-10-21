@@ -8,6 +8,7 @@
     "skipLibCheck": true, // 외부 라이브러리의 타입 검사 건너뛰기 (오류 방지)
 
     /*route */
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"] // Alias 설정: 빌드 시 내부 캐싱 효율 향상
     },
