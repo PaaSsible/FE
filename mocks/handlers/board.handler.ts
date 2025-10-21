@@ -55,6 +55,7 @@ const boardHandlers: HttpHandler[] = [
   //보드 생성
   http.post(`/boards`, async ({ request }) => {
     const body = (await request.clone().json()) as BoardAPITypes.PostBoard['Body']
+    void body
 
     const data: BoardAPITypes.PostBoard['Response'] = {
       success: true,
@@ -71,6 +72,8 @@ const boardHandlers: HttpHandler[] = [
   http.put<{ boardId: string }>(`${API_URL}/boards/:boardId}`, async ({ params, request }) => {
     const { boardId } = params
     const body = (await request.clone().json()) as BoardAPITypes.PutBoard['Body']
+    void boardId
+    void body
 
     const data: BoardAPITypes.PutBoard['Response'] = {
       success: true,
@@ -86,6 +89,7 @@ const boardHandlers: HttpHandler[] = [
   //보드 삭제
   http.delete<{ boardId: string }>(`${API_URL}/boards/:boardId`, ({ params }) => {
     const { boardId } = params
+    void boardId
 
     const data: BoardAPITypes.DeleteBoard['Response'] = {
       success: true,
@@ -101,6 +105,7 @@ const boardHandlers: HttpHandler[] = [
   //보드 진입
   http.get<{ boardId: string }>(`${API_URL}/boards/:boardId`, ({ params }) => {
     const { boardId } = params
+    void boardId
 
     const data: BoardAPITypes.GetBoardDetail['Response'] = {
       success: true,
@@ -119,6 +124,7 @@ const boardHandlers: HttpHandler[] = [
   //보드 멤버 조회
   http.get<{ boardId: string }>(`${API_URL}/boards/:boardId/members`, ({ params }) => {
     const { boardId } = params
+    void boardId
 
     const data: BoardAPITypes.GetBoardMember['Response'] = {
       success: true,
@@ -146,6 +152,7 @@ const boardHandlers: HttpHandler[] = [
   //보드 탈퇴
   http.delete<{ boardId: string }>(`${API_URL}/boards/:boardId/members`, ({ params }) => {
     const { boardId } = params
+    void boardId
 
     const data: BoardAPITypes.DeleteBoardMember['Response'] = {
       success: true,
@@ -162,6 +169,8 @@ const boardHandlers: HttpHandler[] = [
     const { boardId } = params
     const url = new URL(request.url)
     const positionid = url.searchParams.get('positionId')
+    void boardId
+    void positionid
 
     const data: BoardAPITypes.PatchBoardMember['Response'] = {
       success: true,

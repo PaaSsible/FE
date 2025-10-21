@@ -1,4 +1,4 @@
-import { useRef, type JSX } from 'react'
+import { useRef } from 'react'
 import type ReactQuill from 'react-quill-new'
 
 import TextEditor from '@/components/common/TextEditor'

@@ -7,7 +7,7 @@ import EditEditorSection from '@/components/feature/boards/boardEdit/EditEditorS
 
 export default function BoardEditPage(): JSX.Element {
   const navigate = useNavigate()
-  const [error, setError] = useState(false)
+  const [error] = useState(false)
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
 

@@ -7,6 +7,8 @@ const API_URL = import.meta.env.VITE_API_BOARD_URL
 const contributionHandlers: HttpHandler[] = [
   http.get<{ boardId: string }>(`${API_URL}/boards/:boardId/members/scores`, ({ params }) => {
     const { boardId } = params
+    void boardId
+
     const data: GetContributionScores['response'] = {
       success: true,
       message: '요청이 성공적으로 처리되었습니다.',

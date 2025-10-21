@@ -198,6 +198,7 @@ export const recruitHandlers: HttpHandler[] = [
   // 모집 공고 생성
   http.get(`${API_URL}/recruits`, async ({ request }) => {
     const body = (await request.clone().json()) as RecruitTypes.PostRecruit['Body']
+    void body
 
     const data: RecruitTypes.PostRecruit['Response'] = {
       success: true,
@@ -221,6 +222,13 @@ export const recruitHandlers: HttpHandler[] = [
     const subCategory = url.searchParams.get('subCategory') ?? undefined
     const position = url.searchParams.get('position') ?? undefined
     const keyword = url.searchParams.get('keyword') ?? undefined
+    void page
+    void size
+    void sort
+    void mainCategory
+    void subCategory
+    void position
+    void keyword
 
     const data: RecruitTypes.GetRecruits['Response'] = {
       success: true,
@@ -237,21 +245,18 @@ export const recruitHandlers: HttpHandler[] = [
             deadline: '2025-11-16',
             viewCount: 0,
             applicationCount: 0,
-            recruitments: [
+            recruits: [
               {
-                recruitmentId: 47,
-                positionId: 1,
-                stackIds: [1],
+                position: 1,
+                stacks: [1],
               },
               {
-                recruitmentId: 48,
-                positionId: 2,
-                stackIds: [2],
+                position: 2,
+                stacks: [2],
               },
               {
-                recruitmentId: 49,
-                positionId: 2,
-                stackIds: [3],
+                position: 2,
+                stacks: [3],
               },
             ],
           },
@@ -265,11 +270,10 @@ export const recruitHandlers: HttpHandler[] = [
             deadline: '2025-11-30',
             viewCount: 0,
             applicationCount: 0,
-            recruitments: [
+            recruits: [
               {
-                recruitmentId: 44,
-                positionId: 1,
-                stackIds: [7],
+                position: 1,
+                stacks: [7],
               },
             ],
           },
@@ -293,6 +297,8 @@ export const recruitHandlers: HttpHandler[] = [
   http.put<{ postId: string }>(`${API_URL}/recruits/:postId`, async ({ params, request }) => {
     const postId = params.postId
     const body = (await request.clone().json()) as RecruitTypes.PostRecruit['Response']
+    void postId
+    void body
 
     const data: RecruitTypes.PostRecruit['Response'] = {
       success: true,
@@ -310,6 +316,7 @@ export const recruitHandlers: HttpHandler[] = [
   // 모집 공고 상세 조회
   http.get<{ postId: string }>(`${API_URL}/recruits/:postId`, ({ params }) => {
     const postId = params.postId
+    void postId
 
     const data: RecruitTypes.GetRecruitDetail['Response'] = {
       success: true,
@@ -342,6 +349,7 @@ export const recruitHandlers: HttpHandler[] = [
   // 모집 공고 삭제
   http.delete<{ postId: string }>(`${API_URL}/recruits/:postId`, ({ params }) => {
     const postId = params.postId
+    void postId
 
     const data: RecruitTypes.DeleteRecruit['Response'] = {
       success: true,
@@ -357,6 +365,7 @@ export const recruitHandlers: HttpHandler[] = [
   // 지원자 목록 조회
   http.get<{ postId: string }>(`${API_URL}/recruits/:postId/applications`, ({ params }) => {
     const postId = params.postId
+    void postId
 
     const data: RecruitTypes.GetRecruitApplicants['Response'] = {
       success: true,
@@ -382,6 +391,9 @@ export const recruitHandlers: HttpHandler[] = [
       const postId = params.postId
       const applicationId = params.applicationId
       const body = (await request.clone().json()) as RecruitTypes.PostRecruitApplicantAccept['Body']
+      void postId
+      void applicationId
+      void body
 
       return HttpResponse.json(null, { status: 200 })
     },
@@ -392,6 +404,8 @@ export const recruitHandlers: HttpHandler[] = [
     const url = new URL(request.url)
     const page = url.searchParams.get('page') ?? undefined
     const size = url.searchParams.get('size') ?? undefined
+    void page
+    void size
 
     const data: RecruitTypes.GetMyRecruit['Response'] = {
       success: true,
@@ -408,26 +422,22 @@ export const recruitHandlers: HttpHandler[] = [
             deadline: '2025-08-30',
             viewCount: 0,
             applicationCount: 0,
-            recruitments: [
+            recruits: [
               {
-                recruitmentId: 5,
-                positionId: 1,
-                stackIds: [1],
+                position: 1,
+                stacks: [1],
               },
               {
-                recruitmentId: 6,
-                positionId: 1,
-                stackIds: [2],
+                position: 1,
+                stacks: [2],
               },
               {
-                recruitmentId: 7,
-                positionId: 2,
-                stackIds: [2],
+                position: 2,
+                stacks: [2],
               },
               {
-                recruitmentId: 8,
-                positionId: 2,
-                stackIds: [3],
+                position: 2,
+                stacks: [3],
               },
             ],
           },
@@ -441,11 +451,10 @@ export const recruitHandlers: HttpHandler[] = [
             deadline: '2025-08-30',
             viewCount: 0,
             applicationCount: 0,
-            recruitments: [
+            recruits: [
               {
-                recruitmentId: 9,
-                positionId: 1,
-                stackIds: [1],
+                position: 1,
+                stacks: [1],
               },
             ],
           },
@@ -471,6 +480,8 @@ export const recruitHandlers: HttpHandler[] = [
     async ({ params, request }) => {
       const postId = params.postId
       const body = (await request.clone().json()) as RecruitTypes.PostRecruitComment['Body']
+      void postId
+      void body
 
       return HttpResponse.json(null, { status: 200 })
     },
@@ -479,6 +490,7 @@ export const recruitHandlers: HttpHandler[] = [
   // 댓글조회
   http.get<{ postId: string }>(`${API_URL}/recruits/:postId/comments`, ({ params }) => {
     const postId = params.postId
+    void postId
 
     const data: RecruitTypes.GetRecruitComments['Response'] = {
       success: true,
@@ -498,6 +510,8 @@ export const recruitHandlers: HttpHandler[] = [
                 writerId: 1,
                 deleted: false,
                 children: [],
+                createdAt: '',
+                updatedAt: '',
               },
               {
                 id: 3,
@@ -505,8 +519,12 @@ export const recruitHandlers: HttpHandler[] = [
                 writerId: 1,
                 deleted: false,
                 children: [],
+                createdAt: '',
+                updatedAt: '',
               },
             ],
+            createdAt: '',
+            updatedAt: '',
           },
         ],
       },
@@ -522,6 +540,8 @@ export const recruitHandlers: HttpHandler[] = [
     async ({ params, request }) => {
       const { commentId } = params
       const body = (await request.clone().json()) as RecruitTypes.PutRecruitComment['Body']
+      void commentId
+      void body
 
       return HttpResponse.json(null, { status: 200 })
     },
@@ -530,6 +550,7 @@ export const recruitHandlers: HttpHandler[] = [
   // 댓글삭제
   http.delete<{ commentId: string }>(`${API_URL}/recruits/comments/:commentId`, ({ params }) => {
     const { commentId } = params
+    void commentId
 
     const data: RecruitTypes.DeleteRecruitComment['Response'] = {
       success: true,
