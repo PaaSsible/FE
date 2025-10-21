@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, type JSX } from 'react'
-import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import Button from '@/components/atoms/Button'

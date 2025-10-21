@@ -8,6 +8,7 @@ export const userHandlers: HttpHandler[] = [
   //로그인(토큰 발급)
   http.post(`${API_URL}/users/auth/token`, async ({ request }) => {
     const body = (await request.clone().json()) as UserTypes.PostLogin['Body']
+    void body
 
     const refreshToken = 'refreshTokenExample'
 

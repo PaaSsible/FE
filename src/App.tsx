@@ -6,7 +6,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 // Public
 import Layout from './components/common/Layout'
 import AuthCallBackPage from './pages/AuthCallBackPage'
-import HomePage from './pages/HomePage'
 import LandingPage from './pages/LandingPage'
 import StartPage from './pages/StartPage'
 // Boards
