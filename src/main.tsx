@@ -5,7 +5,10 @@ import './index.css'
 import App from './App'
 
 const enableMocking = async () => {
-  if (!import.meta.env.DEV) {
+  const isDev = import.meta.env.DEV
+  const useMSW = String(import.meta.env.VITE_ENABLE_MSW).toLowerCase() === 'true'
+
+  if (!isDev || !useMSW) {
     return
   }
   const { worker } = await import('../mocks/browser')
