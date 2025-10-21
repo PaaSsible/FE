@@ -1,3 +1,4 @@
+import { isBefore, startOfDay } from 'date-fns'
 import z from 'zod'
 
 import { activityTypeArray, detailTypeArray } from '@/types/entities/board/board.entities.schemas'
@@ -44,18 +45,34 @@ export const getStacksSchema = {
  * @name 모집공고생성
  * @path `/recruits`
  */
+const recruitPayloadSchema = z
+  .array(
+    z.object({
+      position: positionSchema.shape.id,
+      stacks: z.array(stackSchema.shape.id).default([]),
+    }),
+  )
+  .default([])
+
 export const postRecruitSchema = {
   body: recruitPostSchema
     .pick({
       mainCategory: true,
-      subcategory: true,
+      subCategory: true,
       title: true,
       content: true,
-      deadline: true,
       projectDuration: true,
-      recruitment: true,
     })
-    .extend({ deadline: z.date().min(new Date(), '마감기한은 현재 시간 이후여야 합니다.') }),
+    .extend({
+      deadline: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .refine((value) => {
+          const parsed = startOfDay(new Date(`${value}T00:00:00`))
+          return !isBefore(parsed, startOfDay(new Date()))
+        }, '마감기한은 현재 시간 이후여야 합니다.'),
+      recruits: recruitPayloadSchema,
+    }),
   response: z.object({
     success: z.boolean(),
     message: z.string().nullable(),
@@ -76,7 +93,7 @@ export const getRecruitsSchema = {
     size: z.int().min(1).positive(),
     sort: z.enum(sortArray).default('RECENT'),
     mainCategory: z.enum(activityTypeArray).optional(),
-    subcategory: z.enum(detailTypeArray).optional(),
+    subCategory: z.enum(detailTypeArray).optional(),
     position: positionSchema.shape.id.optional(),
     keyword: z.string().optional(),
   }),
@@ -99,13 +116,17 @@ export const getRecruitsSchema = {
             modifiedAt: z.preprocess((val) => new Date(val as string), z.date()),
             viewCount: z.int(),
             applicationCount: z.int(),
-            recruitments: z.array(
-              z.object({
-                recruitmentId: z.int(),
-                positionId: positionSchema.shape.id,
-                stackIds: z.array(stackSchema.shape.id),
-              }),
-            ),
+            recruits: z
+              .array(
+                z.object({
+                  position: positionSchema.shape.id,
+                  stacks: z
+                    .union([z.array(stackSchema.shape.id), stackSchema.shape.id])
+                    .transform((v) => (Array.isArray(v) ? v : [v])),
+                }),
+              )
+              .optional()
+              .default([]),
           }),
       ),
       pageInfo: z.object({
@@ -236,10 +257,10 @@ export const postRecruitCommentSchema = {
   path: z.object({
     postId: recruitPostSchema.shape.postId,
   }),
-  body: z.union([
-    recruitCommentSchema.pick({ content: true }),
-    recruitCommentSchema.pick({ parentId: true, content: true }),
-  ]),
+  body: z.object({
+    content: recruitCommentSchema.shape.content,
+    parentId: recruitCommentSchema.shape.parentId.optional(),
+  }),
 }
 
 /**

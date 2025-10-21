@@ -1,3 +1,4 @@
+import { isBefore, startOfDay } from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
 
 import Button from '@/components/atoms/Button'
@@ -7,88 +8,20 @@ import MultiSelectDropdown from '@/components/atoms/MultiSelectDropdown'
 import Tab from '@/components/atoms/Tab'
 import { InputField } from '@/components/common/InputField'
 import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
+import {
+  RECRUIT_CATEGORIES,
+  RECRUIT_CATEGORY_BY_LABEL,
+  RECRUIT_PERIODS,
+  type RecruitCategoryConfig,
+} from '@/constants/recruitFilters'
+import usePositionsOptions from '@/hooks/usePositionsOptions'
+import useStacksOptions from '@/hooks/useStacksOptions'
 import { useBoardFormStore } from '@/stores/boardFormStore'
 
 interface RecruitInfoSectionProps {
   showErrors?: boolean
   onValidityChange?: (isValid: boolean) => void
 }
-
-const tabs = ['공모전/대회', '사이드 프로젝트', '스터디', '기타']
-const chips = ['기획 중심', '기획+디자인', '디자인 중심', '개발 중심', '융합 프로젝트', '기타']
-const periodOptions = ['기간 미정', '1개월', '2개월', '3개월', '4개월', '5개월', '6개월', '장기']
-const positionOptions = [
-  '기획자',
-  'PM',
-  '마케터',
-  '디자이너',
-  '프론트엔드 개발자',
-  '백엔드 개발자',
-  'iOS',
-  '안드로이드',
-  '데브옵스',
-  '기타',
-]
-const stackOptions = [
-  'JavaScript',
-  'TypeScript',
-  'React',
-  'Vue',
-  'NodeJS',
-  'Spring',
-  'Java',
-  'NextJS',
-  'Express',
-  'Go',
-  'C',
-  'Python',
-  'Django',
-  'Swift',
-  'Kotlin',
-  'MySQL',
-  'MongoDB',
-  'php',
-  'GraphQL',
-  'Firebase',
-  'ReactNative',
-  'Unity',
-  'Flutter',
-  'AWS',
-  'Kubernetes',
-  'Docker',
-  'Git',
-  'Figma',
-  'Zeplin',
-  'Jest',
-  'Svelte',
-]
-
-const mainCategoryByTab: Record<string, string> = {
-  '공모전/대회': 'CONTEST',
-  '사이드 프로젝트': 'SIDE_PROJECT',
-  스터디: 'STUDY',
-  기타: 'ETC',
-}
-const subCategoryByChip: Record<string, string> = {
-  '기획 중심': 'CONTEST_PLANNING',
-  '기획+디자인': 'CONTEST_PLANNING_DESIGN',
-  '디자인 중심': 'CONTEST_DESIGN',
-  '개발 중심': 'CONTEST_DEV',
-  '융합 프로젝트': 'CONTEST_MIXED',
-  기타: 'CONTEST_ETC',
-}
-const periodCodeByLabel: Record<string, string> = {
-  '기간 미정': 'UNDEFINED',
-  '1개월': 'ONE',
-  '2개월': 'TWO',
-  '3개월': 'THREE',
-  '4개월': 'FOUR',
-  '5개월': 'FIVE',
-  '6개월': 'SIX',
-  장기: 'LONG',
-}
-const positionIdByLabel = Object.fromEntries(positionOptions.map((l, i) => [l, i + 1]))
-const stackIdByLabel = Object.fromEntries(stackOptions.map((l, i) => [l, i + 1]))
 
 export default function RecruitInfoSection({
   showErrors = false,
@@ -109,11 +42,56 @@ export default function RecruitInfoSection({
 
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
-  const hasValidTeamMember = useMemo(
-    () => recruitment.some((r) => r.position !== null),
+  const {
+    options: positionOptions,
+    getPositionIdByLabel,
+    getPositionLabelById,
+  } = usePositionsOptions()
+  const { options: stackOptions, getStackIdByLabel, getStackLabelById } = useStacksOptions()
+
+  const selectedCategoryLabel = useMemo(() => {
+    const matched = RECRUIT_CATEGORIES.find((category) => category.mainCategory === mainCategory)
+    return matched?.label ?? RECRUIT_CATEGORIES[0].label
+  }, [mainCategory])
+
+  const currentCategory: RecruitCategoryConfig = useMemo(
+    () => RECRUIT_CATEGORY_BY_LABEL[selectedCategoryLabel],
+    [selectedCategoryLabel],
+  )
+
+  const today = useMemo(() => startOfDay(new Date()), [])
+  const memberPositionOptions = useMemo(
+    () => positionOptions.filter((label) => label !== '전체'),
+    [positionOptions],
+  )
+
+  const meaningfulRecruitment = useMemo(
+    () => recruitment.filter((member) => member.position !== null || member.stacks.length > 0),
     [recruitment],
   )
-  const isFormValid = Boolean(deadline && projectDuration && hasValidTeamMember)
+
+  const hasIncompleteRecruitment = meaningfulRecruitment.some((member) => member.position === null)
+
+  const isDeadlineValid = useMemo(() => {
+    if (!deadline) {
+      return false
+    }
+
+    return !isBefore(startOfDay(deadline), today)
+  }, [deadline, today])
+
+  const currentChipOptions = currentCategory.chips
+  const selectedChipLabel = useMemo(() => {
+    const matched = currentChipOptions.find((chip) => chip.subCategory === subCategory)
+    return matched?.label ?? null
+  }, [currentChipOptions, subCategory])
+
+  const isFormValid = Boolean(
+    deadline &&
+      isDeadlineValid &&
+      projectDuration &&
+      (!meaningfulRecruitment.length || !hasIncompleteRecruitment),
+  )
 
   useEffect(() => {
     onValidityChange?.(isFormValid)
@@ -124,7 +102,7 @@ export default function RecruitInfoSection({
   }
 
   const handlePositionSelect = (index: number, label: string) => {
-    const positionId = positionIdByLabel[label] ?? null
+    const positionId = getPositionIdByLabel(label)
     const updated = [...recruitment]
     updated[index].position = positionId
     setRecruitment(updated)
@@ -132,12 +110,25 @@ export default function RecruitInfoSection({
 
   const handleStacksChange = (index: number, labels: string[]) => {
     const selectedIds = labels
-      .map((label) => stackIdByLabel[label])
-      .filter((id): id is number => id !== undefined)
+      .map((label) => getStackIdByLabel(label))
+      .filter((id): id is number => typeof id === 'number')
+    const uniqueIds = Array.from(new Set(selectedIds))
     const updated = [...recruitment]
-    updated[index].stacks = selectedIds
+    updated[index].stacks = uniqueIds
     setRecruitment(updated)
   }
+
+  useEffect(() => {
+    const hasMatchingChip = currentChipOptions.some(
+      ({ subCategory: candidate }) => candidate === subCategory,
+    )
+    if (!hasMatchingChip && currentChipOptions.length > 0) {
+      const firstChip = currentChipOptions[0]
+      if (firstChip) {
+        setSubCategory(firstChip.subCategory)
+      }
+    }
+  }, [currentChipOptions, subCategory, setSubCategory])
 
   return (
     <section className="flex flex-col">
@@ -146,28 +137,38 @@ export default function RecruitInfoSection({
       {/* 탭 */}
       <div className="border-gray-250 mt-6 flex justify-between border-b-[1.5px] pb-3">
         <div className="flex gap-[25px]">
-          {tabs.map((tab) => (
+          {RECRUIT_CATEGORIES.map((category) => (
             <Tab
-              key={tab}
-              label={tab}
-              selected={mainCategoryByTab[tab] === mainCategory}
-              onClick={() => setMainCategory(mainCategoryByTab[tab])}
+              key={category.label}
+              label={category.label}
+              selected={selectedCategoryLabel === category.label}
+              onClick={() => {
+                setMainCategory(category.mainCategory)
+                if (category.chips.length > 0) {
+                  const defaultChip = category.chips[0]
+                  if (defaultChip) {
+                    setSubCategory(defaultChip.subCategory)
+                  }
+                }
+              }}
             />
           ))}
         </div>
       </div>
 
       {/* 칩 */}
-      <div className="border-gray-250 flex flex-wrap justify-start gap-[10px] border-b-[1.5px] py-3">
-        {chips.map((chip) => (
-          <Chip
-            key={chip}
-            label={chip}
-            selected={subCategoryByChip[chip] === subCategory}
-            onClick={() => setSubCategory(subCategoryByChip[chip])}
-          />
-        ))}
-      </div>
+      {currentChipOptions.length > 0 && (
+        <div className="border-gray-250 flex flex-wrap justify-start gap-[10px] border-b-[1.5px] py-3">
+          {currentChipOptions.map((chip) => (
+            <Chip
+              key={chip.label}
+              label={chip.label}
+              selected={chip.label === selectedChipLabel}
+              onClick={() => setSubCategory(chip.subCategory)}
+            />
+          ))}
+        </div>
+      )}
 
       {/* 모집 마감일 / 진행 기간 */}
       <div className="mt-6 flex w-full gap-4">
@@ -178,6 +179,14 @@ export default function RecruitInfoSection({
             dateValue={deadline}
             onSelectDate={(date) => setDeadline(date ?? null)}
           />
+          {showErrors && !deadline && (
+            <span className="text-b5-medium text-red-500">* 모집 마감일을 선택해 주세요.</span>
+          )}
+          {showErrors && deadline && !isDeadlineValid && (
+            <span className="text-b5-medium text-red-500">
+              * 모집 마감일은 오늘 이후 날짜로 선택해 주세요.
+            </span>
+          )}
         </div>
 
         <div className="flex flex-1 flex-col gap-[10px]">
@@ -185,12 +194,13 @@ export default function RecruitInfoSection({
           <div className="flex flex-col gap-[7px]">
             <Dropdown
               placeholder={
-                Object.keys(periodCodeByLabel).find(
-                  (key) => periodCodeByLabel[key] === projectDuration,
-                ) ?? '진행 기간'
+                RECRUIT_PERIODS.find(({ code }) => code === projectDuration)?.label ?? '진행 기간'
               }
-              options={periodOptions}
-              onSelect={(label) => setProjectDuration(periodCodeByLabel[label] ?? null)}
+              options={RECRUIT_PERIODS.map(({ label }) => label)}
+              onSelect={(label) => {
+                const period = RECRUIT_PERIODS.find((item) => item.label === label)
+                setProjectDuration(period?.code ?? null)
+              }}
               variant="form"
             />
             {showErrors && !projectDuration && (
@@ -206,29 +216,31 @@ export default function RecruitInfoSection({
 
         <div className="flex w-full flex-col gap-3">
           {recruitment.map((member, index) => {
-            const showTeamErrors = showErrors && (!member.position || member.stacks.length === 0)
+            const hasAnySelection = member.position !== null || member.stacks.length > 0
+            const isMemberValid = member.position !== null
+            const showTeamErrors = showErrors && hasAnySelection && !isMemberValid
             const selectedTags = member.stacks
-              .map((id) => Object.keys(stackIdByLabel).find((key) => stackIdByLabel[key] === id))
-              .filter(Boolean) as string[]
+              .map((id) => getStackLabelById(id))
+              .filter((label): label is string => Boolean(label))
 
             const isOpen = openIndex === index
             const shouldShowDropdown = isOpen || selectedTags.length === 0
+            const shouldShowPositionError = showTeamErrors && member.position === null
+            const positionLabel =
+              member.position !== null ? getPositionLabelById(member.position) : null
+            const positionPlaceholder = positionLabel ?? '포지션'
 
             return (
               <div key={index} className="flex w-full gap-4">
                 {/* 포지션 */}
                 <div className="flex w-[25%] flex-col gap-[7px]">
                   <Dropdown
-                    placeholder={
-                      Object.keys(positionIdByLabel).find(
-                        (key) => positionIdByLabel[key] === member.position,
-                      ) ?? '포지션'
-                    }
-                    options={positionOptions}
+                    placeholder={positionPlaceholder}
+                    options={memberPositionOptions}
                     onSelect={(value) => handlePositionSelect(index, value)}
                     variant="form"
                   />
-                  {showTeamErrors && !member.position && (
+                  {shouldShowPositionError && (
                     <span className="text-b5-medium text-red-500">
                       * 팀원의 포지션을 선택해 주세요.
                     </span>
@@ -256,12 +268,6 @@ export default function RecruitInfoSection({
                       }}
                     />
                   )}
-
-                  {/* {showTeamErrors && member.stacks.length === 0 && (
-                    <span className="text-b5-medium text-red-500">
-                      * 기술 스택을 한 가지 이상 선택해 주세요.
-                    </span>
-                  )} */}
                 </div>
               </div>
             )

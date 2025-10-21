@@ -28,5 +28,5 @@ export const putWithdrawal = async (): Promise<AxiosResponse<any, any>> => {
 
 export const patchUserTerms = async (): Promise<UserAPITypes.PatchUserTerms['Response']> => {
   const res = await PaaSsibleUser.patch('/users/terms')
-  return userAPISchemas.patchUserTermsSchema.response.parse(res)
+  return userAPISchemas.patchUserTermsSchema.response.parse(res.data)
 }
