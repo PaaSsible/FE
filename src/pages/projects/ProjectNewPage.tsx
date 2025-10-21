@@ -1,12 +1,9 @@
-import { useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
 import { useState, type JSX } from 'react'
 
 import Button from '@/components/atoms/Button'
 import Chip from '@/components/atoms/Chip'
 import Tab from '@/components/atoms/Tab'
 import { InputField } from '@/components/common/InputField'
-import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
 import { activityTypeToDetailTypeMap } from '@/config/converters/activityTypeDetailTypeMap'
 import { activityTypeEngToKorMap } from '@/config/converters/activityTypeEngToKorMap'
 import { detailTypeEngToKorMap } from '@/config/converters/detailTypeEngToKorMap'
