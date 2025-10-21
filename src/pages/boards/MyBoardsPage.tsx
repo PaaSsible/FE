@@ -31,7 +31,7 @@ export default function MyBoardsPage() {
         isOpen={isDeleteModalOpen}
         title="모집글을 삭제하시겠어요?"
         description={
-          <div className="mb-6">
+          <div>
             삭제한 모집글은 복구할 수 없습니다.
             <br />
             정말 삭제하시겠습니까?
