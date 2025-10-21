@@ -8,6 +8,7 @@ interface CommentTextareaPanelProps {
   onSubmit: () => void
   variant?: 'primary' | 'nested'
   className?: string
+  isSubmitting?: boolean
 }
 
 export default function CommentTextareaPanel({
@@ -18,10 +19,12 @@ export default function CommentTextareaPanel({
   onSubmit,
   variant = 'nested',
   className = '',
+  isSubmitting = false,
 }: CommentTextareaPanelProps) {
   const containerClasses = 'rounded-md border border-[#E2E8F0] bg-gray-0 p-3'
   const textareaHeight = variant === 'primary' ? 'h-[100px]' : 'h-[72px]'
   const isEmpty = value.trim().length === 0
+  const isActionDisabled = isSubmitting || isEmpty
 
   return (
     <div className={`${containerClasses} ${className}`}>
@@ -37,11 +40,16 @@ export default function CommentTextareaPanel({
           size="medium"
           className="!h-[34px] !w-[80px] !border-none !bg-gray-200 !text-gray-600 enabled:hover:!bg-gray-300 disabled:!cursor-not-allowed disabled:!bg-gray-100 disabled:!text-gray-400"
           onClick={onCancel}
-          disabled={isEmpty}
+          disabled={isActionDisabled}
         >
           취소
         </Button>
-        <Button size="medium" className="!h-[34px] !w-[80px]" onClick={onSubmit} disabled={isEmpty}>
+        <Button
+          size="medium"
+          className="!h-[34px] !w-[80px]"
+          onClick={onSubmit}
+          disabled={isActionDisabled}
+        >
           등록
         </Button>
       </div>
