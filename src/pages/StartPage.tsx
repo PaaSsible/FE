@@ -1,9 +1,9 @@
 import type { JSX } from 'react'
-
-import startIllustration from '@/assets/images/start-illustration.png'
 import GoogleLoginButton from '@/components/feature/auth/GoogleLoginButton'
 
 const StartPage = (): JSX.Element => {
+  const startIllustrationSrc = '/assets/images/start-illustration.png'
+
   return (
     <div className="flex h-screen items-center justify-center bg-white px-[50px]">
       {/* 좌측 */}
@@ -18,7 +18,7 @@ const StartPage = (): JSX.Element => {
       {/* 우측 */}
       <div className="flex w-[565px] items-center justify-center">
         <img
-          src={startIllustration}
+          src={startIllustrationSrc}
           alt="시작하기 일러스트"
           className="h-[820px] w-[565px] rounded-2xl"
         />
