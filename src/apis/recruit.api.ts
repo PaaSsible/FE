@@ -105,7 +105,9 @@ export const deleteRecruit = async (
   path: DeleteRecruit['Path'],
 ): Promise<DeleteRecruit['Response']> => {
   const parsedPath = deleteRecruitSchema.path.parse(path)
-  const res = await PaaSsibleRecruit.delete(`/recruits/${parsedPath.postId}`)
+  const res = await PaaSsibleRecruit.delete(`/recruits/${parsedPath.postId}`, {
+    params: { postId: parsedPath.postId },
+  })
   return deleteRecruitSchema.response.parse(res.data)
 }
 

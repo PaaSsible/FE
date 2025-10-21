@@ -13,7 +13,7 @@ export const stacksArray = [
   'Java',
   'NextJS',
   'Express',
-  'GO',
+  'Go',
   'C',
   'Python',
   'Django',
@@ -35,7 +35,6 @@ export const stacksArray = [
   'Zeplin',
   'Jest',
   'Svelte',
-  'Go',
 ] as const
 
 export const stackSchema = z
@@ -52,7 +51,7 @@ export const positionsArray = [
   'PM',
   '마케터',
   '디자이너',
-  '프론트엔드 개발자  ',
+  '프론트엔드 개발자',
   '백엔드 개발자',
   'iOS',
   '안드로이드',
@@ -84,9 +83,11 @@ export const projectDurationSchema = z.enum(projectDurationArray)
 
 export const recruitCommentSchema = z.object({
   id: z.number(),
-  content: z.string().min(1, { error: '내용은 최소 1자 이상이여야합니다.' }),
+  content: z.string().nullable(),
   writerId: userSchema.shape.id,
   deleted: z.boolean(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
   parentId: z.number().optional(),
   get children() {
     return z.array(recruitCommentSchema)
