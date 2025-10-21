@@ -71,7 +71,7 @@ const boardHandlers: HttpHandler[] = [
   }),
 
   //보드 생성
-  http.post(`/boards`, async ({ request }) => {
+  http.post(`${API_URL}/boards`, async ({ request }) => {
     const body = (await request.clone().json()) as BoardAPITypes.PostBoard['Body']
 
     const data: BoardAPITypes.PostBoard['Response'] = {

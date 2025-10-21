@@ -5,25 +5,25 @@
     "useDefineForClassFields": true,
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
+    "skipLibCheck": true, // 외부 라이브러리의 타입 검사 건너뛰기 (오류 방지)
 
     /*route */
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"] // Alias 설정: 빌드 시 내부 캐싱 효율 향상
     },
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "moduleResolution": "bundler", // 번들러의 모듈 해석 로직 적용
+    "allowImportingTsExtensions": true, // .ts 확장자명을 포함한 Import 허용
+    "verbatimModuleSyntax": true, // Import 구문을 있는 그대로 유지
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": true, // 사용되지 않는 지역 변수 검사
+    "noUnusedParameters": true, // 사용되지 않는 매개변수 검사
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true

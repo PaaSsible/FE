@@ -16,9 +16,9 @@ import BoardEditPage from './pages/boards/BoardEditPage'
 import BoardNewPage from './pages/boards/BoardNewPage'
 import BoardsPage from './pages/boards/BoardsPage'
 import MyBoardsPage from './pages/boards/MyBoardsPage'
-// Projects
 import PrivacyPage from './pages/policy/PrivacyPage'
 import TermsPage from './pages/policy/TermsPage'
+// Projects
 import ProjectBoardPage from './pages/projects/ProjectBoardPage'
 import ProjectChatPage from './pages/projects/ProjectChatPage'
 import ProjectDetailPage from './pages/projects/ProjectDetailPage'
