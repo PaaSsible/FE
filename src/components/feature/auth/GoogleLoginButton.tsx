@@ -2,7 +2,7 @@ import type { JSX } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
-const REDIRECT_URI = 'http://localhost:5173/login/oauth2/code/google'
+const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URL
 const SCOPE = 'openid email profile'
 const RESPONSE_TYPE = 'code'
 
