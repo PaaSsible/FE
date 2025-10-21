@@ -1,4 +1,5 @@
 import type { JSX } from 'react'
+
 import GoogleLoginButton from '@/components/feature/auth/GoogleLoginButton'
 
 const StartPage = (): JSX.Element => {

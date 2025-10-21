@@ -1,16 +1,26 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import Checkbox from '@/components/atoms/Checkbox'
 import Modal from '@/components/common/Modal'
 
 interface TermsConsentModalProps {
   isOpen: boolean
+  isChecked: boolean
+  isSubmitting?: boolean
+  onCheck: () => void
   onClose: () => void
   onConfirm: () => void
 }
 
-const TermsConsentModal: React.FC<TermsConsentModalProps> = ({ isOpen, onClose, onConfirm }) => {
-  const [isChecked, setIsChecked] = useState(false)
+const TermsConsentModal: React.FC<TermsConsentModalProps> = ({
+  isOpen,
+  isChecked,
+  isSubmitting = false,
+  onCheck,
+  onClose,
+  onConfirm,
+}) => {
+  const actionsDisabled = !isChecked || isSubmitting
 
   const description = (
     <div className="flex flex-col gap-8">
@@ -22,7 +32,7 @@ const TermsConsentModal: React.FC<TermsConsentModalProps> = ({ isOpen, onClose, 
 
       {/* 체크박스 */}
       <div className="flex items-center gap-2">
-        <Checkbox checked={isChecked} onChange={() => setIsChecked((prev) => !prev)} />
+        <Checkbox checked={isChecked} onChange={onCheck} />
         <span className="text-b5-medium text-gray-550">
           모든{' '}
           <a href="/policy/terms" target="_blank" className="text-locallit-red-500">
@@ -47,8 +57,8 @@ const TermsConsentModal: React.FC<TermsConsentModalProps> = ({ isOpen, onClose, 
       confirmLabel="프로필 설정하러 가기"
       onCancel={onClose}
       onConfirm={onConfirm}
-      cancelDisabled={!isChecked}
-      confirmDisabled={!isChecked}
+      cancelDisabled={actionsDisabled}
+      confirmDisabled={actionsDisabled}
     />
   )
 }
