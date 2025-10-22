@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, develop]
   pull_request:
     branches: [main, master]
 
@@ -25,6 +25,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # 👇 추가: Google Client ID 값 찍기
+      - name: Check Google Client ID
+        run: echo "VITE_GOOGLE_CLIENT_ID is $VITE_GOOGLE_CLIENT_ID"
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+
       - name: Build app
         run: pnpm build
         env:
@@ -32,3 +38,4 @@ jobs:
           VITE_API_RECRUIT_URL: ${{ secrets.VITE_API_RECRUIT_URL }}
           VITE_API_BOARD_URL: ${{ secrets.VITE_API_BOARD_URL }}
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          VITE_REDIRECT_URL: ${{ secrets.VITE_REDIRECT_URL }}
