@@ -19,6 +19,7 @@ export default tseslint.config(
       'src/components/tiptap-node/',
       'src/components/tiptap-templates/',
       'src/components/tiptap-ui-primitive/',
+      'src/components/ui/',
     ]),
     {
       files: ['**/*.{ts,tsx}'], // TS/TSX 파일만 적용
