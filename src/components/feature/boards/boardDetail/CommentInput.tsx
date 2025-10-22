@@ -9,7 +9,7 @@ interface Props {
 
 export default function CommentInput({ value, onChange, onSubmit, isSubmitting }: Props) {
   return (
-    <div className="mt-4 mb-10">
+    <div className="mt-3 flex flex-col gap-[41px]">
       <CommentTextareaPanel
         value={value}
         placeholder="댓글을 입력해 주세요."
@@ -19,7 +19,7 @@ export default function CommentInput({ value, onChange, onSubmit, isSubmitting }
         variant="primary"
         isSubmitting={isSubmitting}
       />
-      <div className="mt-4 h-[1.5px] bg-gray-200" />
+      <div className="bg-gray-250 h-[1.5px]" />
     </div>
   )
 }

@@ -14,8 +14,8 @@ import {
   RECRUIT_PERIODS,
   type RecruitCategoryConfig,
 } from '@/constants/recruitFilters'
-import usePositionsOptions from '@/hooks/usePositionsOptions'
-import useStacksOptions from '@/hooks/useStacksOptions'
+import usePositionsOptions from '@/hooks/boards/usePositionsOptions'
+import useStacksOptions from '@/hooks/boards/useStacksOptions'
 import { useBoardFormStore } from '@/stores/boardFormStore'
 
 interface RecruitInfoSectionProps {

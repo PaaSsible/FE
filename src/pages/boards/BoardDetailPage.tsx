@@ -7,12 +7,12 @@ import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
 import BoardsDetailBody from '@/components/feature/boards/boardDetail/BoardsDetailBody'
 import BoardsDetailComments from '@/components/feature/boards/boardDetail/BoardsDetailComments'
 import BoardsDetailMeta from '@/components/feature/boards/boardDetail/BoardsDetailMeta'
-import useCreateRecruitComment from '@/hooks/useCreateRecruitComment'
-import useDeleteRecruitComment from '@/hooks/useDeleteRecruitComment'
-import useDeleteRecruitPost from '@/hooks/useDeleteRecruitPost'
-import useFetchRecruitComments from '@/hooks/useFetchRecruitComments'
-import useRecruitDetail from '@/hooks/useRecruitDetail'
-import useUpdateRecruitComment from '@/hooks/useUpdateRecruitComment'
+import useCreateRecruitComment from '@/hooks/boards/useCreateRecruitComment'
+import useDeleteRecruitComment from '@/hooks/boards/useDeleteRecruitComment'
+import useDeleteRecruitPost from '@/hooks/boards/useDeleteRecruitPost'
+import useFetchRecruitComments from '@/hooks/boards/useFetchRecruitComments'
+import useRecruitDetail from '@/hooks/boards/useRecruitDetail'
+import useUpdateRecruitComment from '@/hooks/boards/useUpdateRecruitComment'
 import { getAuthUser } from '@/utils/authToken'
 
 interface BoardDetailViewModel {
@@ -93,8 +93,8 @@ export default function BoardDetailPage(): JSX.Element {
       subCategory: recruitDetail.subCategory,
       writerId: recruitDetail.writerId,
       writerName: recruitDetail.writerName,
-      createdAt: null,
-      updatedAt: null,
+      createdAt: recruitDetail.createdAt ?? null,
+      updatedAt: recruitDetail.updatedAt ?? null,
       deadline: recruitDetail.deadline ?? null,
       projectDuration: recruitDetail.projectDuration ?? null,
       viewCount: recruitDetail.viewCount,
@@ -157,11 +157,13 @@ export default function BoardDetailPage(): JSX.Element {
       />
 
       {isOwner && postForDisplay && (
-        <div className="mt-5 flex w-full justify-end gap-3">
+        <div className="mt-[55px] flex w-full justify-end gap-3">
           <Button variant="secondary" onClick={() => setIsDeleteModalOpen(true)}>
             삭제하기
           </Button>
-          <Button>수정하기</Button>
+          <Button onClick={() => void navigate(`/boards/${resolvedPostIdString}/edit`)}>
+            수정하기
+          </Button>
         </div>
       )}
 
@@ -182,13 +184,13 @@ export default function BoardDetailPage(): JSX.Element {
           <BoardsDetailMeta post={postForDisplay} />
           <BoardsDetailBody content={postForDisplay.content} />
 
-          <div className="mt-8 w-full">
+          <div className="mt-[100px] w-full">
             {isOwner ? (
-              <Button className="w-full" onClick={handleViewApplicants}>
+              <Button className="w-full" size="big" onClick={handleViewApplicants}>
                 지원자 보러 가기
               </Button>
             ) : (
-              <Button className="w-full" onClick={handleApplyClick}>
+              <Button className="w-full" size="big" onClick={handleApplyClick}>
                 지원하기
               </Button>
             )}

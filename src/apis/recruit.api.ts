@@ -81,7 +81,9 @@ export const putRecruit = async (
 ): Promise<PutRecruit['Response']> => {
   const parsedPath = putRecruitSchema.path.parse(path)
   const parsedBody = putRecruitSchema.body.parse(body)
-  const res = await PaaSsibleRecruit.put(`/recruits/${parsedPath.postId}`, parsedBody)
+  const res = await PaaSsibleRecruit.put(`/recruits/${parsedPath.postId}`, parsedBody, {
+    params: { postId: parsedPath.postId },
+  })
   return putRecruitSchema.response.parse(res.data)
 }
 
