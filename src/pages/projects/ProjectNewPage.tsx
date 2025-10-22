@@ -33,10 +33,8 @@ export default function ProjectNewPage(): JSX.Element {
     setIsModalVisible(!isModalVisible)
   }
   const onCreateButton = async () => {
-    console.log('called')
     try {
       if (title && content) {
-        console.log('called')
         const body: PostBoard['Body'] = {
           name: title,
           content: content,
