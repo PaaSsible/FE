@@ -57,7 +57,7 @@ export default function ProjectNewPage(): JSX.Element {
   }
   return (
     <div className="flex min-h-screen flex-col px-[144px] py-[44px] text-start">
-      <ProjectHeader title="모집 기본 정보" className="mb-[3.375rem]" />
+      <ProjectHeader title="새 프로젝트 보드 생성" className="mb-[3.375rem]" />
       <div className="mb-6 flex items-center justify-start gap-6">
         {activityTypeArray.map((type, index) => (
           <Tab

@@ -18,7 +18,7 @@ const ProjectListItem = ({ project }: ProjectListItemProps): JSX.Element => {
 
   return (
     <div
-      onClick={() => void navigate(`${project.boardId}`)}
+      onClick={() => void navigate(`${project.boardId}/board`)}
       className="flex h-60 cursor-pointer flex-col items-start justify-between rounded-[20px] bg-zinc-100 px-8 py-7"
     >
       <div className="gap-[0.4375rem]">
