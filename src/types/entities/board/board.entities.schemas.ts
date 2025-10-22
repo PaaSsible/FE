@@ -23,6 +23,7 @@ export const detailTypeArray = [
 export const boardSchema = z.object({
   boardId: z.number(),
   name: z.string(),
+  content: z.string(),
   activityType: z.enum(activityTypeArray),
   detailType: z.enum(detailTypeArray),
   status: z.enum(boardStatusArray),

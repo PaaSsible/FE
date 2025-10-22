@@ -161,7 +161,7 @@ interface RichTextEditorProps {
   setContent: (content: string) => void
 }
 
-export function RichTextEditor({ content, setContent }: RichTextEditorProps) {
+export function RichTextEditor({ content, setContent }: RichTextEditorProps): React.JSX.Element {
   const isMobile = useIsMobile()
   const { height } = useWindowSize()
   const [mobileView, setMobileView] = React.useState<'main' | 'highlighter' | 'link'>('main')
