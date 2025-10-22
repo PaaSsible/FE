@@ -2,9 +2,15 @@ name: Deploy
 
 on:
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - master
+      - develop
   pull_request:
-    branches: [main, master]
+    branches:
+      - main
+      - master
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,10 +31,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Create .env.production
+        shell: bash
+        run: |
+          echo "VITE_API_USER_URL=${{ secrets.VITE_API_USER_URL }}" > .env.production
+          echo "VITE_API_RECRUIT_URL=${{ secrets.VITE_API_RECRUIT_URL }}" >> .env.production
+          echo "VITE_API_BOARD_URL=${{ secrets.VITE_API_BOARD_URL }}" >> .env.production
+          echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> .env.production
+          echo "VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }}" >> .env.production
+
       - name: Build app
         run: pnpm build
-        env:
-          VITE_API_USER_URL: ${{ secrets.VITE_API_USER_URL }}
-          VITE_API_RECRUIT_URL: ${{ secrets.VITE_API_RECRUIT_URL }}
-          VITE_API_BOARD_URL: ${{ secrets.VITE_API_BOARD_URL }}
-          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
