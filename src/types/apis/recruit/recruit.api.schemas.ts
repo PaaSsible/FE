@@ -151,12 +151,12 @@ export const putRecruitSchema = {
   }),
   body: recruitPostSchema.pick({
     mainCategory: true,
-    subcategory: true,
+    subCategory: true,
     title: true,
     content: true,
     deadline: true,
     projectDuration: true,
-    recruitment: true,
+    recruits: true,
   }),
   response: z.object({
     success: z.boolean(),
