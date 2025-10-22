@@ -4,10 +4,10 @@ interface Props {
 
 export default function BoardsDetailBody({ content }: Props) {
   return (
-    <section className="mt-8 pb-10">
-      <h2 className="text-s2-bold mb-3 text-gray-900">본문</h2>
+    <section className="mt-[100px] flex flex-col gap-[28px] pb-10">
+      <h2 className="text-s2-bold text-gray-900">본문</h2>
       <div
-        className="text-b4-medium leading-relaxed text-gray-900"
+        className="prose max-w-none text-gray-900"
         dangerouslySetInnerHTML={{ __html: content }}
       />
     </section>
