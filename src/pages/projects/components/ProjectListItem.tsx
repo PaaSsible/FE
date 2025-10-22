@@ -1,20 +1,20 @@
-import { ChevronRight, MoreVertical } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
+import type { JSX } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { activityTypeEngToKorMap } from '@/config/converters/activityTypeEngToKorMap'
 import { detailTypeEngToKorMap } from '@/config/converters/detailTypeEngToKorMap'
 import type { Board } from '@/types/entities/board/board.entitites.types'
 
+import MoreDropdown from './MoreDropdown'
 import ProjectStatusChip from './ProjectStatusChip'
 
 interface ProjectListItemProps {
   project: Board
 }
 
-const ProjectListItem = ({ project }: ProjectListItemProps) => {
+const ProjectListItem = ({ project }: ProjectListItemProps): JSX.Element => {
   const navigate = useNavigate()
-
-  const onMoreButton = () => {}
 
   return (
     <div
@@ -47,9 +47,7 @@ const ProjectListItem = ({ project }: ProjectListItemProps) => {
             )}
           </div>
 
-          <button onClick={onMoreButton}>
-            <MoreVertical className="h-6 w-6 opacity-60 outline-zinc-900" />
-          </button>
+          <MoreDropdown projectId={project.boardId} />
         </div>
       </div>
     </div>
