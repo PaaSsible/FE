@@ -115,7 +115,13 @@ export function InputField({
       {variant === 'techTag' && (
         <div className="flex flex-wrap gap-[10px] rounded-lg bg-gray-200 px-[20px] py-[14px]">
           {tags.map((tag) => (
-            <Tag key={tag} label={tag} withXIcon onRemove={() => onRemoveTag?.(tag)} />
+            <Tag
+              key={tag}
+              label={tag}
+              variant="edit"
+              withXIcon
+              onRemove={() => onRemoveTag?.(tag)}
+            />
           ))}
         </div>
       )}
