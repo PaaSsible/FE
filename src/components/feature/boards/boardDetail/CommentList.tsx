@@ -1,4 +1,4 @@
-import type { RecruitComment } from '@/hooks/useFetchRecruitComments'
+import type { RecruitComment } from '@/hooks/boards/useFetchRecruitComments'
 
 import CommentItem from './CommentItem'
 
@@ -56,7 +56,7 @@ export default function CommentList({ comments, isLoading, error, onRetry, ...ha
   }
 
   return (
-    <div className="bg-gray-0 mt-10 rounded-md border border-[#E2E8F0]">
+    <div className="bg-gray-0 mt-[41px] rounded-md border border-[#E2E8F0]">
       {comments.map((comment, idx) => (
         <CommentItem
           key={comment.id}

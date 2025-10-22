@@ -19,9 +19,9 @@ import {
   type RecruitCategoryLabel,
   type RecruitSortLabel,
 } from '@/constants/recruitFilters'
-import usePositionsOptions from '@/hooks/usePositionsOptions'
-import useRecruitList from '@/hooks/useRecruitList'
-import useTermsConsent from '@/hooks/useTermsConsent'
+import usePositionsOptions from '@/hooks/boards/usePositionsOptions'
+import useRecruitList from '@/hooks/boards/useRecruitList'
+import useTermsConsent from '@/hooks/boards/useTermsConsent'
 import { positionIdToLabel, stackIdToLabel } from '@/utils/recruitMeta'
 
 const BoardsPage: React.FC = () => {

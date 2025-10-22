@@ -6,7 +6,7 @@ import Button from '@/components/atoms/Button'
 import Modal from '@/components/common/Modal'
 import PostEditorSection from '@/components/feature/boards/boardNew/PostEditorSection'
 import RecruitInfoSection from '@/components/feature/boards/boardNew/RecruitInfoSection'
-import useCreateRecruit from '@/hooks/useCreateRecruit'
+import useCreateRecruit from '@/hooks/boards/useCreateRecruit'
 import { useBoardFormStore } from '@/stores/boardFormStore'
 
 export default function BoardNewPage(): JSX.Element {

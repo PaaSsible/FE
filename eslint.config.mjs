@@ -12,7 +12,15 @@ import prettierPlugin from 'eslint-plugin-prettier'
 export default tseslint.config(
   [
     // 빌드 산출물(dist) 폴더는 ESLint 검사에서 제외
-    globalIgnores(['dist']),
+    globalIgnores([
+      'dist',
+      'src/components/tiptap-ui',
+      'src/components/tiptap-icons/',
+      'src/components/tiptap-node/',
+      'src/components/tiptap-templates/',
+      'src/components/tiptap-ui-primitive/',
+      'src/components/ui/',
+    ]),
     {
       files: ['**/*.{ts,tsx}'], // TS/TSX 파일만 적용
       extends: [

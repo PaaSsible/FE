@@ -5,23 +5,9 @@ interface ChipProps {
   label: string
   selected?: boolean
   onClick?: () => void
-  variant?: 'default' | 'stack'
 }
 
-const ChipComponent: React.FC<ChipProps> = ({
-  label,
-  selected = false,
-  onClick,
-  variant = 'default',
-}) => {
-  if (variant === 'stack') {
-    return (
-      <span className="bg-gray-250 font-pretendard text-l1-medium inline-flex items-center rounded-[30px] px-3 py-[6px] text-gray-500">
-        {label}
-      </span>
-    )
-  }
-
+const ChipComponent: React.FC<ChipProps> = ({ label, selected = false, onClick }) => {
   return (
     <button
       type="button"

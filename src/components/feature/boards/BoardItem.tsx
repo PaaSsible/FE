@@ -43,7 +43,7 @@ const BoardItem: React.FC<BoardItemProps> = ({
         {/* 태그 리스트 */}
         <div className="flex flex-wrap justify-end gap-[5px]">
           {tags.map((tag) => (
-            <Tag key={tag} label={tag} />
+            <Tag key={tag} label={tag} size="sm" />
           ))}
         </div>
 

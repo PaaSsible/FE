@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 
 import Avatar from '@/components/atoms/Avatar'
 import Modal from '@/components/common/Modal'
-import useBoardsDetailComments from '@/hooks/useBoardsDetailComments'
-import type { RecruitComment } from '@/hooks/useFetchRecruitComments'
+import useBoardsDetailComments from '@/hooks/boards/useBoardsDetailComments'
+import type { RecruitComment } from '@/hooks/boards/useFetchRecruitComments'
 
 import CommentInput from './CommentInput'
 import CommentList from './CommentList'
@@ -89,14 +89,14 @@ export default function BoardsDetailComments({
     : '삭제한 댓글은 복구할 수 없습니다.'
 
   return (
-    <section className="mt-12">
+    <section className="mt-[88px]">
       {/* 헤더 */}
-      <h3 className="text-s2-bold flex items-baseline gap-2">
-        댓글 <span className="text-s2-bold text-gray-600">{totalComments}</span>
+      <h3 className="text-s2-bold flex items-baseline gap-4">
+        댓글 <span className="text-b1-medium text-gray-600">{totalComments}</span>
       </h3>
 
       {/* 사용자 정보 */}
-      <div className="mt-8 flex items-center gap-2">
+      <div className="mt-[47px] flex items-center gap-[11px]">
         <Avatar name={currentUserName} />
         <div className="text-b4-bold text-gray-900">{currentUserName}</div>
       </div>

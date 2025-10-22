@@ -1,7 +1,7 @@
 import { Pencil, Trash2 } from 'lucide-react'
 
 import Avatar from '@/components/atoms/Avatar'
-import type { RecruitComment } from '@/hooks/useFetchRecruitComments'
+import type { RecruitComment } from '@/hooks/boards/useFetchRecruitComments'
 import { formatRelativeTime } from '@/utils/relativeTime'
 
 import CommentTextareaPanel from './CommentTextareaPanel'
@@ -36,38 +36,43 @@ export default function ReplyItem({
   const isEditing = activeEditId === reply.id
   const editValue = editDrafts[reply.id] ?? reply.content ?? ''
   const displayContent = reply.deleted ? '삭제된 댓글입니다.' : (reply.content ?? '')
-  const writerLabel = reply.writerId ? String(reply.writerId) : '작성자'
+  const writerLabel = reply.writerName ? String(reply.writerName) : '작성자'
   const createdAtLabel = formatRelativeTime(reply.createdAt)
   const canManage = isOwnComment(reply.writerId) && !reply.deleted
 
   const normalizedReply = { ...reply, parentId }
 
   return (
-    <div className="mt-4 flex pl-8">
-      <Avatar name={writerLabel} className="mr-3" />
+    <div className="relative mt-6 flex pl-10">
+      {/* ㄴ 모양 */}
+      <div className="absolute top-[-10px] left-[5px] h-[30px] w-[20px] rounded-bl-sm border-b border-l border-gray-300" />
+
+      <Avatar name={writerLabel} className="mr-[11px]" />
       <div className="flex-1">
         <div className="flex items-start justify-between leading-8">
           <div className="text-b4-bold text-gray-900">{writerLabel}</div>
-          <div className="flex items-center gap-3 text-gray-500">
-            <span className="text-l3-medium">{createdAtLabel}</span>
-            {canManage && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => onEditToggle(normalizedReply)}
-                  className="hover:text-gray-800"
-                >
-                  <Pencil className="h-5 w-5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onDeleteClick(normalizedReply)}
-                  className="hover:text-gray-800"
-                >
-                  <Trash2 className="h-5 w-5" />
-                </button>
-              </>
-            )}
+          <div className="flex items-center gap-[30px] text-gray-500">
+            <span className="text-b4-regular">{createdAtLabel}</span>
+            <div className="flex gap-5">
+              {canManage && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => onEditToggle(normalizedReply)}
+                    className="hover:text-gray-800"
+                  >
+                    <Pencil className="h-5 w-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onDeleteClick(normalizedReply)}
+                    className="hover:text-gray-800"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
