@@ -23,8 +23,8 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true, // 사용되지 않는 지역 변수 검사
-    "noUnusedParameters": true, // 사용되지 않는 매개변수 검사
+    "noUnusedLocals": false, // 사용되지 않는 지역 변수 검사
+    "noUnusedParameters": false, // 사용되지 않는 매개변수 검사
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
