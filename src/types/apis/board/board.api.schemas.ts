@@ -60,6 +60,7 @@ export const putBoardSchema = {
   }),
   body: boardSchema.pick({
     name: true,
+    content: true,
     activityType: true,
     detailType: true,
   }),
