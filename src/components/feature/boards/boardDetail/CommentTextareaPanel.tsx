@@ -32,7 +32,7 @@ export default function CommentTextareaPanel({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`bg-gray-0 text-b4-medium focus:border-locallit-red-300 focus:ring-locallit-red-100 w-full resize-none rounded-md border border-transparent px-4 py-2 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:outline-none ${textareaHeight}`}
+        className={`bg-gray-0 text-b5-medium focus:border-locallit-red-300 focus:ring-locallit-red-100 w-full resize-none rounded-md border border-transparent px-4 py-2 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:outline-none ${textareaHeight}`}
       />
       <div className="mt-3 flex justify-end gap-3">
         <Button

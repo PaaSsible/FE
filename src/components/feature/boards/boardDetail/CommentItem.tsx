@@ -1,7 +1,7 @@
 import { MessageCircle, Pencil, Trash2 } from 'lucide-react'
 
 import Avatar from '@/components/atoms/Avatar'
-import type { RecruitComment } from '@/hooks/useFetchRecruitComments'
+import type { RecruitComment } from '@/hooks/boards/useFetchRecruitComments'
 import { formatRelativeTime } from '@/utils/relativeTime'
 
 import CommentTextareaPanel from './CommentTextareaPanel'
@@ -51,43 +51,45 @@ export default function CommentItem({
   const isEditing = activeEditId === comment.id
   const editValue = editDrafts[comment.id] ?? comment.content ?? ''
   const displayContent = comment.deleted ? '삭제된 댓글입니다.' : (comment.content ?? '')
-  const writerLabel = comment.writerId ? String(comment.writerId) : '작성자'
+  const writerLabel = comment.writerName ? String(comment.writerName) : '작성자'
   const createdAtLabel = formatRelativeTime(comment.createdAt)
 
   return (
     <div>
-      <div className="flex gap-4 px-6 py-8">
-        <Avatar name={writerLabel} />
+      <div className="flex px-[34px] py-[45px]">
+        <Avatar name={writerLabel} className="mr-[11px]" />
         <div className="flex-1">
           <div className="flex items-start justify-between">
             <div className="text-b4-bold text-gray-900">{writerLabel}</div>
-            <div className="flex items-center gap-4 text-gray-500">
-              <span className="text-l3-medium">{createdAtLabel}</span>
-              <button
-                type="button"
-                className="hover:text-gray-800"
-                onClick={() => onReplyToggle(comment.id)}
-              >
-                <MessageCircle className="h-5 w-5" />
-              </button>
-              {isOwnComment(comment.writerId) && !comment.deleted && (
-                <>
-                  <button
-                    type="button"
-                    className="hover:text-gray-800"
-                    onClick={() => onEditToggle(comment)}
-                  >
-                    <Pencil className="h-5 w-5" />
-                  </button>
-                  <button
-                    type="button"
-                    className="hover:text-gray-800"
-                    onClick={() => onDeleteClick(comment)}
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </button>
-                </>
-              )}
+            <div className="flex items-center gap-[30px] text-gray-500">
+              <span className="text-b4-regular">{createdAtLabel}</span>
+              <div className="flex gap-[20px]">
+                <button
+                  type="button"
+                  className="hover:text-gray-800"
+                  onClick={() => onReplyToggle(comment.id)}
+                >
+                  <MessageCircle className="h-5 w-5" />
+                </button>
+                {isOwnComment(comment.writerId) && !comment.deleted && (
+                  <>
+                    <button
+                      type="button"
+                      className="hover:text-gray-800"
+                      onClick={() => onEditToggle(comment)}
+                    >
+                      <Pencil className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      className="hover:text-gray-800"
+                      onClick={() => onDeleteClick(comment)}
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
@@ -126,16 +128,24 @@ export default function CommentItem({
           ))}
 
           {replyParentId === comment.id && (
-            <div className="mt-4 pl-8">
-              <CommentTextareaPanel
-                value={replyValue}
-                placeholder="답글을 입력해 주세요."
-                onChange={onReplyChange}
-                onCancel={onReplyCancel}
-                onSubmit={() => void onReplySubmit()}
-                variant="nested"
-                isSubmitting={isSubmitting}
-              />
+            <div className="relative mt-6 flex items-start gap-[11px] pl-[42px]">
+              {/* ㄴ 모양 */}
+              <div className="absolute top-[-10px] left-[5px] h-[30px] w-[20px] rounded-bl-sm border-b border-l border-gray-300" />
+
+              {/* 아바타 및 이름 */}
+              <Avatar name="나" className="flex-shrink-0" />
+              <div className="flex-1">
+                <div className="text-b4-bold mb-[9px] text-gray-900">나</div>
+                <CommentTextareaPanel
+                  value={replyValue}
+                  placeholder="답글을 입력해 주세요."
+                  onChange={onReplyChange}
+                  onCancel={onReplyCancel}
+                  onSubmit={() => void onReplySubmit()}
+                  variant="nested"
+                  isSubmitting={isSubmitting}
+                />
+              </div>
             </div>
           )}
         </div>

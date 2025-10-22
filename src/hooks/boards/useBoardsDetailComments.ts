@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import type { RecruitComment } from '@/hooks/useFetchRecruitComments'
+import type { RecruitComment } from '@/hooks/boards/useFetchRecruitComments'
 
 type SubmitParams = {
   content: string
@@ -23,7 +23,10 @@ type UseBoardsDetailCommentsParams = {
   isDeleting: boolean
 }
 
-type CommentTarget = Pick<RecruitComment, 'id' | 'content' | 'deleted' | 'writerId' | 'parentId'>
+type CommentTarget = Pick<
+  RecruitComment,
+  'id' | 'content' | 'deleted' | 'writerId' | 'writerName' | 'parentId'
+>
 
 type UseBoardsDetailCommentsResult = {
   commentValue: string
