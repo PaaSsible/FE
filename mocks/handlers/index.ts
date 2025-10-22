@@ -9,7 +9,7 @@ export const handlers: HttpHandler[] = [
   http.get('chrome-extension://*', () => {
     return passthrough()
   }),
-  http.get('*/assets/*.svg', async ({ request }) => {
+  http.get('*.svg', async ({ request }) => {
     console.log('svg static file detected')
     const response = await fetch(bypass(request)).then((res) => res.arrayBuffer())
     return HttpResponse.arrayBuffer(response, {
@@ -19,7 +19,7 @@ export const handlers: HttpHandler[] = [
       },
     })
   }),
-  http.get('*/assets/*.png', async ({ request }) => {
+  http.get('*.png', async ({ request }) => {
     console.log('png static file detected')
     const response = await fetch(bypass(request)).then((res) => res.arrayBuffer())
     return HttpResponse.arrayBuffer(response, {
@@ -29,7 +29,17 @@ export const handlers: HttpHandler[] = [
       },
     })
   }),
-  http.get('*/assets/*.woff2', async ({ request }) => {
+  http.get('*.jpg', async ({ request }) => {
+    console.log('png static file detected')
+    const response = await fetch(bypass(request)).then((res) => res.arrayBuffer())
+    return HttpResponse.arrayBuffer(response, {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/jpg',
+      },
+    })
+  }),
+  http.get('*.woff2', async ({ request }) => {
     console.log('woff2 static file detected')
     const response = await fetch(bypass(request)).then((res) => res.arrayBuffer())
     return HttpResponse.arrayBuffer(response, {
