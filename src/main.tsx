@@ -1,4 +1,4 @@
-// import { StrictMode } from 'react'
+import { isCommonAssetRequest } from 'msw'
 import { createRoot } from 'react-dom/client'
 
 import './index.css'
@@ -12,7 +12,13 @@ const enableMocking = async () => {
     return
   }
   const { worker } = await import('../mocks/browser')
-  return worker.start()
+  return worker.start({
+    onUnhandledRequest: (request) => {
+      if (isCommonAssetRequest(request)) {
+        return
+      }
+    },
+  })
 }
 
 enableMocking()

@@ -19,7 +19,7 @@ const StartPage = (): JSX.Element => {
       {/* 우측 */}
       <div className="flex w-[565px] items-center justify-center">
         <img
-          src={startIllustrationSrc}
+          src={'/assets/images/start-illustration.png'}
           alt="시작하기 일러스트"
           className="h-[820px] w-[565px] rounded-2xl"
         />

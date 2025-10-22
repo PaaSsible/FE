@@ -12,7 +12,7 @@ const ScrollDown: React.FC<ScrollDownProps> = ({ onClick }) => {
       className="absolute bottom-20 left-1/2 flex h-[56px] w-[36px] -translate-x-1/2 animate-bounce cursor-pointer justify-center"
       onClick={onClick}
     >
-      <img src={arrowDownIconSrc} alt="scroll down" className="h-[56px] w-[36px]" />
+      <img src={'/assets/icons/arrow-down.svg'} alt="scroll down" className="h-[56px] w-[36px]" />
     </div>
   )
 }

@@ -13,7 +13,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onChange,
 }) => {
   return (
-    <div className="flex w-[320px] items-center gap-2 rounded-xl bg-gray-200 px-4 py-3">
+    <div className="flex h-11 w-[320px] items-center gap-2 rounded-xl bg-gray-200 px-4 py-3">
       <FiSearch className="text-gray-500" size={20} />
       <input
         type="text"
