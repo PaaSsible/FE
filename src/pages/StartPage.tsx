@@ -3,6 +3,8 @@ import type { JSX } from 'react'
 import GoogleLoginButton from '@/components/feature/auth/GoogleLoginButton'
 
 const StartPage = (): JSX.Element => {
+  const startIllustrationSrc = '/assets/images/start-illustration.png'
+
   return (
     <div className="flex h-screen items-center justify-center bg-white px-[50px]">
       {/* 좌측 */}

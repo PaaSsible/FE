@@ -1,0 +1,42 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      VITE_API_USER_URL: ${{ secrets.VITE_API_USER_URL }}
+      VITE_API_RECRUIT_URL: ${{ secrets.VITE_API_RECRUIT_URL }}
+      VITE_API_BOARD_URL: ${{ secrets.VITE_API_BOARD_URL }}
+      VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create .env.production
+        run: |
+          echo "VITE_API_USER_URL=${VITE_API_USER_URL}" > .env.production
+          echo "VITE_API_RECRUIT_URL=${VITE_API_RECRUIT_URL}" >> .env.production
+          echo "VITE_API_BOARD_URL=${VITE_API_BOARD_URL}" >> .env.production
+          echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}" >> .env.production
+
+      - name: Build app
+        run: pnpm build

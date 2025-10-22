@@ -5,8 +5,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 // Public
 import Layout from './components/common/Layout'
+import MypageLayout from './components/common/MypageLayout'
+import ProjectsLayout from './components/common/ProjectsLayout'
 import AuthCallBackPage from './pages/AuthCallBackPage'
-import HomePage from './pages/HomePage'
 import LandingPage from './pages/LandingPage'
 import StartPage from './pages/StartPage'
 // Boards
@@ -16,6 +17,11 @@ import BoardEditPage from './pages/boards/BoardEditPage'
 import BoardNewPage from './pages/boards/BoardNewPage'
 import BoardsPage from './pages/boards/BoardsPage'
 import MyBoardsPage from './pages/boards/MyBoardsPage'
+// Mypage
+import MypageApplicationsPage from './pages/mypage/MypageApplicationsPage'
+import MypageNotificationsPage from './pages/mypage/MypageNotificationsPage'
+import MypagePortfolioPage from './pages/mypage/MypagePortfolioPage'
+import MypageProfilePage from './pages/mypage/MypageProfilePage'
 import PrivacyPage from './pages/policy/PrivacyPage'
 import TermsPage from './pages/policy/TermsPage'
 // Projects
@@ -66,15 +72,15 @@ function App(): JSX.Element {
           <Route path="boards" element={<BoardsPage />} />
           <Route path="boards/new" element={<BoardNewPage />} />
           <Route path="boards/mine" element={<MyBoardsPage />} />
-          <Route path="boards/:category" element={<BoardsPage />} />
-          <Route path="boards/:category/:postId" element={<BoardDetailPage />} />
-          <Route path="boards/:category/:postId/edit" element={<BoardEditPage />} />
-          <Route path="boards/:category/:postId/applicants" element={<ApplicantsPage />} />
+          <Route path="boards/:postId" element={<BoardDetailPage />} />
+          <Route path="boards/:postId/edit" element={<BoardEditPage />} />
+          <Route path="boards/:postId/applicants" element={<ApplicantsPage />} />
 
           {/* Projects */}
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/new" element={<ProjectNewPage />} />
-          <Route path="projects/:projectId" element={<ProjectLayout />}>
+
+          <Route path="projects/:projectId" element={<ProjectsLayout />}>
             <Route index element={<ProjectDetailPage />} />
             <Route path="edit" element={<ProjectEditPage />} />
             <Route path="board" element={<ProjectBoardPage />} />
@@ -82,6 +88,13 @@ function App(): JSX.Element {
             <Route path="meeting" element={<ProjectMeetingPage />} />
             <Route path="meeting/:roomId" element={<ProjectMeetingPage />} />
             <Route path="chat" element={<ProjectChatPage />} />
+          </Route>
+
+          <Route path="mypage" element={<MypageLayout />}>
+            <Route index element={<MypageProfilePage />} />
+            <Route path="portfolio" element={<MypagePortfolioPage />} />
+            <Route path="applications" element={<MypageApplicationsPage />} />
+            <Route path="notifications" element={<MypageNotificationsPage />} />
           </Route>
         </Route>
 

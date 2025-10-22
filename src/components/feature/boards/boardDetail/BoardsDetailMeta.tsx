@@ -1,22 +1,34 @@
-import Chip from '@/components/atoms/Chip'
+import { ChevronLeft } from 'lucide-react'
+
+import { Tag } from '@/components/atoms/Tag'
+import { formatRecruitDateLabel } from '@/utils/date'
+import {
+  detailTypeToLabel,
+  mainCategoryToLabel,
+  positionIdToLabel,
+  projectDurationToLabel,
+  stackIdToLabel,
+} from '@/utils/recruitMeta'
+
+type RecruitStack = number | string
 
 interface RecruitInfo {
-  position: string
-  stacks: string[]
+  position: number | string
+  stacks: RecruitStack[]
 }
 
 interface BoardDetailData {
   postId: number
   title: string
   content: string
-  mainCategory: string
-  subCategory: string
+  mainCategory?: string | null
+  subCategory?: string | null
   writerId: number
   writerName: string
-  createdAt: string
-  updatedAt: string
-  deadline: string
-  projectDuration: string
+  createdAt?: string | null
+  updatedAt?: string | null
+  deadline?: string | null
+  projectDuration?: string | null
   viewCount: number
   applicationCount: number
   recruits: RecruitInfo[]
@@ -25,36 +37,54 @@ interface Props {
   post: BoardDetailData
 }
 
+const formatPositionLabel = (position: number | string): string => {
+  if (typeof position === 'number') {
+    return positionIdToLabel(position) ?? `포지션 #${position}`
+  }
+
+  return position
+}
+
+const formatStackLabel = (stack: RecruitStack): string => {
+  if (typeof stack === 'number') {
+    return stackIdToLabel(stack) ?? `스택 #${stack}`
+  }
+
+  return stack
+}
+
 export default function BoardsDetailMeta({ post }: Props) {
   return (
-    <section className="mt-6 flex flex-col gap-6 pb-8">
-      <div className="text-b5-medium border-gray-250 flex items-center justify-between border-b-[1.5px] pb-5 text-gray-900">
-        <div className="text-b5-medium text-gray-1000">{post.writerName}</div>
-        <div className="flex gap-6 text-gray-700">
-          <div className="flex gap-[6px]">
+    <section className="mt-6 flex flex-col">
+      <div className="text-b5-medium border-gray-250 flex items-center justify-between border-b-[1.5px] pb-6 text-gray-900">
+        <div className="text-b5-bold text-gray-900">{post.writerName}</div>
+        <div className="flex gap-6 text-gray-900">
+          <div className="flex gap-[9px]">
             <span>작성일:</span>
-            <span className="text-b5-bold">{post.createdAt || '2025.08.12 12:34'}</span>
+            <span className="text-b5-bold">{formatRecruitDateLabel(post.createdAt)}</span>
           </div>
-          <div className="flex gap-[6px]">
+          <div className="flex gap-[9px]">
             <span>수정일:</span>
-            <span className="text-b5-bold">{post.updatedAt || '2025.08.12 16:55'}</span>
+            <span className="text-b5-bold">{formatRecruitDateLabel(post.updatedAt)}</span>
           </div>
-          <div className="flex gap-[6px]">
+          <div className="flex gap-[9px]">
             <span>조회수:</span>
             <span className="text-b5-bold">{post.viewCount}</span>
           </div>
-          <div className="flex gap-[6px]">
+          <div className="flex gap-[9px]">
             <span>지원자수:</span>
             <span className="text-b5-bold">{post.applicationCount}</span>
           </div>
         </div>
       </div>
 
-      <div className="border-gray-250 grid grid-cols-2 gap-x-8 gap-y-5 border-b-[1.5px] pb-5">
+      <div className="border-gray-250 mt-[36px] grid grid-cols-2 gap-x-8 gap-y-[26px] border-b-[1.5px] pb-6">
         <div className="grid grid-cols-[100px_1fr] items-start gap-5">
           <div className="text-b4-medium text-gray-600">모집 구분</div>
-          <div className="text-b4-bold text-gray-900">
-            {post.mainCategory || '사이드 프로젝트'} &gt; {post.subCategory}
+          <div className="text-b4-bold flex gap-[11px] text-gray-900">
+            <span>{mainCategoryToLabel(post.mainCategory)}</span>
+            <ChevronLeft className="h-[30px] w-[30px] text-gray-600" />
+            <span>{detailTypeToLabel(post.subCategory)}</span>
           </div>
         </div>
         <div className="grid grid-cols-[100px_1fr] items-start gap-5">
@@ -63,12 +93,12 @@ export default function BoardsDetailMeta({ post }: Props) {
         </div>
         <div className="grid grid-cols-[100px_1fr] items-start gap-5">
           <div className="text-b4-medium text-gray-600">모집 마감일</div>
-          <div className="text-b4-bold text-gray-900">{post.deadline}</div>
+          <div className="text-b4-bold text-gray-900">{formatRecruitDateLabel(post.deadline)}</div>
         </div>
         <div className="grid grid-cols-[100px_1fr] items-start gap-5">
           <div className="text-b4-medium text-gray-600">진행 기간</div>
           <div className="text-b4-bold text-gray-900">
-            {post.projectDuration === 'UNDEFINED' ? '미정' : post.projectDuration}
+            {projectDurationToLabel(post.projectDuration)}
           </div>
         </div>
       </div>
@@ -77,14 +107,15 @@ export default function BoardsDetailMeta({ post }: Props) {
         {post.recruits.map((recruit, idx) => (
           <div key={idx} className="grid grid-cols-[100px_1fr] items-start gap-5">
             <div className="text-b4-medium text-gray-600">모집 팀원 {idx + 1}</div>
-            <div className="flex flex-col gap-3">
-              <div className="text-b4-bold text-gray-900">{recruit.position}</div>
+            <div className="flex flex-col gap-[11px]">
+              <div className="text-b4-bold text-gray-900">
+                {formatPositionLabel(recruit.position)}
+              </div>
               <div className="flex flex-wrap gap-2">
-                {recruit.stacks.length > 0 ? (
-                  recruit.stacks.map((stack, i) => <Chip key={i} label={stack} variant="stack" />)
-                ) : (
-                  <Chip label="요구스택 없음" variant="stack" />
-                )}
+                {recruit.stacks.length > 0 &&
+                  recruit.stacks.map((stack, i) => (
+                    <Tag key={`${stack}-${i}`} label={formatStackLabel(stack)} variant="default" />
+                  ))}
               </div>
             </div>
           </div>

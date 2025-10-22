@@ -6,6 +6,8 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ onClick }) => {
+  const logoSrc = '/assets/logo.svg'
+
   return (
     <img
       src={'assets/images/logo.svg'}

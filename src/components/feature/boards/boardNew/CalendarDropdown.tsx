@@ -5,8 +5,10 @@ import {
   endOfMonth,
   endOfWeek,
   format,
+  isBefore,
   isSameDay,
   isSameMonth,
+  startOfDay,
   startOfMonth,
   startOfWeek,
 } from 'date-fns'
@@ -20,6 +22,7 @@ interface CalendarDropdownProps {
 
 export function CalendarDropdown({ selectedDate, onSelectDate }: CalendarDropdownProps) {
   const [currentMonth, setCurrentMonth] = useState(() => startOfMonth(selectedDate ?? new Date()))
+  const today = useMemo(() => startOfDay(new Date()), [])
 
   useEffect(() => {
     setCurrentMonth(startOfMonth(selectedDate ?? new Date()))
@@ -42,7 +45,10 @@ export function CalendarDropdown({ selectedDate, onSelectDate }: CalendarDropdow
 
   const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
-  const handleSelect = (day: Date) => {
+  const handleSelect = (day: Date, isDisabled: boolean) => {
+    if (isDisabled) {
+      return
+    }
     onSelectDate(day)
   }
 
@@ -81,19 +87,24 @@ export function CalendarDropdown({ selectedDate, onSelectDate }: CalendarDropdow
           const isCurrentMonthDay = isSameMonth(day, currentMonth)
           const isSelected = selectedDate ? isSameDay(day, selectedDate) : false
           const isToday = isSameDay(day, new Date())
+          const isPast = isBefore(day, today)
 
           return (
             <button
               key={day.toISOString()}
               type="button"
-              onClick={() => handleSelect(day)}
+              onClick={() => handleSelect(day, isPast)}
+              disabled={isPast}
               className={clsx(
                 'mx-auto mb-1 flex h-9 w-9 items-center justify-center rounded-md text-sm leading-5 font-normal transition-colors',
                 {
                   'bg-neutral-900 text-white': isSelected,
-                  'bg-gray-100 text-neutral-900': !isSelected && isToday,
-                  'text-gray-900 hover:bg-gray-100': !isSelected && !isToday && isCurrentMonthDay,
-                  'text-gray-300 hover:bg-gray-100': !isCurrentMonthDay,
+                  'cursor-not-allowed text-gray-300 hover:bg-transparent': isPast && !isSelected,
+                  'bg-gray-100 text-neutral-900':
+                    !isSelected && !isPast && isToday && isCurrentMonthDay,
+                  'text-gray-900 hover:bg-gray-100':
+                    !isSelected && !isPast && !isToday && isCurrentMonthDay,
+                  'text-gray-300 hover:bg-gray-100': !isSelected && !isPast && !isCurrentMonthDay,
                 },
               )}
             >

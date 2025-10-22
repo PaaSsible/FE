@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 
 interface DropdownProps {
   placeholder: string
-  options: string[]
+  options: readonly string[]
   onSelect: (value: string) => void
   variant?: 'default' | 'form'
 }
@@ -51,7 +51,7 @@ export default function Dropdown({
           variant === 'default' ? 'text-gray-500' : 'bg-gray-200 px-5 py-[14px] text-gray-500',
         )}
       >
-        <span className={selected ? 'text-gray-1000' : 'text-gray-500'}>
+        <span className={variant === 'form' && selected ? 'text-gray-1000' : 'text-gray-500'}>
           {selected || placeholder}
         </span>
         <ChevronDown

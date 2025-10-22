@@ -6,21 +6,39 @@ interface TagProps {
   onRemove?: () => void
   className?: string
   withXIcon?: boolean
+  variant?: 'default' | 'edit'
+  size?: 'sm' | 'md'
 }
 
-export function Tag({ label, onRemove, className, withXIcon = false }: TagProps) {
-  const base = 'inline-flex items-center rounded-sm bg-gray-0'
+export function Tag({
+  label,
+  onRemove,
+  className,
+  withXIcon = false,
+  variant = 'default',
+  size = 'md',
+}: TagProps) {
+  const base = 'inline-flex items-center text-gray-900'
 
-  const withXIconStyle = 'gap-[9px] px-[10px] py-[3px]'
-  const withoutXIconStyle = 'px-[5px] py-[3px] text-l2-medium'
+  const variantStyles = {
+    edit: 'rounded-sm bg-gray-0 gap-[9px] px-[10px] py-[3px]',
+    default: clsx(
+      size === 'md'
+        ? 'rounded-[4px] px-[10px] py-[3px] gap-[9px] bg-gray-300'
+        : 'rounded-sm bg-gray-0 px-[5px] py-[3px] bg-gray-0',
+    ),
+  }
+
+  const fontStyles = {
+    edit: 'font-b4-medium',
+    default: size === 'sm' ? 'text-l2-medium' : 'font-l2-medium',
+  }
 
   return (
-    <div className={clsx(base, withXIcon ? withXIconStyle : withoutXIconStyle, className)}>
-      <span className={clsx(withXIcon ? 'font-b4-medium' : 'font-l2-medium', 'text-gray-900')}>
-        {label}
-      </span>
+    <div className={clsx(base, variantStyles[variant], className)}>
+      <span className={fontStyles[variant]}>{label}</span>
 
-      {withXIcon && onRemove && (
+      {variant === 'edit' && withXIcon && onRemove && (
         <button type="button" onClick={onRemove} className="text-gray-550">
           <X className="h-6 w-6" />
         </button>

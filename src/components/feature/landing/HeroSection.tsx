@@ -1,9 +1,4 @@
-import React, { useState } from 'react'
-
-import Button from '@/components/atoms/Button'
-
-import { InputField } from '../../common/InputField'
-import { Pagination } from '../../common/Pagination'
+import React from 'react'
 
 import ScrollDown from './ScrollDown'
 
