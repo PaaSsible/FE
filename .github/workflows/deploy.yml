@@ -25,17 +25,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 👇 추가: Google Client ID 값 찍기
+      # ✅ 5. .env.production 파일 생성 (Vite가 빌드 시 읽어감)
+      - name: Create .env.production
+        run: |
+          echo "VITE_API_USER_URL=${{ secrets.VITE_API_USER_URL }}" > .env.production
+          echo "VITE_API_RECRUIT_URL=${{ secrets.VITE_API_RECRUIT_URL }}" >> .env.production
+          echo "VITE_API_BOARD_URL=${{ secrets.VITE_API_BOARD_URL }}" >> .env.production
+          echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> .env.production
+          echo "VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }}" >> .env.production
+
+      # ✅ (선택) .env 값 확인용 로그 — Google Client ID는 보안상 마스킹됨
       - name: Check Google Client ID
-        run: echo "VITE_GOOGLE_CLIENT_ID is $VITE_GOOGLE_CLIENT_ID"
+        run: echo "Google Client ID detected: $VITE_GOOGLE_CLIENT_ID"
         env:
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
 
       - name: Build app
         run: pnpm build
-        env:
-          VITE_API_USER_URL: ${{ secrets.VITE_API_USER_URL }}
-          VITE_API_RECRUIT_URL: ${{ secrets.VITE_API_RECRUIT_URL }}
-          VITE_API_BOARD_URL: ${{ secrets.VITE_API_BOARD_URL }}
-          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
-          VITE_REDIRECT_URL: ${{ secrets.VITE_REDIRECT_URL }}
