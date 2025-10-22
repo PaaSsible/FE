@@ -23,6 +23,7 @@ import ProjectBoardPage from './pages/projects/ProjectBoardPage'
 import ProjectChatPage from './pages/projects/ProjectChatPage'
 import ProjectDetailPage from './pages/projects/ProjectDetailPage'
 import ProjectEditPage from './pages/projects/ProjectEditPage'
+import ProjectLayout from './pages/projects/ProjectLayout'
 import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
 import ProjectNewPage from './pages/projects/ProjectNewPage'
 import ProjectStatusPage from './pages/projects/ProjectStatusPage'
@@ -73,13 +74,15 @@ function App(): JSX.Element {
           {/* Projects */}
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/new" element={<ProjectNewPage />} />
-          <Route path="projects/:projectId" element={<ProjectDetailPage />} />
-          <Route path="projects/:projectId/edit" element={<ProjectEditPage />} />
-          <Route path="projects/:projectId/board" element={<ProjectBoardPage />} />
-          <Route path="projects/:projectId/status" element={<ProjectStatusPage />} />
-          <Route path="projects/:projectId/meeting" element={<ProjectMeetingPage />} />
-          <Route path="projects/:projectId/meeting/:roomId" element={<ProjectMeetingPage />} />
-          <Route path="projects/:projectId/chat" element={<ProjectChatPage />} />
+          <Route path="projects/:projectId" element={<ProjectLayout />}>
+            <Route index element={<ProjectDetailPage />} />
+            <Route path="edit" element={<ProjectEditPage />} />
+            <Route path="board" element={<ProjectBoardPage />} />
+            <Route path="status" element={<ProjectStatusPage />} />
+            <Route path="meeting" element={<ProjectMeetingPage />} />
+            <Route path="meeting/:roomId" element={<ProjectMeetingPage />} />
+            <Route path="chat" element={<ProjectChatPage />} />
+          </Route>
         </Route>
 
         <Route path="start" element={<StartPage />} />
