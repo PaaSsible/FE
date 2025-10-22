@@ -47,10 +47,10 @@ export const useBoardFormStore = create<BoardFormState>((set) => ({
   reset: () =>
     set({
       mainCategory: 'CONTEST',
-      subCategory: 'CONTEST_DEV',
+      subCategory: 'CONTEST_PLANNING',
       deadline: getDefaultDeadline(),
       projectDuration: null,
-      recruitment: [],
+      recruitment: [{ position: null, stacks: [] }],
       title: '',
       content: '',
     }),
