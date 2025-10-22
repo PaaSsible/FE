@@ -77,7 +77,6 @@ export default function ProjectEditPage(): JSX.Element {
             {activityTypeToDetailTypeMap[selectedActivityType].map((detailType, index) => (
               <Chip
                 key={index}
-                variant="default"
                 label={detailTypeEngToKorMap[detailType]}
                 selected={selectedDetailType === detailType}
                 onClick={() => setSelectedDetailType(detailType)}
