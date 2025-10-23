@@ -3,27 +3,26 @@ kind: Namespace
 metadata:
   name: frontend
 ---
-# frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-app-deployment # Deployment 이름 구분
+  name: frontend-app-deployment
   namespace: frontend
   labels:
-    app: frontend-app # Deployment 라벨
+    app: frontend-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: frontend-app # Pod 선택용 selector
+      app: frontend-app
   template:
     metadata:
       labels:
-        app: frontend-app # Pod 라벨
+        app: frontend-app
     spec:
       containers:
         - name: frontend-container
-          image: jimin980915/contest-18-image-frontend:fe-{BUILD_DATE_TIME} # CI/CD 치환
+          image: 당신의 이미지 파일명
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -35,42 +34,30 @@ spec:
               cpu: '200m'
               memory: '256Mi'
 ---
-# frontend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-app-svc # Service 이름 구분
+  name: frontend-app-svc
   namespace: frontend
 spec:
   selector:
-    app: frontend-app # Deployment Pod 라벨과 매칭
+    app: frontend-app
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
   type: ClusterIP
 ---
-# frontend-ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: frontend-app-ingress # Ingress 이름 구분
+  name: frontend-app-ingress
   namespace: frontend
-  annotations:
-    cert-manager.io/cluster-issuer: 'letsencrypt-prod'
-    nginx.ingress.kubernetes.io/rewrite-target: / # SPA 루트 재작성
-    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts:
-        - paassible.kro.kr # 실제 도메인
-      secretName: frontend-app-tls # cert-manager가 자동 생성
   rules:
-    - host: paassible.kro.kr
-      http:
+    - http:
         paths:
-          # SPA 루트 경로
           - path: /
             pathType: Prefix
             backend:
