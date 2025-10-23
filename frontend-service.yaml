@@ -56,8 +56,14 @@ kind: Ingress
 metadata:
   name: frontend-app-ingress # Ingress 이름 구분
   namespace: frontend
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-prod'
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - paassible.kro.kr # 실제 도메인
+      secretName: frontend-app-tls # cert-manager가 자동 생성
   rules:
     - host: paassible.kro.kr
       http:
