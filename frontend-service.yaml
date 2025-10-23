@@ -58,6 +58,8 @@ metadata:
   namespace: frontend
   annotations:
     cert-manager.io/cluster-issuer: 'letsencrypt-prod'
+    nginx.ingress.kubernetes.io/rewrite-target: / # SPA 루트 재작성
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
 spec:
   ingressClassName: nginx
   tls:
