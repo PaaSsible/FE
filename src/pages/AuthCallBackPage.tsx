@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios'
 import { type JSX, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -40,6 +41,11 @@ export default function AuthCallBackPage(): JSX.Element | null {
         setAuthSession(response.data)
         void navigate('/boards', { replace: true })
       } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.status === 404) {
+            void navigate('/boards', { replace: true })
+          }
+        }
         console.error('Failed to complete login', error)
         if (!cancelled) {
           setErrorMessage(

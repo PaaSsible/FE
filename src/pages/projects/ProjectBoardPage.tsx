@@ -37,19 +37,19 @@ export default function ProjectBoardPage(): JSX.Element {
   }
 
   useEffect(() => {
-    // const getUserPositionData = async () => {
-    //   try {
-    //     const data = await getBoardDetail({ boardId: Number(projectId) }).then((res) => res.data)
-    //     const positionId = data.positionId
-    //     if (positionId === null) {
-    //       setIsPositionSelectModalVisible(true)
-    //     }
-    //   } catch (error) {
-    //     if (error instanceof ZodError) console.error('타입에러', error)
-    //     else if (error instanceof AxiosError) console.error('네트워크 에러', error)
-    //   }
-    // }
-    // void getUserPositionData()
+    const getUserPositionData = async () => {
+      try {
+        const data = await getBoardDetail({ boardId: Number(projectId) }).then((res) => res.data)
+        const positionId = data.positionId
+        if (positionId === null) {
+          setIsPositionSelectModalVisible(true)
+        }
+      } catch (error) {
+        if (error instanceof ZodError) console.error('타입에러', error)
+        else if (error instanceof AxiosError) console.error('네트워크 에러', error)
+      }
+    }
+    void getUserPositionData()
 
     const getProjectMember = async () => {
       try {
@@ -108,7 +108,7 @@ export default function ProjectBoardPage(): JSX.Element {
   }, [searchValue, tasks])
 
   return (
-    <div className="flex min-h-full flex-1 flex-col px-[6.4375rem] pt-12">
+    <div className="flex min-h-full flex-1 flex-col pt-12">
       <div className="mb-9 flex items-center justify-between">
         <div className="font-['Pretendard'] text-3xl leading-10 font-semibold text-black">
           프로젝트 이름

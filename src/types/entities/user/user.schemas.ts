@@ -16,5 +16,5 @@ export const userSchema = z.object({
   id: z.number(),
   nickname: z.string(),
   major: z.string().nullable(),
-  profileImageUrl: z.url().nullable(),
+  profileImageUrl: z.string().nullable(),
 })

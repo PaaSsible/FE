@@ -5,20 +5,18 @@ import './index.css'
 import App from './App'
 
 const enableMocking = async () => {
-  const isDev = import.meta.env.DEV
-  const useMSW = String(import.meta.env.VITE_ENABLE_MSW).toLowerCase() === 'true'
-
-  if (!isDev || !useMSW) {
-    return
-  }
-  const { worker } = await import('../mocks/browser')
-  return worker.start({
-    onUnhandledRequest: (request) => {
-      if (isCommonAssetRequest(request)) {
-        return
-      }
-    },
-  })
+  // const isDev = import.meta.env.DEV
+  // if (!isDev) {
+  //   return
+  // }
+  // const { worker } = await import('../mocks/browser')
+  // return worker.start({
+  //   onUnhandledRequest: (request) => {
+  //     if (isCommonAssetRequest(request)) {
+  //       return
+  //     }
+  //   },
+  // })
 }
 
 enableMocking()

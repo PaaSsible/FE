@@ -5,75 +5,6 @@ import * as BoardAPITypes from '@/types/apis/board/board.api.types'
 const API_URL = import.meta.env.VITE_API_BOARD_URL
 
 const boardHandlers: HttpHandler[] = [
-  //보드 진입
-  http.get<{ boardId: string }>(`${API_URL}/boards/:boardId`, ({ params }) => {
-    const { boardId } = params
-    const data: BoardAPITypes.GetBoardDetail['Response'] = {
-      success: true,
-      message: '요청이 성공적으로 처리되었습니다.',
-      data: {
-        boardId: 1,
-        positionId: null,
-      },
-      code: 'OK',
-      errors: null,
-    }
-
-    return HttpResponse.json(data)
-  }),
-  //보드 수정
-  http.put<{ boardId: string }>(`${API_URL}/boards/:boardId`, async ({ params, request }) => {
-    const { boardId } = params
-    const body = (await request.clone().json()) as BoardAPITypes.PutBoard['Body']
-    void boardId
-    void body
-
-    const data: BoardAPITypes.PutBoard['Response'] = {
-      success: true,
-      message: '리소스가 수정되었습니다.',
-      data: null,
-      code: 'MODIFIED',
-      errors: null,
-    }
-
-    return HttpResponse.json(data)
-  }),
-
-  //보드 삭제
-  http.delete<{ boardId: string }>(`${API_URL}/boards/:boardId`, ({ params }) => {
-    const { boardId } = params
-    void boardId
-
-    const data: BoardAPITypes.DeleteBoard['Response'] = {
-      success: true,
-      message: '리소스가 삭제되었습니다.',
-      data: null,
-      code: 'DELETED',
-      errors: null,
-    }
-
-    return HttpResponse.json(data)
-  }),
-
-  //보드 진입
-  http.get<{ boardId: string }>(`${API_URL}/boards/:boardId`, ({ params }) => {
-    const { boardId } = params
-    void boardId
-
-    const data: BoardAPITypes.GetBoardDetail['Response'] = {
-      success: true,
-      message: '요청이 성공적으로 처리되었습니다.',
-      data: {
-        boardId: 2,
-        positionId: null,
-      },
-      code: 'OK',
-      errors: null,
-    }
-
-    return HttpResponse.json(data)
-  }),
-
   //보드 멤버 조회
   http.get<{ boardId: string }>(`${API_URL}/boards/:boardId/members`, ({ params }) => {
     const { boardId } = params
@@ -147,6 +78,55 @@ const boardHandlers: HttpHandler[] = [
 
     return HttpResponse.json(data)
   }),
+  //보드 진입
+  http.get<{ boardId: string }>(`${API_URL}/boards/:boardId`, ({ params }) => {
+    const { boardId } = params
+    const data: BoardAPITypes.GetBoardDetail['Response'] = {
+      success: true,
+      message: '요청이 성공적으로 처리되었습니다.',
+      data: {
+        boardId: 1,
+        positionId: null,
+      },
+      code: 'OK',
+      errors: null,
+    }
+
+    return HttpResponse.json(data)
+  }),
+  //보드 수정
+  http.put<{ boardId: string }>(`${API_URL}/boards/:boardId`, async ({ params, request }) => {
+    const { boardId } = params
+    const body = (await request.clone().json()) as BoardAPITypes.PutBoard['Body']
+    void boardId
+    void body
+
+    const data: BoardAPITypes.PutBoard['Response'] = {
+      success: true,
+      message: '리소스가 수정되었습니다.',
+      data: null,
+      code: 'MODIFIED',
+      errors: null,
+    }
+
+    return HttpResponse.json(data)
+  }),
+  //보드 삭제
+  http.delete<{ boardId: string }>(`${API_URL}/boards/:boardId`, ({ params }) => {
+    const { boardId } = params
+    void boardId
+
+    const data: BoardAPITypes.DeleteBoard['Response'] = {
+      success: true,
+      message: '리소스가 삭제되었습니다.',
+      data: null,
+      code: 'DELETED',
+      errors: null,
+    }
+
+    return HttpResponse.json(data)
+  }),
+
   //보드 목록 조회
   http.get(`${API_URL}/boards`, ({ request }) => {
     // 쿼리 파라미터 가져오기
@@ -211,7 +191,6 @@ const boardHandlers: HttpHandler[] = [
 
     return HttpResponse.json(data)
   }),
-
   //보드 생성
   http.post(`${API_URL}/boards`, async ({ request }) => {
     const body = (await request.clone().json()) as BoardAPITypes.PostBoard['Body']
