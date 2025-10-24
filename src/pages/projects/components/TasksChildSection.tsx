@@ -2,6 +2,8 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { Plus } from 'lucide-react'
 import { useEffect, useState, type JSX } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 import { postTask } from '@/apis/task.api'
 import Button from '@/components/atoms/Button'
@@ -56,13 +58,15 @@ const TasksChildSection = ({
     value: position,
   }))
 
+  const navigate = useNavigate()
+
   const handleSelectedMembers = (selectedNames: string[]) => {
     if (!members) return
     const selected = members.filter((m) => selectedNames.includes(m.userName)).map((m) => m.userId)
     setSelectedMembers(selected)
   }
 
-  const handleSelectedPostions = (selectedPositions: string[]) => {
+  const handleSelectedPositions = (selectedPositions: string[]) => {
     const positionWithId = positionsArray.map((p, index) => ({ id: index + 1, name: p }))
     const selected = positionWithId
       .filter((p) => selectedPositions.includes(p.name))
@@ -70,7 +74,7 @@ const TasksChildSection = ({
     setSelectedPositions(selected)
   }
 
-  const handleNewTaskAdd = async () => {
+  const handleNewTaskAdd = () => {
     try {
       const body: PostTask['Body'] = {
         title,
@@ -78,7 +82,14 @@ const TasksChildSection = ({
         assigneeIds: selectedMembers,
         positionIds: selectedPositions,
       }
-      const response = await postTask({ boardId: Number(projectId) }, body)
+      // toast
+      toast.promise(() => postTask({ boardId: Number(projectId) }, body), {
+        loading: '처리 중...',
+        success: '작업이 추가되었습니다.',
+        error: '처리 중 오류가 발생하였습니다.',
+      })
+
+      // 성공 시 폼 초기화
       setIsNewTaskFormVisible(false)
       setTitle('')
       setDueDate(undefined)
@@ -87,6 +98,14 @@ const TasksChildSection = ({
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const handleNewTaskAddCancel = () => {
+    setIsNewTaskFormVisible(false)
+    setTitle('')
+    setDueDate(undefined)
+    setSelectedMembers([])
+    setSelectedPositions([])
   }
 
   useEffect(() => {
@@ -108,6 +127,7 @@ const TasksChildSection = ({
             <li
               key={task.id}
               className="flex w-full flex-col items-start gap-[2.125rem] rounded bg-white px-3 pt-[0.6875rem] pb-3"
+              onClick={() => void navigate(`${task.id}`)}
             >
               <div className="justify-center text-left text-base leading-normal font-semibold text-zinc-900 opacity-80">
                 {task.title}
@@ -150,7 +170,7 @@ const TasksChildSection = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className={clsx(
-                'mb-[1.125rem] h-6 w-64 text-base leading-normal font-semibold outline-none',
+                'mb-[1.125rem] h-6 w-full text-base leading-normal font-semibold outline-none',
                 { 'text-zinc-900 opacity-50': !title, 'text-black': title },
               )}
             />
@@ -162,10 +182,13 @@ const TasksChildSection = ({
             />
             <MultiSelect
               options={positionsToMultiSelectOptions}
-              onValueChange={(value: string[]) => handleSelectedPostions(value)}
+              onValueChange={(value: string[]) => handleSelectedPositions(value)}
               placeholder="파트 선택"
             />
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-1">
+              <Button variant="secondary" onClick={() => handleNewTaskAddCancel()}>
+                취소
+              </Button>
               <Button disabled={isSubmitButtonDisabled} onClick={() => void handleNewTaskAdd()}>
                 등록
               </Button>
