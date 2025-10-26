@@ -38,6 +38,7 @@ jobs:
           echo "VITE_API_RECRUIT_URL=${VITE_API_RECRUIT_URL}" >> .env.production
           echo "VITE_API_BOARD_URL=${VITE_API_BOARD_URL}" >> .env.production
           echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}" >> .env.production
+          echo "VITE_REDIRECT_URL=${VITE_REDIRECT_URL}" >> .env.production
 
       - name: Build app
         run: pnpm build
