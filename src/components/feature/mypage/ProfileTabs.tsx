@@ -96,7 +96,7 @@ export default function ProfileTabs({ isMyProfile = false }: ProfileTabsProps) {
       </div>
 
       {/* 콘텐츠 영역 */}
-      <div className="flex h-[614px] flex-col bg-[#E9E9E9] p-10">
+      <div className="flex min-h-[614px] flex-col bg-[#E9E9E9] p-10">
         {activeTab === 'info' ? (
           <div className="text-left">
             <h2 className="mb-4 text-[18px] font-semibold text-gray-900">
@@ -132,7 +132,7 @@ export default function ProfileTabs({ isMyProfile = false }: ProfileTabsProps) {
           </>
         ) : (
           <div className="flex h-full flex-col items-center justify-center text-center">
-            <h2 className="mb-2 text-[18px] font-semibold text-gray-900">{title}</h2>
+            <h2 className="mt-50 mb-2 text-[18px] font-semibold text-gray-900">{title}</h2>
             <p className="whitespace-pre-line text-gray-500">{description}</p>
           </div>
         )}

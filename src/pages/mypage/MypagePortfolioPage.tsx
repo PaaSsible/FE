@@ -89,7 +89,7 @@ export default function MypagePortfolioPage() {
         <Button onClick={() => void navigate('/mypage/portfolio/new')}>추가하기</Button>
       </div>
 
-      <div className="flex min-h-[calc(100vh-200px)] flex-col">
+      <div className="flex min-h-[850px] flex-col">
         {isError ? (
           <div className="flex flex-1 items-center justify-center text-gray-500">
             포트폴리오를 불러오지 못했습니다.
