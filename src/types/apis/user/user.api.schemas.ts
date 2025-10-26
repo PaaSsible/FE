@@ -50,3 +50,72 @@ export const patchUserTermsSchema = {
     errors: z.string().nullable(),
   }),
 }
+
+export const postUserPortfolioSchema = {
+  body: z.object({
+    positionId: z.number().int().positive(),
+    title: z.string().min(1, '제목은 필수 항목입니다.'),
+    summary: z.string().nullable().optional(),
+    description: z.string().min(1, '본문은 필수 항목입니다.'),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.unknown().nullable(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+export const postUserUploadSchema = {
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z
+      .object({
+        url: z.string(),
+      })
+      .passthrough(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+const userPortfolioItemSchema = z.object({
+  id: z.number(),
+  userId: z.number(),
+  positionName: z.string(),
+  title: z.string(),
+  summary: z.string().nullable(),
+  mainCategory: z.string().nullable(),
+  subCategory: z.string().nullable(),
+  contribution: z.number().nullable(),
+  generatedByAi: z.boolean().optional(),
+  createdAt: z.string(),
+})
+
+export const getUserPortfoliosSchema = {
+  path: z.object({
+    userId: z.number().int().positive(),
+  }),
+  query: z
+    .object({
+      page: z.number().int().min(0).optional(),
+      size: z.number().int().min(1).max(50).optional(),
+    })
+    .optional(),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.object({
+      portfolios: z.array(userPortfolioItemSchema),
+      currentPage: z.number().int().min(0),
+      totalPages: z.number().int().min(0),
+      totalElements: z.number().int().min(0),
+      hasNext: z.boolean(),
+      hasPrevious: z.boolean(),
+    }),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
