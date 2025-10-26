@@ -27,17 +27,26 @@ jobs:
         id: meta
         run: echo "TAG=fe-${{ github.run_number }}" >> $GITHUB_OUTPUT
 
+      # .env.production 파일을 Actions 단계에서 직접 생성
+      - name: Create .env.production
+        run: |
+          echo "📦 Creating .env.production file before build"
+          cat <<EOF > .env.production
+          VITE_API_USER_URL=${{ secrets.VITE_API_USER_URL }}
+          VITE_API_RECRUIT_URL=${{ secrets.VITE_API_RECRUIT_URL }}
+          VITE_API_BOARD_URL=${{ secrets.VITE_API_BOARD_URL }}
+          VITE_API_CHAT_URL=${{ secrets.VITE_API_CHAT_URL }}
+          VITE_API_MEET_URL=${{ secrets.VITE_API_MEET_URL }}
+          VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }}
+          EOF
+
+          echo ".env.production created successfully"
+          cat .env.production
+
       - name: Build and push image
         run: |
-          docker build \
-            --build-arg VITE_API_USER_URL=${{ secrets.VITE_API_USER_URL }} \
-            --build-arg VITE_API_RECRUIT_URL=${{ secrets.VITE_API_RECRUIT_URL }} \
-            --build-arg VITE_API_BOARD_URL=${{ secrets.VITE_API_BOARD_URL }} \
-            --build-arg VITE_API_CHAT_URL=${{ secrets.VITE_API_CHAT_URL }} \
-            --build-arg VITE_API_MEET_URL=${{ secrets.VITE_API_MEET_URL }} \
-            --build-arg VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }} \
-            --build-arg VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} \
-            -t seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }} .
+          docker build -t seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }} .
           docker push seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
 
       - name: Set Kubeconfig
