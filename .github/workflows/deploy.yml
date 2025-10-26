@@ -32,13 +32,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Create .env.production
-        run: |
-          echo "VITE_API_USER_URL=${VITE_API_USER_URL}" > .env.production
-          echo "VITE_API_RECRUIT_URL=${VITE_API_RECRUIT_URL}" >> .env.production
-          echo "VITE_API_BOARD_URL=${VITE_API_BOARD_URL}" >> .env.production
-          echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}" >> .env.production
-          echo "VITE_REDIRECT_URL=${VITE_REDIRECT_URL}" >> .env.production
-
       - name: Build app
-        run: pnpm build
+        run: |
+          export VITE_API_USER_URL=${VITE_API_USER_URL}
+          export VITE_API_RECRUIT_URL=${VITE_API_RECRUIT_URL}
+          export VITE_API_BOARD_URL=${VITE_API_BOARD_URL}
+          export VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
+          export VITE_REDIRECT_URL=${VITE_REDIRECT_URL}
+          pnpm build
