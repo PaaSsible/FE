@@ -1,5 +1,6 @@
 export type AuthUser = {
   id: string
+  username: string
   role: string
   agreedToTerms: boolean
 }
@@ -33,18 +34,24 @@ const decodeAccessToken = (accessToken: string): AuthUser | null => {
   try {
     const normalized = payload.replace(/-/g, '+').replace(/_/g, '/')
     const padded = normalized.padEnd(normalized.length + ((4 - (normalized.length % 4)) % 4), '=')
-    const decoded = atob(padded)
+    const decoded = decodeURIComponent(
+      Array.prototype.map
+        .call(atob(padded), (c: string) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+        .join(''),
+    )
     const parsed = JSON.parse(decoded) as Partial<AuthUser> & {
       sub?: string
     }
 
     if (
       typeof parsed.sub === 'string' &&
+      typeof parsed.username === 'string' &&
       typeof parsed.role === 'string' &&
       typeof parsed.agreedToTerms === 'boolean'
     ) {
       return {
         id: parsed.sub,
+        username: parsed.username,
         role: parsed.role,
         agreedToTerms: parsed.agreedToTerms,
       }

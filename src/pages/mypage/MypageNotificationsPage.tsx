@@ -1,3 +1,9 @@
+import { MypageHeader } from '@/components/feature/mypage/MypageHeader'
+
 export default function MypageNotificationsPage() {
-  return <div className="text-s1-bold">마이페이지 프로필</div>
+  return (
+    <div className="bg-gray-50 px-[100px]">
+      <MypageHeader title="알림" />
+    </div>
+  )
 }
