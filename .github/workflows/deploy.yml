@@ -41,14 +41,24 @@ jobs:
           docker push seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
 
       - name: Set Kubeconfig
-        if: ${{ secrets.KUBE_CONFIG }}
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+          if [ -n "$KUBE_CONFIG" ]; then
+            mkdir -p ~/.kube
+            echo "$KUBE_CONFIG" > ~/.kube/config
+          else
+            echo "No KUBE_CONFIG secret found, skipping kubeconfig setup."
+          fi
 
       - name: Rollout new image
-        if: ${{ secrets.KUBE_CONFIG }}
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         run: |
-          kubectl -n frontend set image deployment/frontend-app-deployment \
-            frontend-container=seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
-          kubectl -n frontend rollout status deployment/frontend-app-deployment
+          if [ -n "$KUBE_CONFIG" ]; then
+            kubectl -n frontend set image deployment/frontend-app-deployment \
+              frontend-container=seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
+            kubectl -n frontend rollout status deployment/frontend-app-deployment
+          else
+            echo "No KUBE_CONFIG secret found, skipping rollout."
+          fi
