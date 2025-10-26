@@ -36,6 +36,9 @@ import ProjectStatusPage from './pages/projects/ProjectStatusPage'
 import ProjectsPage from './pages/projects/ProjectsPage'
 
 function App(): JSX.Element {
+  console.log('VITE_GOOGLE_CLIENT_ID:', import.meta.env.VITE_GOOGLE_CLIENT_ID)
+  console.log('VITE_REDIRECT_URL:', import.meta.env.VITE_REDIRECT_URL)
+
   return (
     <BrowserRouter>
       <Toaster
