@@ -32,15 +32,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build app with env injection
+      - name: Create .env.production
         run: |
-          echo "📦 Building with env vars:"
-          echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}"
-          echo "VITE_REDIRECT_URL=${VITE_REDIRECT_URL}"
+          echo "VITE_API_USER_URL=${VITE_API_USER_URL}" > .env.production
+          echo "VITE_API_RECRUIT_URL=${VITE_API_RECRUIT_URL}" >> .env.production
+          echo "VITE_API_BOARD_URL=${VITE_API_BOARD_URL}" >> .env.production
+          echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}" >> .env.production
+          echo "VITE_REDIRECT_URL=${VITE_REDIRECT_URL}" >> .env.production
+          echo "✅ .env.production 파일 생성 완료:"
+          cat .env.production
 
-          VITE_API_USER_URL=$VITE_API_USER_URL \
-          VITE_API_RECRUIT_URL=$VITE_API_RECRUIT_URL \
-          VITE_API_BOARD_URL=$VITE_API_BOARD_URL \
-          VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID \
-          VITE_REDIRECT_URL=$VITE_REDIRECT_URL \
-          pnpm build
+      - name: Build app
+        run: pnpm build
