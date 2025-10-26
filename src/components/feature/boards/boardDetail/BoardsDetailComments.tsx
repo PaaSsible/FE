@@ -76,7 +76,6 @@ export default function BoardsDetailComments({
   })
 
   const authUser = getAuthUser()
-  console.log(authUser)
 
   // 댓글 총합 (댓글 + 대댓글)
   const totalComments = useMemo(() => {
