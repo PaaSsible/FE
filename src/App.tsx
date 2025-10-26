@@ -20,6 +20,7 @@ import MyBoardsPage from './pages/boards/MyBoardsPage'
 // Mypage
 import MypageApplicationsPage from './pages/mypage/MypageApplicationsPage'
 import MypageNotificationsPage from './pages/mypage/MypageNotificationsPage'
+import MypagePortfolioNewPage from './pages/mypage/MypagePortfolioNewPage'
 import MypagePortfolioPage from './pages/mypage/MypagePortfolioPage'
 import MypageProfilePage from './pages/mypage/MypageProfilePage'
 import PrivacyPage from './pages/policy/PrivacyPage'
@@ -29,11 +30,12 @@ import ProjectBoardPage from './pages/projects/ProjectBoardPage'
 import ProjectChatPage from './pages/projects/ProjectChatPage'
 import ProjectDetailPage from './pages/projects/ProjectDetailPage'
 import ProjectEditPage from './pages/projects/ProjectEditPage'
-import ProjectLayout from './pages/projects/ProjectLayout'
 import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
+import ProjectMeetingRoomPage from './pages/projects/ProjectMeetingRoomPage'
 import ProjectNewPage from './pages/projects/ProjectNewPage'
 import ProjectStatusPage from './pages/projects/ProjectStatusPage'
 import ProjectsPage from './pages/projects/ProjectsPage'
+import UserProfilePage from './pages/users/UserProfilePage'
 
 function App(): JSX.Element {
   return (
@@ -67,7 +69,6 @@ function App(): JSX.Element {
           {/* Policy */}
           <Route path="policy/privacy" element={<PrivacyPage />} />
           <Route path="policy/terms" element={<TermsPage />} />
-
           {/* Boards */}
           <Route path="boards" element={<BoardsPage />} />
           <Route path="boards/new" element={<BoardNewPage />} />
@@ -75,31 +76,33 @@ function App(): JSX.Element {
           <Route path="boards/:postId" element={<BoardDetailPage />} />
           <Route path="boards/:postId/edit" element={<BoardEditPage />} />
           <Route path="boards/:postId/applicants" element={<ApplicantsPage />} />
-
           {/* Projects */}
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/new" element={<ProjectNewPage />} />
-
           <Route path="projects/:projectId" element={<ProjectsLayout />}>
             <Route index element={<ProjectDetailPage />} />
             <Route path="edit" element={<ProjectEditPage />} />
             <Route path="board" element={<ProjectBoardPage />} />
             <Route path="status" element={<ProjectStatusPage />} />
             <Route path="meeting" element={<ProjectMeetingPage />} />
-            <Route path="meeting/:roomId" element={<ProjectMeetingPage />} />
             <Route path="chat" element={<ProjectChatPage />} />
           </Route>
 
+          {/* Mypage */}
           <Route path="mypage" element={<MypageLayout />}>
             <Route index element={<MypageProfilePage />} />
             <Route path="portfolio" element={<MypagePortfolioPage />} />
             <Route path="applications" element={<MypageApplicationsPage />} />
             <Route path="notifications" element={<MypageNotificationsPage />} />
           </Route>
+          <Route path="mypage/portfolio/new" element={<MypagePortfolioNewPage />} />
+
+          <Route path="users/:userId/profile" element={<UserProfilePage />} />
         </Route>
 
         <Route path="start" element={<StartPage />} />
         <Route path="login/oauth2/code/google" element={<AuthCallBackPage />} />
+        <Route path="projects/:projectId/meeting/:roomId" element={<ProjectMeetingRoomPage />} />
       </Routes>
     </BrowserRouter>
   )

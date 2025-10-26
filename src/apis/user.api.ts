@@ -30,3 +30,40 @@ export const patchUserTerms = async (): Promise<UserAPITypes.PatchUserTerms['Res
   const res = await PaaSsibleUser.patch('/users/terms')
   return userAPISchemas.patchUserTermsSchema.response.parse(res.data)
 }
+
+export const postUserPortfolio = async (
+  body: UserAPITypes.PostUserPortfolio['Body'],
+): Promise<UserAPITypes.PostUserPortfolio['Response']> => {
+  const parsedBody = userAPISchemas.postUserPortfolioSchema.body.parse(body)
+  const res = await PaaSsibleUser.post('/users/portfolios', parsedBody)
+  return userAPISchemas.postUserPortfolioSchema.response.parse(res.data)
+}
+
+export const postUserUpload = async (
+  formData: FormData,
+): Promise<UserAPITypes.PostUserUpload['Response']> => {
+  const res = await PaaSsibleUser.post('/users/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  return userAPISchemas.postUserUploadSchema.response.parse(res.data)
+}
+
+export const getUserPortfolios = async ({
+  userId,
+  page,
+  size,
+}: {
+  userId: number
+  page?: number
+  size?: number
+}): Promise<UserAPITypes.GetUserPortfolios['Response']> => {
+  const parsedPath = userAPISchemas.getUserPortfoliosSchema.path.parse({ userId })
+  const parsedQuery = userAPISchemas.getUserPortfoliosSchema.query?.parse({ page, size }) ?? {}
+
+  const res = await PaaSsibleUser.get(`/users/${parsedPath.userId}/portfolios`, {
+    params: parsedQuery,
+  })
+  return userAPISchemas.getUserPortfoliosSchema.response.parse(res.data)
+}
