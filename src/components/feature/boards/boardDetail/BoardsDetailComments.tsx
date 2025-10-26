@@ -4,6 +4,7 @@ import Avatar from '@/components/atoms/Avatar'
 import Modal from '@/components/common/Modal'
 import useBoardsDetailComments from '@/hooks/boards/useBoardsDetailComments'
 import type { RecruitComment } from '@/hooks/boards/useFetchRecruitComments'
+import { getAuthUser } from '@/utils/authToken'
 
 import CommentInput from './CommentInput'
 import CommentList from './CommentList'
@@ -74,6 +75,9 @@ export default function BoardsDetailComments({
     isDeleting,
   })
 
+  const authUser = getAuthUser()
+  console.log(authUser)
+
   // 댓글 총합 (댓글 + 대댓글)
   const totalComments = useMemo(() => {
     if (typeof totalCount === 'number') return totalCount
@@ -81,7 +85,6 @@ export default function BoardsDetailComments({
     return comments.reduce((acc, c) => acc + countReplies(c), 0)
   }, [comments, totalCount])
 
-  const currentUserName = '이윤지'
   const isDeleteReply = deleteTarget?.parentId !== undefined && deleteTarget?.parentId !== null
   const deleteModalTitle = isDeleteReply ? '답글을 삭제하시겠어요?' : '댓글을 삭제하시겠어요?'
   const deleteModalDescription = isDeleteReply
@@ -97,8 +100,8 @@ export default function BoardsDetailComments({
 
       {/* 사용자 정보 */}
       <div className="mt-[47px] flex items-center gap-[11px]">
-        <Avatar name={currentUserName} />
-        <div className="text-b4-bold text-gray-900">{currentUserName}</div>
+        <Avatar name={authUser?.username ?? ''} />
+        <div className="text-b4-bold text-gray-900">{authUser?.username ?? ''}</div>
       </div>
 
       {/* 댓글 입력 */}
