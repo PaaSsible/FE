@@ -1,5 +1,3 @@
-import type { M } from 'vitest/dist/chunks/reporters.d.BFLkQcL6.js'
-
 import PaaSsibleChat from '@/config/interceptors/chat.interceptor'
 import * as chatApiSchemas from '@/types/apis/chat/chat.api.schemas'
 import * as ChatApiTypes from '@/types/apis/chat/chat.api.types'
