@@ -1,18 +1,17 @@
+import { Separator } from '@radix-ui/react-dropdown-menu'
 import { useEffect, useState, type JSX } from 'react'
 import { ZodError } from 'zod'
 
 import { getBoardList } from '@/apis/board.api'
 import Tab from '@/components/atoms/Tab'
 import SearchBar from '@/components/common/SearchBar'
+import CreateProjectButton from '@/components/feature/projects/CreateProjectButton'
+import ProjectHeader from '@/components/feature/projects/ProjectHeader'
+import ProjectListItem from '@/components/feature/projects/ProjectListItem'
 import { statusTab, type StatusTab } from '@/config/constants/statusKor'
 import { statusKorToEngMap } from '@/config/converters/statusKorToEngMap'
 import type { GetBoardList } from '@/types/apis/board/board.api.types'
 import type { Board } from '@/types/entities/board/board.entitites.types'
-
-import CreateProjectButton from './components/CreateProjectButton'
-import ProjectHeader from './components/ProjectHeader'
-import ProjectListItem from './components/ProjectListItem'
-import Separator from './components/Separator'
 
 export default function ProjectsPage(): JSX.Element {
   const [selectedTab, setSelectedTab] = useState<StatusTab>('전체')

@@ -9,10 +9,9 @@ import { ZodError } from 'zod'
 
 import { getTaskDetail, getTaskDetailComments, postTaskDetailComment } from '@/apis/task.api'
 import Button from '@/components/atoms/Button'
+import Separator from '@/components/feature/projects/Separator'
 import { Textarea } from '@/components/ui/textarea'
 import { type Comment, type Task } from '@/types/entities/board/board.entitites.types'
-
-import Separator from './components/Separator'
 
 const ProjectTaskPage = (): JSX.Element => {
   const navigate = useNavigate()

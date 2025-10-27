@@ -1,3 +1,4 @@
+import { Separator } from '@radix-ui/react-dropdown-menu'
 import { AxiosError } from 'axios'
 import clsx from 'clsx'
 import { useEffect, useState, type JSX } from 'react'
@@ -6,6 +7,14 @@ import { ZodError } from 'zod'
 
 import { getContributionScores } from '@/apis/contribution.api'
 import { getExternalLinks, getTaskStatusChart, getWeeklyGoalAchievement } from '@/apis/task.api'
+import AddLinkButton from '@/components/feature/projects/AddLinkButton'
+import ExternalLinkItem from '@/components/feature/projects/ExternalLinkItem'
+import ProjectHeader from '@/components/feature/projects/ProjectHeader'
+import QuestionTooltip from '@/components/feature/projects/QuestionTooltip'
+import { TaskStatusPieChart } from '@/components/feature/projects/TaskStatusPieChart'
+import { WeeklyGoalAchievementProgressBar } from '@/components/feature/projects/WeeklyAchievementProgressBar'
+import { DataTable } from '@/components/feature/projects/contributionTable/DataTable'
+import { columns } from '@/components/feature/projects/contributionTable/columns'
 import { SemiDoughnutChart } from '@/components/ui/semi-doughnut-chart'
 import type {
   TaskStatusChartData,
@@ -13,16 +22,6 @@ import type {
 } from '@/types/components/chart/chart.types'
 import type { ContributionScore } from '@/types/components/contributionScore/contributionScore.types'
 import type { Link } from '@/types/entities/board/board.entitites.types'
-
-import AddLinkButton from './components/AddLinkButton'
-import ExternalLinkItem from './components/ExternalLinkItem'
-import ProjectHeader from './components/ProjectHeader'
-import QuestionTooltip from './components/QuestionTooltip'
-import Separator from './components/Separator'
-import { TaskStatusPieChart } from './components/TaskStatusPieChart'
-import { WeeklyGoalAchievementProgressBar } from './components/WeeklyAchievementProgressBar'
-import { DataTable } from './components/contributionTable/DataTable'
-import { columns } from './components/contributionTable/columns'
 
 interface StatusChartLabelWithValueProps {
   label: '완료된 작업' | '진행 중인 작업' | '해야 할 작업'

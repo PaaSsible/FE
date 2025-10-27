@@ -9,7 +9,6 @@ import {
 import type { JSX } from 'react'
 import { useParams, useNavigate, useLocation, Outlet } from 'react-router-dom'
 
-// eslint-disable-next-line import/extensions
 import { Button } from '@/components/ui/button'
 
 interface AsideItemProps {

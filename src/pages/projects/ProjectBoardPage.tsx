@@ -6,11 +6,10 @@ import { ZodError } from 'zod'
 import { getBoardDetail, getBoardMember, patchBoardMember } from '@/apis/board.api'
 import { getTaskList } from '@/apis/task.api'
 import SearchBar from '@/components/common/SearchBar'
+import PositionSelectModal from '@/components/feature/projects/PositionSelectModal'
+import TasksChildSection from '@/components/feature/projects/TasksChildSection'
 import { type Task, type BoardMember } from '@/types/entities/board/board.entitites.types'
 import type { Position } from '@/types/entities/recruit-post/recruitPost.types'
-
-import PositionSelectModal from './components/PositionSelectModal'
-import TasksChildSection from './components/TasksChildSection'
 
 // interface ProjectBoardPageProps {
 //   projectTitle: string
