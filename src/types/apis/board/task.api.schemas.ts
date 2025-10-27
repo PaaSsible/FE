@@ -278,7 +278,7 @@ export const getExternalLinksSchema = {
  */
 export const postExternalLinkSchema = {
   path: z.object({ boardId: boardSchema.shape.boardId }),
-  body: linkSchema.pick({ title: true, url: true }),
+  body: linkSchema.pick({ name: true, url: true }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),
