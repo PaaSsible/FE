@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: frontend-container
-          image: jimin980915/contest-18-image-frontend:fe-{BUILD_DATE_TIME} # CI/CD 치환
+          image: seungjulee1228/contest-18-image-frontend:fe-{BUILD_DATE_TIME} # CI/CD 치환
           imagePullPolicy: Always
           ports:
             - containerPort: 80

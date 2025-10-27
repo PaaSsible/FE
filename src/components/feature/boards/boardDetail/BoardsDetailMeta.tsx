@@ -1,4 +1,4 @@
-import { ChevronLeft } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 
 import { Tag } from '@/components/atoms/Tag'
 import { formatRecruitDateLabel } from '@/utils/date'
@@ -83,7 +83,7 @@ export default function BoardsDetailMeta({ post }: Props) {
           <div className="text-b4-medium text-gray-600">모집 구분</div>
           <div className="text-b4-bold flex gap-[11px] text-gray-900">
             <span>{mainCategoryToLabel(post.mainCategory)}</span>
-            <ChevronLeft className="h-[30px] w-[30px] text-gray-600" />
+            <ChevronRight className="h-[30px] w-[30px] text-gray-600" />
             <span>{detailTypeToLabel(post.subCategory)}</span>
           </div>
         </div>

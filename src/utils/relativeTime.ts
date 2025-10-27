@@ -37,3 +37,10 @@ export function formatRelativeTime(input: InputDate) {
 
   return format(createdAt, 'yyyy.MM.dd')
 }
+
+export function formatDate(input: InputDate) {
+  if (!input) return '-'
+  const date = input instanceof Date ? input : new Date(input)
+  if (Number.isNaN(date.getTime())) return '-'
+  return format(date, 'yyyy.MM.dd')
+}

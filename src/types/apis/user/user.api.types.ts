@@ -5,6 +5,9 @@ import type {
   postLoginSchema,
   postLogoutSchema,
   postReissueSchema,
+  postUserPortfolioSchema,
+  postUserUploadSchema,
+  getUserPortfoliosSchema,
 } from './user.api.schemas'
 
 export type PostLogin = {
@@ -22,4 +25,19 @@ export type PostReissue = {
 
 export type PatchUserTerms = {
   Response: z.infer<typeof patchUserTermsSchema.response>
+}
+
+export type PostUserPortfolio = {
+  Body: z.infer<typeof postUserPortfolioSchema.body>
+  Response: z.infer<typeof postUserPortfolioSchema.response>
+}
+
+export type PostUserUpload = {
+  Response: z.infer<typeof postUserUploadSchema.response>
+}
+
+export type GetUserPortfolios = {
+  Path: z.infer<typeof getUserPortfoliosSchema.path>
+  Query: z.infer<typeof getUserPortfoliosSchema.query>
+  Response: z.infer<typeof getUserPortfoliosSchema.response>
 }

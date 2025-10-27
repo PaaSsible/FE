@@ -1,42 +1,64 @@
-name: Deploy
+name: Deploy Frontend
 
 on:
   push:
     branches: [main, master]
-  pull_request:
-    branches: [main, master]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
-    env:
-      VITE_API_USER_URL: ${{ secrets.VITE_API_USER_URL }}
-      VITE_API_RECRUIT_URL: ${{ secrets.VITE_API_RECRUIT_URL }}
-      VITE_API_BOARD_URL: ${{ secrets.VITE_API_BOARD_URL }}
-      VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Set image tag
+        id: meta
+        run: echo "TAG=fe-${{ github.run_number }}" >> $GITHUB_OUTPUT
 
-      - name: Create .env.production
+      - name: Build and push image
         run: |
-          echo "VITE_API_USER_URL=${VITE_API_USER_URL}" > .env.production
-          echo "VITE_API_RECRUIT_URL=${VITE_API_RECRUIT_URL}" >> .env.production
-          echo "VITE_API_BOARD_URL=${VITE_API_BOARD_URL}" >> .env.production
-          echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}" >> .env.production
+          docker build \
+            --build-arg VITE_API_USER_URL=${{ secrets.VITE_API_USER_URL }} \
+            --build-arg VITE_API_RECRUIT_URL=${{ secrets.VITE_API_RECRUIT_URL }} \
+            --build-arg VITE_API_BOARD_URL=${{ secrets.VITE_API_BOARD_URL }} \
+            --build-arg VITE_API_CHAT_URL=${{ secrets.VITE_API_CHAT_URL }} \
+            --build-arg VITE_API_MEET_URL=${{ secrets.VITE_API_MEET_URL }} \
+            --build-arg VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }} \
+            --build-arg VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} \
+            -t seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }} .
+          docker push seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
 
-      - name: Build app
-        run: pnpm build
+      - name: Set Kubeconfig
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        run: |
+          if [ -n "$KUBE_CONFIG" ]; then
+            mkdir -p ~/.kube
+            echo "$KUBE_CONFIG" > ~/.kube/config
+          else
+            echo "No KUBE_CONFIG secret found, skipping kubeconfig setup."
+          fi
+
+      - name: Rollout new image
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        run: |
+          if [ -n "$KUBE_CONFIG" ]; then
+            kubectl -n frontend set image deployment/frontend-app-deployment \
+              frontend-container=seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
+            kubectl -n frontend rollout status deployment/frontend-app-deployment
+          else
+            echo "No KUBE_CONFIG secret found, skipping rollout."
+          fi

@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-[15px]">
             {/* 제목 */}
-            <h2 className="text-s1-bold text-start">{title}</h2>
+            <h2 className="text-s1-bold text-start text-gray-900">{title}</h2>
             {/* 설명 */}
             {description && <div className="text-b5-medium text-gray-800">{description}</div>}
           </div>
