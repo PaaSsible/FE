@@ -32,6 +32,7 @@ export const chatHandlers: HttpHandler[] = [
    */
   http.get<{ boardId: string }>(`${BOARD_API_URL}/boards/:boardId/chats/rooms`, ({ params }) => {
     const { boardId } = params
+
     const data: ChatAPITypes.GetChatRooms['Response'] = {
       success: true,
       message: '요청이 성공적으로 처리되었습니다.',
@@ -39,7 +40,8 @@ export const chatHandlers: HttpHandler[] = [
         {
           roomId: 8,
           roomName: '홍길동',
-          lastMessage: 'message 2',
+          lastMessage:
+            '메시지 내용은 이렇게 들어갑니다 길면 이렇게 잘리고요 어쩌구 저쩌구 저쩌구 가나다라마바사아자차카타파하아야어여오요우유으이 어쩌구 저쩌구',
           lastMessageTime: new Date('2025-10-15T14:43:23'),
           unreadCount: 2,
         },
@@ -68,7 +70,7 @@ export const chatHandlers: HttpHandler[] = [
    * @name 채팅방 생성
    */
   http.post<{ boardId: string }>(
-    `${API_URL}/boards/:boardId/chats/rooms`,
+    `${BOARD_API_URL}/boards/:boardId/chats/rooms`,
     async ({ request, params }) => {
       const { boardId } = params
       const body = (await request.clone().json()) as ChatAPITypes.PostChatRoom['Body']
