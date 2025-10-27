@@ -2,7 +2,7 @@ import type z from 'zod'
 
 import * as chatApiSchema from './chat.api.schemas'
 
-export type GetChatRoom = {
+export type GetChatRooms = {
   Path: z.infer<(typeof chatApiSchema)['getChatRoomsSchema']['path']>
   Response: z.infer<(typeof chatApiSchema)['getChatRoomsSchema']['response']>
 }
