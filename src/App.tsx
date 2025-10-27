@@ -3,6 +3,8 @@ import '@/styles/App.css'
 import { Toaster } from 'react-hot-toast'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import { Toaster as ShadcnToaster } from '@/components/ui/sonner'
+
 // Public
 import Layout from './components/common/Layout'
 import MypageLayout from './components/common/MypageLayout'
@@ -34,6 +36,7 @@ import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
 import ProjectMeetingRoomPage from './pages/projects/ProjectMeetingRoomPage'
 import ProjectNewPage from './pages/projects/ProjectNewPage'
 import ProjectStatusPage from './pages/projects/ProjectStatusPage'
+import ProjectTaskPage from './pages/projects/ProjectTaskPage'
 import ProjectsPage from './pages/projects/ProjectsPage'
 import UserProfilePage from './pages/users/UserProfilePage'
 
@@ -61,7 +64,7 @@ function App(): JSX.Element {
           },
         }}
       />
-
+      <ShadcnToaster position="top-right" />
       <Routes>
         {/* Public */}
         <Route element={<Layout isLoggedIn={false} />}>
@@ -86,6 +89,8 @@ function App(): JSX.Element {
             <Route index element={<ProjectDetailPage />} />
             <Route path="edit" element={<ProjectEditPage />} />
             <Route path="board" element={<ProjectBoardPage />} />
+            <Route path="board/:taskId" element={<ProjectTaskPage />} />
+
             <Route path="status" element={<ProjectStatusPage />} />
             <Route path="meeting" element={<ProjectMeetingPage />} />
             <Route path="chat" element={<ProjectChatPage />} />
