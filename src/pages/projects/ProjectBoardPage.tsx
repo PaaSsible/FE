@@ -108,7 +108,7 @@ export default function ProjectBoardPage(): JSX.Element {
   }, [searchValue, tasks])
 
   return (
-    <div className="flex min-h-full flex-1 flex-col pt-12">
+    <div className="flex min-h-full flex-col">
       <div className="mb-9 flex items-center justify-between">
         <div className="font-['Pretendard'] text-3xl leading-10 font-semibold text-black">
           프로젝트 이름
