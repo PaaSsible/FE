@@ -1,3 +1,4 @@
+import PaaSsibleBoard from '@/config/interceptors/board.interceptor'
 import PaaSsibleChat from '@/config/interceptors/chat.interceptor'
 import * as chatApiSchemas from '@/types/apis/chat/chat.api.schemas'
 import * as ChatApiTypes from '@/types/apis/chat/chat.api.types'
@@ -11,7 +12,7 @@ export const getChatRooms = async (
   path: ChatApiTypes.GetChatRooms['Path'],
 ): Promise<ChatApiTypes.GetChatRooms['Response']> => {
   const parsedPath = chatApiSchemas.getChatRoomsSchema.path.parse(path)
-  const res = await PaaSsibleChat.get(`/boards/${parsedPath.boardId}/chats/rooms`)
+  const res = await PaaSsibleBoard.get(`/boards/${parsedPath.boardId}/chats/rooms`)
   return chatApiSchemas.getChatRoomsSchema.response.parse(res.data)
 }
 
@@ -26,7 +27,7 @@ export const postChatRoom = async (
 ): Promise<ChatApiTypes.PostChatRoom['Response']> => {
   const parsedPath = chatApiSchemas.postChatRoomSchema.path.parse(path)
   const parsedBody = chatApiSchemas.postChatRoomSchema.body.parse(body)
-  const res = await PaaSsibleChat.post(`/boards/${parsedPath.boardId}/chats/rooms`, parsedBody)
+  const res = await PaaSsibleBoard.post(`/boards/${parsedPath.boardId}/chats/rooms`, parsedBody)
   return chatApiSchemas.postChatRoomSchema.response.parse(res.data)
 }
 
@@ -39,7 +40,7 @@ export const deleteChatRoom = async (
   path: ChatApiTypes.DeleteChatRoom['Path'],
 ): Promise<ChatApiTypes.DeleteChatRoom['Response']> => {
   const parsedPath = chatApiSchemas.deleteChatRoomSchema.path.parse(path)
-  const res = await PaaSsibleChat.delete(
+  const res = await PaaSsibleBoard.delete(
     `/boards/${parsedPath.boardId}/chats/rooms/${parsedPath.roomId}`,
   )
   return chatApiSchemas.deleteChatRoomSchema.response.parse(res.data)
@@ -56,7 +57,7 @@ export const postChatRoomInvitation = async (
 ): Promise<ChatApiTypes.PostChatRoomInvitation['Response']> => {
   const parsedPath = chatApiSchemas.postChatRoomInvitationSchema.path.parse(path)
   const parsedBody = chatApiSchemas.postChatRoomInvitationSchema.body.parse(body)
-  const res = await PaaSsibleChat.post(
+  const res = await PaaSsibleBoard.post(
     `/boards/${parsedPath.boardId}/chats/rooms/${parsedPath.roomId}/invite`,
     parsedBody,
   )
