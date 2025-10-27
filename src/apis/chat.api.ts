@@ -52,10 +52,13 @@ export const deleteChatRoom = async (
  */
 export const postChatRoomInvitation = async (
   path: ChatApiTypes.PostChatRoomInvitation['Path'],
+  body: ChatApiTypes.PostChatRoomInvitation['Body'],
 ): Promise<ChatApiTypes.PostChatRoomInvitation['Response']> => {
   const parsedPath = chatApiSchemas.postChatRoomInvitationSchema.path.parse(path)
+  const parsedBody = chatApiSchemas.postChatRoomInvitationSchema.body.parse(body)
   const res = await PaaSsibleChat.post(
     `/boards/${parsedPath.boardId}/chats/rooms/${parsedPath.roomId}/invite`,
+    parsedBody,
   )
   return chatApiSchemas.postChatRoomInvitationSchema.response.parse(res.data)
 }

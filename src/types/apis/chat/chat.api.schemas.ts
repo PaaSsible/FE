@@ -160,6 +160,7 @@ export const getChatRoomAroundMessagesSchema = {
     data: z.object({
       content: z.array(chatMessageSchema),
       nextCursor: z.number(),
+      hasNext: z.boolean(),
     }),
     code: z.string(),
     errors: z.null(),
@@ -218,7 +219,7 @@ export const getChatRoomMessageReadUserSchema = {
  * @path `/chats/upload`
  */
 export const postChatRoomImageUploadSchema = {
-  query: z.enum(chatMessageTypeArray),
+  query: z.object({ type: z.enum(chatMessageTypeArray) }),
   response: z.object({
     success: z.boolean(),
     message: z.string(),

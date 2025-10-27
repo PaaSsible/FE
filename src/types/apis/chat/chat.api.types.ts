@@ -20,6 +20,7 @@ export type DeleteChatRoom = {
 
 export type PostChatRoomInvitation = {
   Path: z.infer<(typeof chatApiSchema)['postChatRoomInvitationSchema']['path']>
+  Body: z.infer<(typeof chatApiSchema)['postChatRoomInvitationSchema']['body']>
   Response: z.infer<(typeof chatApiSchema)['postChatRoomInvitationSchema']['response']>
 }
 

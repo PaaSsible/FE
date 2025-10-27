@@ -19,6 +19,6 @@ export const chatMessageSchema = z.object({
   senderImage: userSchema.shape.profileImageUrl,
   content: z.string(),
   type: z.enum(chatMessageTypeArray),
-  createAt: z.preprocess((val) => (typeof val === 'string' ? new Date(val) : val), z.date()),
+  createdAt: z.preprocess((val) => (typeof val === 'string' ? new Date(val) : val), z.date()),
   readCount: z.number(),
 })
