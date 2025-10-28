@@ -105,7 +105,10 @@ export const getBoardDetailSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
-    data: z.object({ boardId: boardSchema.shape.boardId, positionId: z.number().nullable() }),
+    data: z.object({
+      boardId: boardSchema.shape.boardId,
+      positionId: z.number().nullable().optional(),
+    }),
     code: z.string(),
     errors: z.string().nullable(),
   }),

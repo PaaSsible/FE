@@ -363,26 +363,26 @@ export const recruitHandlers: HttpHandler[] = [
   }),
 
   // 지원자 목록 조회
-  http.get<{ postId: string }>(`${API_URL}/recruits/:postId/applications`, ({ params }) => {
-    const postId = params.postId
-    void postId
+  // http.get<{ postId: string }>(`${API_URL}/recruits/:postId/applications`, ({ params }) => {
+  //   const postId = params.postId
+  //   void postId
 
-    const data: RecruitTypes.GetRecruitApplicants['Response'] = {
-      success: true,
-      message: '요청이 성공적으로 처리되었습니다.',
-      data: [
-        {
-          id: 5,
-          postId: 30,
-          applicantId: 3,
-        },
-      ],
-      code: 'OK',
-      errors: null,
-    }
+  //   const data: RecruitTypes.GetRecruitApplicants['Response'] = {
+  //     success: true,
+  //     message: '요청이 성공적으로 처리되었습니다.',
+  //     data: [
+  //       {
+  //         id: 5,
+  //         postId: 30,
+  //         applicantId: 3,
+  //       },
+  //     ],
+  //     code: 'OK',
+  //     errors: null,
+  //   }
 
-    return HttpResponse.json(data)
-  }),
+  //   return HttpResponse.json(data)
+  // }),
 
   // 지원 수락
   http.post<{ postId: string; applicationId: string }>(
