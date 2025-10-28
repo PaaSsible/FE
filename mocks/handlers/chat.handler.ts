@@ -53,7 +53,7 @@ export const chatHandlers: HttpHandler[] = [
           unreadCount: 3,
         },
         {
-          roomId: 10,
+          roomId: 4,
           roomName: '박우진',
           lastMessage: 'message 6',
           lastMessageTime: new Date('2025-10-15T14:43:23'),
@@ -78,7 +78,7 @@ export const chatHandlers: HttpHandler[] = [
       const data: ChatAPITypes.PostChatRoom['Response'] = {
         success: true,
         message: '리소스가 생성되었습니다.',
-        data: null,
+        data: { roomId: 1 },
         code: 'CREATED',
         errors: null,
       }
@@ -237,8 +237,8 @@ export const chatHandlers: HttpHandler[] = [
           {
             id: 40,
             roomId: 4,
-            senderId: 1,
-            senderName: '박채은',
+            senderId: 2,
+            senderName: '홍길동',
             senderImage: 'a.png',
             content: '회의 언제 진행할까요?',
             type: 'TEXT',
@@ -253,7 +253,7 @@ export const chatHandlers: HttpHandler[] = [
             senderImage: 'a.png',
             content: 'abc.png',
             type: 'IMAGE',
-            createdAt: new Date('2025-09-05T16:02:10.804294'),
+            createdAt: new Date('2025-09-06T16:02:10.804294'),
             readCount: 0,
           },
         ],
@@ -263,6 +263,7 @@ export const chatHandlers: HttpHandler[] = [
       code: 'OK',
       errors: null,
     }
+    return HttpResponse.json(data)
   }),
 
   /**
