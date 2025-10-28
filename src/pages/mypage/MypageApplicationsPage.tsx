@@ -79,7 +79,7 @@ export default function MypageApplicationsPage() {
   }
 
   return (
-    <div className="bg-gray-50 px-[100px] py-[40px]">
+    <div className="bg-gray-50 px-[100px]">
       <MypageHeader title="지원 내역" count={applications.length} />
 
       <div className="mt-8 flex flex-col gap-5">

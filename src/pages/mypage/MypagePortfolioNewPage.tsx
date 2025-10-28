@@ -205,7 +205,7 @@ export default function MypagePortfolioNewPage() {
 
   if (isEditMode && isDetailLoading && !portfolioDetail) {
     return (
-      <div className="flex min-h-screen flex-col bg-gray-50 px-[144px] py-[44px] text-start">
+      <div className="flex min-h-screen flex-col bg-gray-50 px-[144px] text-start">
         <MypageHeader title="포트폴리오 수정" />
 
         <div className="flex flex-1 items-center justify-center text-gray-500">
@@ -216,7 +216,7 @@ export default function MypagePortfolioNewPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 px-[144px] py-[44px] text-start">
+    <div className="flex min-h-screen flex-col bg-gray-50 px-[144px] text-start">
       <MypageHeader title={isEditMode ? '포트폴리오 수정' : '포트폴리오 작성'} />
 
       <section className="flex flex-1 flex-col">

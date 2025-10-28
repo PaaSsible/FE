@@ -60,7 +60,7 @@ export default function PortfolioDetailPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 px-[144px] py-[44px]">
+    <div className="flex min-h-screen flex-col bg-gray-50 px-[144px]">
       <MypageHeader title={pageTitle} onBackClick={handleBack} />
 
       {isLoading ? (

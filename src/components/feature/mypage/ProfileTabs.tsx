@@ -65,7 +65,7 @@ export default function ProfileTabs({ isMyProfile = false }: ProfileTabsProps) {
     : `아직 등록된 작업물이 없습니다.\n곧 업데이트될 포트폴리오를 기다려주세요.`
 
   return (
-    <div className="mt-8">
+    <div className="mt-2">
       {/* 탭 버튼 */}
       <div className="flex pl-2">
         <button
@@ -106,11 +106,11 @@ export default function ProfileTabs({ isMyProfile = false }: ProfileTabsProps) {
             </p>
           </div>
         ) : isError ? (
-          <div className="flex h-full items-center justify-center text-gray-500">
+          <div className="mt-40 flex h-full items-center justify-center text-gray-500">
             포트폴리오를 불러오지 못했습니다.
           </div>
         ) : isLoading ? (
-          <div className="flex h-full items-center justify-center text-gray-500">
+          <div className="mt- 40 flex h-full items-center justify-center text-gray-500">
             포트폴리오를 불러오는 중입니다...
           </div>
         ) : hasPortfolio ? (
