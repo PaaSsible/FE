@@ -14,6 +14,10 @@ export default function BoardActionButtons({ postId, onDeleteClick }: BoardActio
     void navigate(`/boards/${postId}/edit`)
   }
 
+  const handleMoveClick = () => {
+    void navigate(`/boards/${postId}/applicants`)
+  }
+
   return (
     <div className="flex gap-2">
       <Button variant="secondary" shape="square" onClick={onDeleteClick}>
@@ -22,7 +26,9 @@ export default function BoardActionButtons({ postId, onDeleteClick }: BoardActio
       <Button variant="secondary" shape="square" onClick={handleEditClick}>
         수정하기
       </Button>
-      <Button variant="primary">지원자 보러가기</Button>
+      <Button variant="primary" onClick={handleMoveClick}>
+        지원자 보러가기
+      </Button>
     </div>
   )
 }

@@ -49,17 +49,29 @@ const TermsConsentModal: React.FC<TermsConsentModalProps> = ({
   )
 
   return (
-    <Modal
-      isOpen={isOpen}
-      title="만나서 반갑습니다!"
-      description={description}
-      cancelLabel="둘러보기"
-      confirmLabel="프로필 설정하러 가기"
-      onCancel={onClose}
-      onConfirm={onConfirm}
-      cancelDisabled={actionsDisabled}
-      confirmDisabled={actionsDisabled}
-    />
+    <>
+      {isOpen && (
+        <>
+          {/* 흰색 전체 배경 */}
+          <div className="fixed inset-0 z-[48] bg-white" />
+
+          {/* 어두운 오버레이 */}
+          <div className="fixed inset-0 z-[49] bg-gray-700/80" />
+        </>
+      )}
+
+      <Modal
+        isOpen={isOpen}
+        title="만나서 반갑습니다!"
+        description={description}
+        cancelLabel="둘러보기"
+        confirmLabel="프로필 설정하러 가기"
+        onCancel={onClose}
+        onConfirm={onConfirm}
+        cancelDisabled={actionsDisabled}
+        confirmDisabled={actionsDisabled}
+      />
+    </>
   )
 }
 

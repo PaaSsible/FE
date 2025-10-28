@@ -4,7 +4,7 @@ import Button from '../atoms/Button'
 
 interface ModalProps {
   isOpen: boolean
-  title: string
+  title: string | React.ReactNode
   description?: string | React.ReactNode
   cancelLabel: string
   confirmLabel: string
