@@ -119,3 +119,43 @@ export const getUserPortfoliosSchema = {
     errors: z.string().nullable(),
   }),
 }
+
+const userPortfolioDetailSchema = userPortfolioItemSchema.extend({
+  positionId: z.number().int().positive().optional(),
+  description: z.string().optional(),
+  updatedAt: z.string().nullable().optional(),
+})
+
+export const getUserPortfolioDetailSchema = {
+  path: z.object({
+    portfolioId: z.number().int().positive(),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: userPortfolioDetailSchema,
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+export const putUserPortfolioSchema = {
+  path: z.object({
+    portfolioId: z.number().int().positive(),
+  }),
+  body: postUserPortfolioSchema.body,
+  response: postUserPortfolioSchema.response,
+}
+
+export const deleteUserPortfolioSchema = {
+  path: z.object({
+    portfolioId: z.number().int().positive(),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.unknown().nullable(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}

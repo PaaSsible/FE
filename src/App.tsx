@@ -25,6 +25,7 @@ import MypageNotificationsPage from './pages/mypage/MypageNotificationsPage'
 import MypagePortfolioNewPage from './pages/mypage/MypagePortfolioNewPage'
 import MypagePortfolioPage from './pages/mypage/MypagePortfolioPage'
 import MypageProfilePage from './pages/mypage/MypageProfilePage'
+import PortfolioDetailPage from './pages/mypage/PortfolioDetailPage'
 import PrivacyPage from './pages/policy/PrivacyPage'
 import TermsPage from './pages/policy/TermsPage'
 // Projects
@@ -103,9 +104,14 @@ function App(): JSX.Element {
             <Route path="applications" element={<MypageApplicationsPage />} />
             <Route path="notifications" element={<MypageNotificationsPage />} />
           </Route>
+          <Route path="mypage/portfolio/:portfolioId" element={<PortfolioDetailPage />} />
           <Route path="mypage/portfolio/new" element={<MypagePortfolioNewPage />} />
 
           <Route path="users/:userId/profile" element={<UserProfilePage />} />
+          <Route
+            path="users/:userId/profile/portfolio/:portfolioId"
+            element={<PortfolioDetailPage />}
+          />
         </Route>
 
         <Route path="start" element={<StartPage />} />

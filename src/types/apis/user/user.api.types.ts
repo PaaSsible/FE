@@ -1,13 +1,16 @@
 import z from 'zod'
 
 import type {
+  deleteUserPortfolioSchema,
+  getUserPortfolioDetailSchema,
+  getUserPortfoliosSchema,
   patchUserTermsSchema,
   postLoginSchema,
   postLogoutSchema,
   postReissueSchema,
   postUserPortfolioSchema,
   postUserUploadSchema,
-  getUserPortfoliosSchema,
+  putUserPortfolioSchema,
 } from './user.api.schemas'
 
 export type PostLogin = {
@@ -40,4 +43,20 @@ export type GetUserPortfolios = {
   Path: z.infer<typeof getUserPortfoliosSchema.path>
   Query: z.infer<typeof getUserPortfoliosSchema.query>
   Response: z.infer<typeof getUserPortfoliosSchema.response>
+}
+
+export type GetUserPortfolioDetail = {
+  Path: z.infer<typeof getUserPortfolioDetailSchema.path>
+  Response: z.infer<typeof getUserPortfolioDetailSchema.response>
+}
+
+export type PutUserPortfolio = {
+  Path: z.infer<typeof putUserPortfolioSchema.path>
+  Body: z.infer<typeof putUserPortfolioSchema.body>
+  Response: z.infer<typeof putUserPortfolioSchema.response>
+}
+
+export type DeleteUserPortfolio = {
+  Path: z.infer<typeof deleteUserPortfolioSchema.path>
+  Response: z.infer<typeof deleteUserPortfolioSchema.response>
 }
