@@ -50,6 +50,16 @@ export const postUserUpload = async (
   return userAPISchemas.postUserUploadSchema.response.parse(res.data)
 }
 
+export const getUserProfile = async ({
+  userId,
+}: {
+  userId: number
+}): Promise<UserAPITypes.GetUserProfile['Response']> => {
+  const parsedPath = userAPISchemas.getUserProfileSchema.path.parse({ userId })
+  const res = await PaaSsibleUser.get(`/users/profile/${parsedPath.userId}`)
+  return userAPISchemas.getUserProfileSchema.response.parse(res.data)
+}
+
 export const getUserPortfolios = async ({
   userId,
   page,

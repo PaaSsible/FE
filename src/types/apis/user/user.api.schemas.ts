@@ -1,5 +1,38 @@
 import z from 'zod'
 
+const degreeTypeSchema = z.enum([
+  'HIGH_SCHOOL',
+  'COLLEGE',
+  'UNIVERSITY',
+  'GRADUATE_MASTER',
+  'GRADUATE_DOCTOR',
+])
+
+const graduationStatusSchema = z.enum([
+  'ENROLLED',
+  'LEAVE_OF_ABSENCE',
+  'GRADUATED',
+  'EXPECTED',
+  'COMPLETED',
+  'DROPPED_OUT',
+])
+
+const userProfileSchema = z.object({
+  id: z.number(),
+  nickname: z.string(),
+  email: z.string().nullable().optional(),
+  profileImageUrl: z.string().nullable().optional(),
+  positionName: z.string().nullable().optional(),
+  stackNames: z.array(z.string()).nullable().optional(),
+  degreeType: degreeTypeSchema.nullable().optional(),
+  university: z.string().nullable().optional(),
+  major: z.string().nullable().optional(),
+  graduationStatus: graduationStatusSchema.nullable().optional(),
+  introductionTitle: z.string().nullable().optional(),
+  introductionContent: z.string().nullable().optional(),
+  role: z.string().nullable().optional(),
+})
+
 export const postLoginSchema = {
   body: z.object({
     code: z.string(),
@@ -46,6 +79,19 @@ export const patchUserTermsSchema = {
     success: z.boolean(),
     message: z.string().nullable(),
     data: z.null(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+export const getUserProfileSchema = {
+  path: z.object({
+    userId: z.number().int().positive(),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: userProfileSchema,
     code: z.string(),
     errors: z.string().nullable(),
   }),

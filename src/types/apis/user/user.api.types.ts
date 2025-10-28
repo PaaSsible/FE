@@ -4,6 +4,7 @@ import type {
   deleteUserPortfolioSchema,
   getUserPortfolioDetailSchema,
   getUserPortfoliosSchema,
+  getUserProfileSchema,
   patchUserTermsSchema,
   postLoginSchema,
   postLogoutSchema,
@@ -37,6 +38,11 @@ export type PostUserPortfolio = {
 
 export type PostUserUpload = {
   Response: z.infer<typeof postUserUploadSchema.response>
+}
+
+export type GetUserProfile = {
+  Path: z.infer<typeof getUserProfileSchema.path>
+  Response: z.infer<typeof getUserProfileSchema.response>
 }
 
 export type GetUserPortfolios = {

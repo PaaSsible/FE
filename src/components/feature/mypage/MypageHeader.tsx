@@ -12,7 +12,7 @@ interface MypageHeaderProps {
 
 export const MypageHeader: React.FC<MypageHeaderProps> = ({ title, onBackClick, count }) => {
   return (
-    <header className="mb-6 flex w-full items-center justify-between bg-gray-50">
+    <header className="mt-[45px] mb-6 flex w-full items-center justify-between bg-gray-50">
       <div className="flex items-center gap-[15px]">
         {onBackClick && (
           <button
