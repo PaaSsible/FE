@@ -10,6 +10,8 @@ import Button from '@/components/atoms/Button'
 import Dropdown from '@/components/atoms/Dropdown'
 import TextEditor from '@/components/common/TextEditor'
 import { MypageHeader } from '@/components/feature/mypage/MypageHeader'
+import { useUpdateUserPortfolio } from '@/hooks/mypage/useUpdateUserPortfolio'
+import { useUserPortfolioDetail } from '@/hooks/mypage/useUserPortfolioDetail'
 import { positionsArray } from '@/types/entities/recruit-post/recruitPost.schemas'
 
 type PortfolioRouteState = {
@@ -26,34 +28,75 @@ export default function MypagePortfolioNewPage() {
 
   const [title, setTitle] = useState('')
   const [selectedPosition, setSelectedPosition] = useState<string | null>(null)
+  const [selectedPositionId, setSelectedPositionId] = useState<number | null>(null)
   const [summary, setSummary] = useState('')
   const [content, setContent] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isCreating, setIsCreating] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
 
+  const {
+    data: portfolioDetail,
+    isLoading: isDetailLoading,
+    isError: isDetailError,
+  } = useUserPortfolioDetail({
+    portfolioId: editId,
+    enabled: isEditMode,
+  })
+
+  const { updatePortfolio, isSubmitting: isUpdating } = useUpdateUserPortfolio()
+
   useEffect(() => {
-    if (!isEditMode) return
+    if (!isEditMode || !portfolioDetail) return
 
-    // TODO: 상세 조회 API 연결 시 교체
-    const mockData = {
-      title: '포트폴리오 예시 제목',
-      positionName: '프론트엔드 개발자',
-      summary: '이건 수정 모드에서 불러온 간략한 설명입니다.',
-      description: '<p>수정 모드에서 불러온 본문 내용입니다.</p>',
+    setTitle(portfolioDetail.title ?? '')
+    setSummary(portfolioDetail.summary ?? '')
+    setContent(portfolioDetail.description ?? '')
+
+    const detailPositionId =
+      typeof portfolioDetail.positionId === 'number' && portfolioDetail.positionId > 0
+        ? portfolioDetail.positionId
+        : null
+    const positionNameIndex = portfolioDetail.positionName
+      ? positionsArray.findIndex((position) => position === portfolioDetail.positionName)
+      : -1
+
+    if (detailPositionId && detailPositionId <= positionsArray.length) {
+      setSelectedPosition(positionsArray[detailPositionId - 1])
+      setSelectedPositionId(detailPositionId)
+    } else if (positionNameIndex >= 0) {
+      setSelectedPosition(positionsArray[positionNameIndex])
+      setSelectedPositionId(positionNameIndex + 1)
+    } else {
+      setSelectedPosition(portfolioDetail.positionName ?? null)
+      setSelectedPositionId(null)
     }
+  }, [isEditMode, portfolioDetail])
 
-    setTitle(mockData.title)
-    setSelectedPosition(mockData.positionName)
-    setSummary(mockData.summary)
-    setContent(mockData.description)
-  }, [isEditMode])
+  useEffect(() => {
+    if (!isEditMode || !isDetailError) return
+
+    toast.error('포트폴리오 정보를 불러오지 못했습니다.')
+    void navigate('/mypage/portfolio')
+  }, [isDetailError, isEditMode, navigate])
 
   const handleCancel = () => {
     void navigate('/mypage/portfolio')
   }
 
+  const isSubmitDisabled =
+    isUploading ||
+    isCreating ||
+    isUpdating ||
+    (isEditMode && isDetailLoading) ||
+    !title.trim() ||
+    !selectedPositionId ||
+    !content
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .trim()
+
   const handleSubmit = async () => {
-    if (isSubmitting || isUploading) return
+    if (isSubmitDisabled) return
 
     const trimmedTitle = title.trim()
     const plainContent = content
@@ -66,7 +109,7 @@ export default function MypagePortfolioNewPage() {
       return
     }
 
-    if (!selectedPosition) {
+    if (!selectedPositionId || selectedPositionId <= 0) {
       toast.error('포지션을 선택해 주세요.')
       return
     }
@@ -76,35 +119,46 @@ export default function MypagePortfolioNewPage() {
       return
     }
 
-    const positionIndex = positionsArray.findIndex((position) => position === selectedPosition)
-    if (positionIndex < 0) {
-      toast.error('선택한 포지션 정보를 확인해 주세요.')
-      return
-    }
-
+    const normalizedSummary = summary.trim()
     const payload = {
-      positionId: positionIndex + 1,
+      positionId: selectedPositionId,
       title: trimmedTitle,
-      summary: summary.trim() || null,
+      summary: normalizedSummary ? normalizedSummary : null,
       description: content,
     }
 
     try {
-      setIsSubmitting(true)
-      const response = await postUserPortfolio(payload)
+      if (isEditMode) {
+        if (editId === null) {
+          throw new Error('수정할 포트폴리오 정보를 찾지 못했습니다.')
+        }
 
-      if (!response.success) {
-        throw new Error(response.message ?? '포트폴리오 등록에 실패했습니다.')
+        await updatePortfolio({
+          portfolioId: editId,
+          ...payload,
+        })
+
+        toast.success('포트폴리오가 수정되었습니다.')
+      } else {
+        setIsCreating(true)
+        const response = await postUserPortfolio(payload)
+
+        if (!response.success) {
+          throw new Error(response.message ?? '포트폴리오 등록에 실패했습니다.')
+        }
+
+        toast.success('포트폴리오가 등록되었습니다.')
       }
 
-      toast.success(isEditMode ? '포트폴리오가 수정되었습니다.' : '포트폴리오가 등록되었습니다.')
       void navigate('/mypage/portfolio')
     } catch (error) {
       const message = error instanceof Error ? error.message : '처리 중 오류가 발생했습니다.'
       toast.error(message)
       console.error(error)
     } finally {
-      setIsSubmitting(false)
+      if (!isEditMode) {
+        setIsCreating(false)
+      }
     }
   }
 
@@ -149,13 +203,25 @@ export default function MypagePortfolioNewPage() {
     [isUploading],
   )
 
+  if (isEditMode && isDetailLoading && !portfolioDetail) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gray-50 px-[144px] py-[44px] text-start">
+        <MypageHeader title="포트폴리오 수정" />
+
+        <div className="flex flex-1 items-center justify-center text-gray-500">
+          포트폴리오를 불러오는 중입니다...
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-50 px-[144px] py-[44px] text-start">
       <MypageHeader title={isEditMode ? '포트폴리오 수정' : '포트폴리오 작성'} />
 
       <section className="flex flex-1 flex-col">
-        <div className="flex flex-col gap-8">
-          <div className="mt-6 flex flex-col gap-3">
+        <div className="flex flex-col gap-[38px]">
+          <div className="mt-6 flex flex-col gap-[13px]">
             <label htmlFor="portfolio-title" className="text-b2-medium text-gray-900">
               제목
             </label>
@@ -168,18 +234,24 @@ export default function MypagePortfolioNewPage() {
             />
           </div>
 
-          <div className="grid grid-cols-[25%_75%] gap-3">
+          <div className="grid grid-cols-[25%_75%] gap-[13px]">
             <div className="flex flex-col gap-3">
               <span className="text-b2-medium text-gray-900">포지션</span>
               <Dropdown
                 placeholder="포지션"
                 options={positionsArray}
-                onSelect={(value) => setSelectedPosition(value)}
+                onSelect={(value) => {
+                  setSelectedPosition(value)
+                  const index = positionsArray.findIndex((position) => position === value)
+                  setSelectedPositionId(index >= 0 ? index + 1 : null)
+                }}
+                value={selectedPosition}
                 variant="form"
+                disabled={isDetailLoading}
               />
             </div>
 
-            <div className="flex flex-1 flex-col gap-3">
+            <div className="flex flex-1 flex-col gap-[13px]">
               <label htmlFor="portfolio-summary" className="text-b2-medium text-gray-900">
                 간단한 설명
               </label>
@@ -193,7 +265,7 @@ export default function MypagePortfolioNewPage() {
             </div>
           </div>
 
-          <div className="mb-10 flex flex-col gap-3">
+          <div className="mb-10 flex flex-col gap-[13px]">
             <span className="text-b2-medium text-gray-900">본문</span>
             <TextEditor
               ref={editorRef}
@@ -204,11 +276,11 @@ export default function MypagePortfolioNewPage() {
           </div>
         </div>
 
-        <div className="mt-10 flex justify-end gap-3">
+        <div className="mt-10 flex justify-end gap-[9px]">
           <Button variant="secondary" onClick={handleCancel}>
             {isEditMode ? '수정 취소' : '작성 취소'}
           </Button>
-          <Button onClick={() => void handleSubmit()} disabled={isSubmitting || isUploading}>
+          <Button onClick={() => void handleSubmit()} disabled={isSubmitDisabled}>
             {isEditMode ? '수정 완료' : '등록하기'}
           </Button>
         </div>

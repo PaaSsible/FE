@@ -22,17 +22,17 @@ export default function ProfileHeader({
   if (!profile) return null
 
   return (
-    <header className="flex w-full flex-col bg-white px-15">
+    <header className="flex w-full flex-col bg-white p-12">
       {showBackButton && (
-        <div className="flex items-center gap-3 py-4">
+        <div className="mb-6 flex items-center gap-[15px]">
           <button
             onClick={() => void navigate(-1)}
             className="flex h-9 w-9 cursor-pointer items-center justify-center"
           >
-            <ChevronLeft size={28} className="text-gray-500" />
+            <ChevronLeft size={36} className="text-gray-900" />
           </button>
 
-          <h1 className="text-[18px] font-semibold text-gray-900">{title}</h1>
+          <h1 className="text-s1-bold text-gray-900">{title}</h1>
         </div>
       )}
 

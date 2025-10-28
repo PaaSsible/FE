@@ -13,7 +13,7 @@ const ProjectStatusChip = ({ status = 'ONGOING' }: ProjectStatusChipProps): JSX.
     <div
       className={clsx(
         'flex h-6 w-16 items-center justify-center rounded-[37px] text-base font-semibold text-white',
-        status === 'ONGOING' ? 'bg-green-500' : 'bg-pink-500',
+        status === 'ONGOING' ? 'bg-green-500' : 'bg-locallit-red-500',
       )}
     >
       {statusEngToKorMap[status]}

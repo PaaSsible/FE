@@ -67,3 +67,33 @@ export const getUserPortfolios = async ({
   })
   return userAPISchemas.getUserPortfoliosSchema.response.parse(res.data)
 }
+
+export const getUserPortfolioDetail = async ({
+  portfolioId,
+}: {
+  portfolioId: number
+}): Promise<UserAPITypes.GetUserPortfolioDetail['Response']> => {
+  const parsedPath = userAPISchemas.getUserPortfolioDetailSchema.path.parse({ portfolioId })
+  const res = await PaaSsibleUser.get(`/users/portfolios/${parsedPath.portfolioId}`)
+  return userAPISchemas.getUserPortfolioDetailSchema.response.parse(res.data)
+}
+
+export const putUserPortfolio = async (
+  { portfolioId }: { portfolioId: number },
+  body: UserAPITypes.PutUserPortfolio['Body'],
+): Promise<UserAPITypes.PutUserPortfolio['Response']> => {
+  const parsedPath = userAPISchemas.putUserPortfolioSchema.path.parse({ portfolioId })
+  const parsedBody = userAPISchemas.putUserPortfolioSchema.body.parse(body)
+  const res = await PaaSsibleUser.put(`/users/portfolios/${parsedPath.portfolioId}`, parsedBody)
+  return userAPISchemas.putUserPortfolioSchema.response.parse(res.data)
+}
+
+export const deleteUserPortfolio = async ({
+  portfolioId,
+}: {
+  portfolioId: number
+}): Promise<UserAPITypes.DeleteUserPortfolio['Response']> => {
+  const parsedPath = userAPISchemas.deleteUserPortfolioSchema.path.parse({ portfolioId })
+  const res = await PaaSsibleUser.delete(`/users/portfolios/${parsedPath.portfolioId}`)
+  return userAPISchemas.deleteUserPortfolioSchema.response.parse(res.data)
+}

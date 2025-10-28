@@ -1,4 +1,6 @@
+import clsx from 'clsx'
 import { EllipsisVertical } from 'lucide-react'
+import type { KeyboardEvent } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { formatDate } from '@/utils/relativeTime'
@@ -16,6 +18,7 @@ interface PortfolioCardProps {
   createdAt: string
   onEdit?: (id: number) => void
   onDelete?: (id: number) => void
+  onSelect?: (id: number) => void
 }
 
 export default function PortfolioCard({
@@ -30,6 +33,7 @@ export default function PortfolioCard({
   createdAt,
   onEdit,
   onDelete,
+  onSelect,
 }: PortfolioCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement | null>(null)
@@ -57,62 +61,86 @@ export default function PortfolioCard({
     closeMenu()
   }
 
+  const handleCardClick = () => {
+    onSelect?.(id)
+  }
+
   const handleDelete = () => {
     onDelete?.(id)
     closeMenu()
   }
 
+  const interactiveProps =
+    typeof onSelect === 'function'
+      ? {
+          role: 'button' as const,
+          tabIndex: 0,
+          onClick: handleCardClick,
+          onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              handleCardClick()
+            }
+          },
+        }
+      : {}
+
   return (
-    <div className="overflow-hideen relative flex h-[263px] w-full flex-col rounded-md bg-white">
+    <div
+      {...interactiveProps}
+      className={clsx(
+        'overflow-hideen relative flex h-[250px] w-full flex-col rounded-md bg-white shadow-[0_0_20px_0_#0000001A]',
+        typeof onSelect === 'function' ? 'cursor-pointer hover:shadow-md' : '',
+      )}
+    >
       {/* 상단 이미지 */}
-      <div className="h-[130px] w-full rounded-t-md bg-gray-300" />
+      <div className="h-[125px] w-full rounded-t-md bg-gray-300" />
 
       {/* 내용 영역 */}
-      <div className="flex h-[133px] flex-col justify-between p-4 text-left">
+      <div className="flex h-[125px] flex-col justify-between p-[14px] text-left">
         {/* 상단 텍스트 */}
         <div className="flex flex-col gap-[2px]">
           <div className="flex items-center gap-2">
             {displayTag && (
-              <span className="bg-locallit-red-500 w-[43px] rounded-full text-center text-[12px] font-medium text-white">
+              <span className="bg-locallit-red-500 text-l2-medium w-[42px] rounded-full text-center text-gray-50">
                 {displayTag}
               </span>
             )}
-            <span className="text-[15px] font-semibold text-gray-800">{title}</span>
+            <span className="text-b5-bold text-gray-850">{title}</span>
           </div>
-          {summary && <p className="line-clamp-1 text-[13px] text-gray-600">{summary}</p>}
+          {summary && <p className="text-l2-medium text-gray-550 line-clamp-1">{summary}</p>}
         </div>
 
         {/* 하단 정보 */}
         <div>
-          <div className="text-[12px] text-gray-900">{formatDate(createdAt)}</div>
-
-          {showContribution && (
-            <div className="flex gap-2 text-[12px] font-medium text-gray-900">
-              <div>
-                기여도: <span className="font-semibold">{contribution}%</span>
-              </div>
-              <div>포지션: {positionName}</div>
+          {showCategory && (
+            <div className="text-l2-medium text-gray-550">
+              {mainCategory} &gt; {subCategory}
             </div>
+          )}
+          {showContribution && (
+            <div className="text-l2-medium flex gap-[6px] text-gray-800">
+              <div>기여도: {contribution}%</div>·<div>포지션: {positionName}</div>
+            </div>
+          )}
+          {shouldShowFallbackPosition && (
+            <div className="text-l2-medium text-gray-800">포지션: {positionName}</div>
           )}
 
           {/* 카테고리 + 메뉴 */}
-          <div className="mt-1 flex items-center justify-between">
-            {showCategory && (
-              <div className="text-[12px] text-gray-500">
-                {mainCategory} &gt; {subCategory}
-              </div>
-            )}
-            {shouldShowFallbackPosition && (
-              <div className="text-[12px] text-gray-900">포지션: {positionName}</div>
-            )}
+          <div className="flex items-center justify-between">
+            <div className="text-l2-medium text-gray-800">생성일: {formatDate(createdAt)}</div>
 
             {hasActions && (
               <div ref={menuRef} className="relative">
                 <button
                   type="button"
                   aria-label="포트폴리오 메뉴 열기"
-                  onClick={() => setIsMenuOpen((prev) => !prev)}
-                  className="-mr-2 flex h-6 w-6 items-center justify-center rounded-full text-gray-700 transition hover:bg-gray-200"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    setIsMenuOpen((prev) => !prev)
+                  }}
+                  className="-mt-2 -mr-2 flex h-6 w-6 items-center justify-center rounded-lg text-gray-600 transition hover:bg-gray-200"
                 >
                   <EllipsisVertical size={20} />
                 </button>
@@ -122,8 +150,11 @@ export default function PortfolioCard({
                     {onEdit && (
                       <button
                         type="button"
-                        onClick={handleEdit}
-                        className="font-regular w-full px-4 py-[10px] text-left text-white hover:bg-gray-600/70"
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          handleEdit()
+                        }}
+                        className="font-regular w-full px-4 py-[10px] text-left text-white hover:rounded-md hover:bg-gray-600/70"
                       >
                         수정
                       </button>
@@ -131,8 +162,11 @@ export default function PortfolioCard({
                     {onDelete && (
                       <button
                         type="button"
-                        onClick={handleDelete}
-                        className="font-regular w-full px-4 py-[10px] text-left text-white hover:bg-gray-600/70"
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          handleDelete()
+                        }}
+                        className="font-regular w-full px-4 py-[10px] text-left text-white hover:rounded-md hover:bg-gray-600/70"
                       >
                         삭제
                       </button>

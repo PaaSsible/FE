@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Pagination } from '@/components/common/Pagination'
 import PortfolioCard from '@/components/feature/mypage/PortfolioCard'
@@ -16,6 +16,7 @@ interface ProfileTabsProps {
 export default function ProfileTabs({ isMyProfile = false }: ProfileTabsProps) {
   const authUser = getAuthUser()
   const { userId: routeUserId } = useParams<{ userId?: string }>()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<'info' | 'portfolio'>('info')
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = isMyProfile ? 8 : 10
@@ -96,13 +97,11 @@ export default function ProfileTabs({ isMyProfile = false }: ProfileTabsProps) {
       </div>
 
       {/* 콘텐츠 영역 */}
-      <div className="flex min-h-[614px] flex-col bg-[#E9E9E9] p-10">
+      <div className="flex min-h-[614px] flex-col bg-gray-200 p-[55px]">
         {activeTab === 'info' ? (
           <div className="text-left">
-            <h2 className="mb-4 text-[18px] font-semibold text-gray-900">
-              {profile.introductionTitle}
-            </h2>
-            <p className="leading-relaxed whitespace-pre-line text-gray-700">
+            <h2 className="text-b3-bold mb-4 text-gray-800">{profile.introductionTitle}</h2>
+            <p className="text-b5-medium leading-relaxed whitespace-pre-line text-gray-800">
               {profile.introductionContent}
             </p>
           </div>
@@ -116,9 +115,19 @@ export default function ProfileTabs({ isMyProfile = false }: ProfileTabsProps) {
           </div>
         ) : hasPortfolio ? (
           <>
-            <div className={`grid ${gridCols} flex-1 gap-6`}>
+            <div className={`grid ${gridCols} flex-1 gap-4`}>
               {currentPortfolios.map((p) => (
-                <PortfolioCard key={p.id} {...p} />
+                <PortfolioCard
+                  key={p.id}
+                  {...p}
+                  onSelect={(id) => {
+                    if (isMyProfile) {
+                      void navigate(`/mypage/portfolio/${id}`)
+                    } else if (isUserIdValid) {
+                      void navigate(`/users/${resolvedUserId}/profile/portfolio/${id}`)
+                    }
+                  }}
+                />
               ))}
             </div>
 
@@ -131,9 +140,9 @@ export default function ProfileTabs({ isMyProfile = false }: ProfileTabsProps) {
             </div>
           </>
         ) : (
-          <div className="flex h-full flex-col items-center justify-center text-center">
-            <h2 className="mt-50 mb-2 text-[18px] font-semibold text-gray-900">{title}</h2>
-            <p className="whitespace-pre-line text-gray-500">{description}</p>
+          <div className="flex h-full flex-col items-center justify-center gap-[29px] text-center">
+            <h2 className="text-s1-bold text-gray-1000 mt-50">{title}</h2>
+            <p className="text-b2-medium whitespace-pre-line text-gray-500">{description}</p>
           </div>
         )}
       </div>
