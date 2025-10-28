@@ -9,6 +9,7 @@ interface ImportMetaEnv {
   readonly VITE_GOOGLE_CLIENT_SECRET: string
   readonly VITE_REDIRECT_DEVELOP_URL: string
   readonly VITE_REDIRECT_URL: string
+  readonly VITE_WEBSOCKET_CHAT_URL: string
 }
 
 interface ImportMeta {
