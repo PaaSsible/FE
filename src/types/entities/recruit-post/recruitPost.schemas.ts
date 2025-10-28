@@ -95,7 +95,7 @@ export const recruitCommentSchema = z.object({
   },
 })
 
-export const applicationStatusArray = ['ACCEPTED', 'REJECTED'] as const
+export const applicationStatusArray = ['PENDING', 'ACCEPTED', 'REJECTED'] as const
 export const applicationSchema = z.object({
   id: z.number(),
   status: z.enum(applicationStatusArray),
@@ -104,10 +104,11 @@ export const applicationSchema = z.object({
 
 export const applicantSchema = z.object({
   applicantId: userSchema.shape.id,
-  name: userSchema.shape.nickname,
-  university: z.string(),
-  major: z.string(),
-  stack: z.array(stackSchema.shape.name),
+  applicantName: userSchema.shape.nickname,
+  university: z.string().nullable(),
+  major: z.string().nullable(),
+  positionName: z.string().nullable(),
+  stackNames: z.array(stackSchema.shape.name),
 })
 
 export const recruitPostSchema = z.object({

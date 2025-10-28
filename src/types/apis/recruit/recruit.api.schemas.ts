@@ -1,7 +1,11 @@
 import { isBefore, startOfDay } from 'date-fns'
 import z from 'zod'
 
-import { activityTypeArray, detailTypeArray } from '@/types/entities/board/board.entities.schemas'
+import {
+  activityTypeArray,
+  boardSchema,
+  detailTypeArray,
+} from '@/types/entities/board/board.entities.schemas'
 import {
   applicantSchema,
   applicationSchema,
@@ -219,8 +223,81 @@ export const getRecruitApplicantsSchema = {
         id: z.number(),
         postId: recruitPostSchema.shape.postId,
         applicantId: applicantSchema.shape.applicantId,
+        applicantName: applicantSchema.shape.applicantName,
+        university: applicantSchema.shape.university,
+        major: applicantSchema.shape.major,
+        positionName: applicantSchema.shape.positionName,
+        stackNames: applicantSchema.shape.stackNames,
       }),
     ),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+/**
+ * @name 나의 지원 내역 조회
+ * @path `/recruits/my`
+ */
+export const getMyRecruitApplicationsSchema = {
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.array(
+      z.object({
+        applicationId: applicationSchema.shape.id,
+        postId: recruitPostSchema.shape.postId,
+        title: recruitPostSchema.shape.title,
+        mainCategory: recruitPostSchema.shape.mainCategory,
+        subCategory: recruitPostSchema.shape.subCategory,
+        createdAt: z.string(),
+        modifiedAt: z.string(),
+        deadline: recruitPostSchema.shape.deadline,
+        viewCount: recruitPostSchema.shape.viewCount,
+        applicationCount: recruitPostSchema.shape.applicationCount,
+        recruits: z.array(
+          z.object({
+            position: positionSchema.shape.id,
+            stacks: z.array(stackSchema.shape.id),
+          }),
+        ),
+        status: applicationSchema.shape.status,
+      }),
+    ),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+/**
+ * @name 모집글지원
+ * @path `/recruits/{postId}/applications`
+ */
+export const postRecruitApplicationSchema = {
+  path: z.object({
+    postId: recruitPostSchema.shape.postId,
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.null(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+/**
+ * @name 모집 지원 취소
+ * @path `/recruits/{applicationId}/cancel`
+ */
+export const deleteRecruitApplicationSchema = {
+  path: z.object({
+    applicationId: applicationSchema.shape.id,
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.null(),
     code: z.string(),
     errors: z.string().nullable(),
   }),
@@ -236,7 +313,56 @@ export const postRecruitApplicantAcceptSchema = {
     applicationId: applicationSchema.shape.id,
   }),
   body: z.object({
-    reason: z.string(),
+    boardId: boardSchema.shape.boardId,
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.null(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+/**
+ *@name 지원거절
+ *@path `/recruits/{postId}/applications/{applicationId}/reject`
+ */
+export const postRecruitApplicantRejectSchema = {
+  path: z.object({
+    postId: recruitPostSchema.shape.postId,
+    applicationId: applicationSchema.shape.id,
+  }),
+  body: z.object({
+    rejectReason: z.string().min(1).max(500),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.null(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+/**
+ *@name 지원거절사유조회
+ *@path `/recruits/{applicationId}/reject-reason`
+ */
+export const getRecruitApplicationRejectReasonSchema = {
+  path: z.object({
+    applicationId: applicationSchema.shape.id,
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z
+      .object({
+        rejectReason: z.string().nullable(),
+      })
+      .nullable(),
+    code: z.string(),
+    errors: z.string().nullable(),
   }),
 }
 

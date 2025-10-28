@@ -1,4 +1,6 @@
+import { AxiosError } from 'axios'
 import { useEffect, useMemo, useState, type JSX } from 'react'
+import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import Button from '@/components/atoms/Button'
@@ -7,6 +9,7 @@ import BoardsPageHeader from '@/components/feature/boards/BoardsPageHeader'
 import BoardsDetailBody from '@/components/feature/boards/boardDetail/BoardsDetailBody'
 import BoardsDetailComments from '@/components/feature/boards/boardDetail/BoardsDetailComments'
 import BoardsDetailMeta from '@/components/feature/boards/boardDetail/BoardsDetailMeta'
+import useCreateRecruitApplication from '@/hooks/boards/useCreateRecruitApplication'
 import useCreateRecruitComment from '@/hooks/boards/useCreateRecruitComment'
 import useDeleteRecruitComment from '@/hooks/boards/useDeleteRecruitComment'
 import useDeleteRecruitPost from '@/hooks/boards/useDeleteRecruitPost'
@@ -40,6 +43,7 @@ export default function BoardDetailPage(): JSX.Element {
   const { postId: postIdParam } = useParams<{ postId: string }>()
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const authUser = getAuthUser()
 
   const numericPostId = useMemo(() => {
@@ -49,7 +53,17 @@ export default function BoardDetailPage(): JSX.Element {
     return Number.isNaN(parsed) ? null : parsed
   }, [postIdParam])
 
-  const { data: recruitDetail, isLoading, error } = useRecruitDetail(numericPostId)
+  const {
+    data: recruitDetail,
+    isLoading,
+    error,
+    refetch: refetchRecruitDetail,
+  } = useRecruitDetail(numericPostId)
+  const { applyRecruit, isApplying } = useCreateRecruitApplication({
+    onSuccess: () => {
+      refetchRecruitDetail()
+    },
+  })
   const {
     comments: recruitComments,
     totalCount: commentTotalCount,
@@ -127,9 +141,40 @@ export default function BoardDetailPage(): JSX.Element {
     setIsApplyModalOpen(false)
   }
 
-  const handleApplyConfirm = () => {
-    setIsApplyModalOpen(false)
-    //toast.success('지원이 완료되었습니다.')
+  const handleApplyConfirm = async () => {
+    if (resolvedPostId === undefined || resolvedPostId === null || Number.isNaN(resolvedPostId)) {
+      setIsApplyModalOpen(false)
+      toast.error('유효하지 않은 모집글입니다.')
+      return
+    }
+
+    try {
+      const response = await applyRecruit(resolvedPostId)
+      if (!response) {
+        return
+      }
+      setIsApplyModalOpen(false)
+      toast.success('지원이 완료되었습니다.')
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === 403) {
+        setIsApplyModalOpen(false)
+        setIsProfileModalOpen(true)
+        return
+      }
+
+      console.error('Failed to apply recruit', error)
+
+      const responseMessage =
+        error instanceof AxiosError &&
+        error.response &&
+        typeof error.response.data === 'object' &&
+        error.response.data !== null &&
+        'message' in error.response.data
+          ? (error.response.data as { message?: string }).message
+          : undefined
+
+      toast.error(responseMessage ?? '지원에 실패했습니다. 잠시 후 다시 시도해주세요.')
+    }
   }
 
   const handleDeleteCancel = () => {
@@ -144,6 +189,15 @@ export default function BoardDetailPage(): JSX.Element {
   const handleViewApplicants = () => {
     if (!resolvedPostIdString) return
     void navigate(`/boards/${resolvedPostIdString}/applicants`)
+  }
+
+  const handleProfileModalCancel = () => {
+    setIsProfileModalOpen(false)
+  }
+
+  const handleProfileModalConfirm = () => {
+    setIsProfileModalOpen(false)
+    void navigate('/mypage')
   }
 
   return (
@@ -219,7 +273,7 @@ export default function BoardDetailPage(): JSX.Element {
         </div>
       )}
 
-      {isOwner && postForDisplay && (
+      {!isOwner && postForDisplay && (
         <Modal
           isOpen={isApplyModalOpen}
           title="이 모집글에 지원하시겠어요?"
@@ -233,7 +287,10 @@ export default function BoardDetailPage(): JSX.Element {
           cancelLabel="취소"
           confirmLabel="지원하기"
           onCancel={handleApplyCancel}
-          onConfirm={handleApplyConfirm}
+          onConfirm={() => {
+            void handleApplyConfirm()
+          }}
+          confirmDisabled={isApplying}
         />
       )}
       {isOwner && postForDisplay && (
@@ -257,8 +314,8 @@ export default function BoardDetailPage(): JSX.Element {
           confirmDisabled={isDeletingPost}
         />
       )}
-      {/* <Modal
-        isOpen={isApplyModalOpen}
+      <Modal
+        isOpen={isProfileModalOpen}
         title="프로필 설정이 완료되지 않았습니다."
         description={
           <p>
@@ -269,9 +326,9 @@ export default function BoardDetailPage(): JSX.Element {
         }
         cancelLabel="취소"
         confirmLabel="프로필 설정하러 가기"
-        onCancel={handleApplyCancel}
-        onConfirm={handleApplyConfirm}
-      /> */}
+        onCancel={handleProfileModalCancel}
+        onConfirm={handleProfileModalConfirm}
+      />
     </div>
   )
 }

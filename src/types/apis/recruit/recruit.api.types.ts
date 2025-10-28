@@ -1,16 +1,21 @@
 import z from 'zod'
 
 import type {
+  deleteRecruitApplicationSchema,
   deleteRecruitCommentSchema,
   deleteRecruitSchema,
+  getMyRecruitApplicationsSchema,
   getMyRecruitSchema,
   getPositionsSchema,
   getRecruitApplicantsSchema,
+  postRecruitApplicationSchema,
   getRecruitCommentsSchema,
   getRecruitDetailSchema,
   getRecruitsSchema,
   getStacksSchema,
   postRecruitApplicantAcceptSchema,
+  postRecruitApplicantRejectSchema,
+  getRecruitApplicationRejectReasonSchema,
   postRecruitCommentSchema,
   postRecruitSchema,
   putRecruitCommentSchema,
@@ -59,9 +64,35 @@ export type GetRecruitApplicants = {
   Response: z.infer<typeof getRecruitApplicantsSchema.response>
 }
 
+export type GetMyRecruitApplications = {
+  Response: z.infer<typeof getMyRecruitApplicationsSchema.response>
+}
+
+export type PostRecruitApplication = {
+  Path: z.infer<typeof postRecruitApplicationSchema.path>
+  Response: z.infer<typeof postRecruitApplicationSchema.response>
+}
+
+export type DeleteRecruitApplication = {
+  Path: z.infer<typeof deleteRecruitApplicationSchema.path>
+  Response: z.infer<typeof deleteRecruitApplicationSchema.response>
+}
+
 export type PostRecruitApplicantAccept = {
   Path: z.infer<typeof postRecruitApplicantAcceptSchema.path>
   Body: z.infer<typeof postRecruitApplicantAcceptSchema.body>
+  Response: z.infer<typeof postRecruitApplicantAcceptSchema.response>
+}
+
+export type PostRecruitApplicantReject = {
+  Path: z.infer<typeof postRecruitApplicantRejectSchema.path>
+  Body: z.infer<typeof postRecruitApplicantRejectSchema.body>
+  Response: z.infer<typeof postRecruitApplicantRejectSchema.response>
+}
+
+export type GetRecruitApplicationRejectReason = {
+  Path: z.infer<typeof getRecruitApplicationRejectReasonSchema.path>
+  Response: z.infer<typeof getRecruitApplicationRejectReasonSchema.response>
 }
 
 export type GetMyRecruit = {
