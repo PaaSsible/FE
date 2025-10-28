@@ -16,6 +16,7 @@ interface BoardsPageHeaderProps {
   /** 오른쪽 버튼 텍스트 + 클릭 핸들러 제공 시 노출 */
   rightButtonLabel?: string
   onRightButtonClick?: () => void
+  count?: number
 }
 
 const BoardsPageHeader: React.FC<BoardsPageHeaderProps> = ({
@@ -25,6 +26,7 @@ const BoardsPageHeader: React.FC<BoardsPageHeaderProps> = ({
   onSearchChange,
   rightButtonLabel,
   onRightButtonClick,
+  count,
 }) => {
   return (
     <header className="flex w-full items-center justify-between bg-gray-50">
@@ -41,6 +43,7 @@ const BoardsPageHeader: React.FC<BoardsPageHeaderProps> = ({
           </button>
         )}
         <h1 className="text-s1-bold">{title}</h1>
+        {typeof count === 'number' && <span className="text-b2-medium text-gray-500">{count}</span>}
       </div>
 
       {/* 오른쪽: SearchBar 또는 Button */}
