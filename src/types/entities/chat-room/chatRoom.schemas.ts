@@ -5,8 +5,10 @@ import { userSchema } from '../user/user.schemas'
 export const chatRoomSchema = z.object({
   roomId: z.number(),
   roomName: z.string(),
-  lastMessage: z.string(),
-  lastMessageTime: z.preprocess((val) => (typeof val === 'string' ? new Date(val) : val), z.date()),
+  lastMessage: z.string().nullable(),
+  lastMessageTime: z
+    .preprocess((val) => (typeof val === 'string' ? new Date(val) : val), z.date())
+    .nullable(),
   unreadCount: z.number(),
 })
 
