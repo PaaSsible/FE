@@ -153,8 +153,12 @@ export const getChatRoomMessageReadUser = async (
  */
 export const postChatRoomImageUpload = async (
   query: ChatApiTypes.PostChatRoomImageUpload['Query'],
+  formData: FormData,
 ): Promise<ChatApiTypes.PostChatRoomImageUpload['Response']> => {
   const parsedQuery = chatApiSchemas.postChatRoomImageUploadSchema.query.parse(query)
-  const res = await PaaSsibleChat.post(`/chats/upload`, {}, { params: parsedQuery })
+  const res = await PaaSsibleChat.post(`/chats/upload`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    params: parsedQuery,
+  })
   return chatApiSchemas.postChatRoomImageUploadSchema.response.parse(res.data)
 }
