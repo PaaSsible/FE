@@ -20,6 +20,7 @@ import {
 import { AlertDialogFooter, AlertDialogHeader } from '@/components/ui/alert-dialog'
 import type { PostChatRoom } from '@/types/apis/chat/chat.api.types'
 import type { BoardMember } from '@/types/entities/board/board.entitites.types'
+import { getAuthUser } from '@/utils/authToken'
 
 const CreateNewChatRoomButton = (): JSX.Element => {
   const { projectId } = useParams<{ projectId: string }>()
@@ -58,10 +59,12 @@ const CreateNewChatRoomButton = (): JSX.Element => {
 
   useEffect(() => {
     if (open) {
+      const user = getAuthUser()
+      const userId = user?.id
       const getBoardMemberData = async () => {
         try {
           const response = await getBoardMember({ boardId: Number(projectId) })
-          setBoardMember(response.data)
+          setBoardMember(response.data.filter((member) => member.userId !== Number(userId)))
         } catch (error) {
           if (error instanceof ZodError) console.error('타입에러', error)
           else if (error instanceof AxiosError) console.error('네트워크에러', error)

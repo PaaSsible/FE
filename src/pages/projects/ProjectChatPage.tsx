@@ -24,7 +24,6 @@ export default function ProjectChatPage(): JSX.Element {
     const getChatRoomsData = async () => {
       try {
         const response = await getChatRooms({ boardId: Number(projectId) })
-
         setChatRooms(response.data)
       } catch (error) {
         if (error instanceof ZodError) console.error('타입에러', error)

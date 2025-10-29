@@ -12,8 +12,8 @@ const ChatRoomItem = ({ item }: ChatRoomProps): JSX.Element => {
   const navigate = useNavigate()
   return (
     <div
-      onClick={() => void navigate(`/chat/${item.roomId}`)}
-      className="flex w-full items-center justify-between rounded-lg bg-white px-5 py-4 shadow-sm"
+      onClick={() => void navigate(`/chat/${item.roomId}`, { state: { roomName: item.roomName } })}
+      className="flex w-full cursor-pointer items-center justify-between rounded-lg bg-white px-5 py-4 shadow-sm"
     >
       <div className="mr-4 h-12 w-12 rounded-full bg-zinc-300" />
       <div className="flex flex-1 flex-col items-start text-base leading-6 font-bold text-black">
