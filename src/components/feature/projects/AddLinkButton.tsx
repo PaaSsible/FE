@@ -17,7 +17,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Field, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
-// eslint-disable-next-line import/extensions
 import { Input } from '@/components/ui/input'
 
 const AddLinkButton = (): JSX.Element => {
