@@ -7,6 +7,8 @@ interface DropdownProps {
   options: readonly string[]
   onSelect: (value: string) => void
   variant?: 'default' | 'form'
+  value?: string | null
+  disabled?: boolean
 }
 
 export default function Dropdown({
@@ -14,9 +16,11 @@ export default function Dropdown({
   options,
   onSelect,
   variant = 'default',
+  value,
+  disabled = false,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<string | null>(value ?? null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -28,6 +32,12 @@ export default function Dropdown({
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelected(value)
+    }
+  }, [value])
 
   const handleSelect = (value: string) => {
     setSelected(value)
@@ -45,10 +55,16 @@ export default function Dropdown({
     >
       {/* 드롭다운 버튼 */}
       <button
-        onClick={() => setIsOpen((prev) => !prev)}
+        type="button"
+        disabled={disabled}
+        onClick={() => {
+          if (disabled) return
+          setIsOpen((prev) => !prev)
+        }}
         className={clsx(
           'text-b4-medium flex w-full items-center justify-between gap-[6px] rounded-lg',
           variant === 'default' ? 'text-gray-500' : 'bg-gray-200 px-5 py-[14px] text-gray-500',
+          disabled && 'cursor-not-allowed opacity-60',
         )}
       >
         <span className={variant === 'form' && selected ? 'text-gray-1000' : 'text-gray-500'}>
@@ -59,6 +75,7 @@ export default function Dropdown({
             'h-6 w-6 transition-transform',
             isOpen && 'rotate-180',
             variant === 'form' && 'h-5 w-5',
+            disabled && 'text-gray-400',
           )}
         />
       </button>

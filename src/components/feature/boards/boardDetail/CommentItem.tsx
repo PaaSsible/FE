@@ -2,6 +2,7 @@ import { MessageCircle, Pencil, Trash2 } from 'lucide-react'
 
 import Avatar from '@/components/atoms/Avatar'
 import type { RecruitComment } from '@/hooks/boards/useFetchRecruitComments'
+import { getAuthUser } from '@/utils/authToken'
 import { formatRelativeTime } from '@/utils/relativeTime'
 
 import CommentTextareaPanel from './CommentTextareaPanel'
@@ -48,6 +49,7 @@ export default function CommentItem({
   isUpdating,
   isSubmitting,
 }: Props) {
+  const authUser = getAuthUser()
   const isEditing = activeEditId === comment.id
   const editValue = editDrafts[comment.id] ?? comment.content ?? ''
   const displayContent = comment.deleted ? '삭제된 댓글입니다.' : (comment.content ?? '')
@@ -133,9 +135,9 @@ export default function CommentItem({
               <div className="absolute top-[-10px] left-[5px] h-[30px] w-[20px] rounded-bl-sm border-b border-l border-gray-300" />
 
               {/* 아바타 및 이름 */}
-              <Avatar name={comment.writerName} className="flex-shrink-0" />
+              <Avatar name={authUser?.username ?? '나'} className="flex-shrink-0" />
               <div className="flex-1">
-                <div className="text-b4-bold mb-[9px] text-gray-900">{comment.writerName}</div>
+                <div className="text-b4-bold mb-[9px] text-gray-900">{authUser?.username}</div>
                 <CommentTextareaPanel
                   value={replyValue}
                   placeholder="답글을 입력해 주세요."

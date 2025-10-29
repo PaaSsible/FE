@@ -7,7 +7,7 @@ export default function MypageLayout() {
     <div className="flex min-h-screen bg-gray-50">
       <MypageSidebar />
 
-      <section className="flex-1 overflow-y-auto py-[45px]">
+      <section className="flex-1 overflow-y-auto">
         <Outlet />
       </section>
     </div>
