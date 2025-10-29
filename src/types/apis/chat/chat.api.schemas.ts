@@ -100,9 +100,8 @@ export const getChatRoomMessagesSchema = {
     roomId: chatRoomSchema.shape.roomId,
   }),
   query: z.object({
-    cursor: z.number().nullable(), // 이전 페이지 마지막 id 저장, 초기 null
-    size: z.number(),
-    direction: z.enum(paginationDirectionArray),
+    page: z.number(),
+    size: z.number().optional(),
   }),
   response: z.object({
     success: z.boolean(),
