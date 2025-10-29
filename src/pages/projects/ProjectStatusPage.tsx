@@ -107,16 +107,16 @@ export default function ProjectStatusPage(): JSX.Element {
     void getWeeklyGoalAchievementData()
 
     // 팀원 기여도
-    const getContributionData = async () => {
-      try {
-        const response = await getContributionScores({ boardId: Number(projectId) })
-        setContributionData(response.data)
-      } catch (error) {
-        if (error instanceof ZodError) console.error('타입 에러', error)
-        if (error instanceof AxiosError) console.error('네트워크 에러', error)
-      }
-    }
-    void getContributionData()
+    // const getContributionData = async () => {
+    //   try {
+    //     const response = await getContributionScores({ boardId: Number(projectId) })
+    //     setContributionData(response.data)
+    //   } catch (error) {
+    //     if (error instanceof ZodError) console.error('타입 에러', error)
+    //     if (error instanceof AxiosError) console.error('네트워크 에러', error)
+    //   }
+    // }
+    // void getContributionData()
 
     // 링크
     const getLinks = async () => {
@@ -129,6 +129,7 @@ export default function ProjectStatusPage(): JSX.Element {
       }
     }
     void getLinks()
+    console.log(taskStatusChartData?.tasks)
   }, [projectId])
 
   return (
@@ -177,8 +178,10 @@ export default function ProjectStatusPage(): JSX.Element {
               <div className="flex w-full justify-between">
                 <div className="flex flex-1/4 flex-col gap-[4.87px] self-end">
                   <div className="text-base leading-6 font-semibold text-black">
-                    {taskStatusChartData.tasks.filter((t) => t.status === 'COMPLETED').length}개
-                    완료
+                    {taskStatusChartData.total !== 0
+                      ? taskStatusChartData.tasks.filter((t) => t.status === 'COMPLETED').length
+                      : 0}
+                    개 완료
                   </div>
                   <Separator />
                   <div className="text-xs leading-5 font-normal text-slate-500">
@@ -211,13 +214,13 @@ export default function ProjectStatusPage(): JSX.Element {
           </div>
         </div>
       </section>
-
+      {/* 
       <ProjectHeader title="팀원 기여도">
         <QuestionTooltip tipContent="해당 프로젝트에 각 팀원이 기여한 정도를 표시합니다. 작업률은 할당된 작업 대비 완료된 작업의 비율이 표시되며 회의 참석률은 전체 회의 중 참석한 회의를 비율로 표시합니다. 커뮤니케이션 빈도는 전체 채팅 대비 각 팀원이 보낸 채팅으로 계산되며 이 모든 활동을 조합해 기여도가 산출됩니다." />
       </ProjectHeader>
       <section className="mb-20 flex w-full">
         {contributionData && <DataTable columns={columns} data={contributionData} />}
-      </section>
+      </section> */}
 
       <ProjectHeader title="바로가기">
         <AddLinkButton />
