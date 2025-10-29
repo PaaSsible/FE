@@ -200,7 +200,7 @@ export const chatHandlers: HttpHandler[] = [
       success: true,
       message: '요청이 성공적으로 처리되었습니다.',
       data: {
-        content: [
+        messages: [
           {
             id: 37,
             roomId: 4,
@@ -257,8 +257,12 @@ export const chatHandlers: HttpHandler[] = [
             readCount: 0,
           },
         ],
-        nextCursor: 37,
+        hasPrevious: true,
         hasNext: true,
+        size: 10,
+        totalElements: 10,
+        totalPages: 2,
+        currentPage: 0,
       },
       code: 'OK',
       errors: null,
