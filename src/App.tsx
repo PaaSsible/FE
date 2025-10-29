@@ -31,6 +31,7 @@ import TermsPage from './pages/policy/TermsPage'
 // Projects
 import ProjectBoardPage from './pages/projects/ProjectBoardPage'
 import ProjectChatPage from './pages/projects/ProjectChatPage'
+import ProjectChatRoomPage from './pages/projects/ProjectChatRoomPage'
 import ProjectDetailPage from './pages/projects/ProjectDetailPage'
 import ProjectEditPage from './pages/projects/ProjectEditPage'
 import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
@@ -113,6 +114,7 @@ function App(): JSX.Element {
             element={<PortfolioDetailPage />}
           />
         </Route>
+        <Route path="chat/:roomId" element={<ProjectChatRoomPage />} />
 
         <Route path="start" element={<StartPage />} />
         <Route path="login/oauth2/code/google" element={<AuthCallBackPage />} />

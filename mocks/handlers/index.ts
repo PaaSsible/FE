@@ -1,6 +1,7 @@
 import { bypass, http, HttpResponse, passthrough, type HttpHandler } from 'msw'
 
 import boardHandlers from './board.handler'
+import { chatHandlers } from './chat.handler'
 import contributionHandlers from './contribution.handler'
 import { recruitHandlers } from './recruit.handler'
 import taskHandlers from './task.handler'
@@ -49,6 +50,7 @@ export const handlers: HttpHandler[] = [
       },
     })
   }),
+  ...chatHandlers,
   ...boardHandlers,
   ...taskHandlers,
   ...contributionHandlers,

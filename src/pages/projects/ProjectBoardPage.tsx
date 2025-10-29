@@ -6,11 +6,10 @@ import { ZodError } from 'zod'
 import { getBoardDetail, getBoardMember, patchBoardMember } from '@/apis/board.api'
 import { getTaskList } from '@/apis/task.api'
 import SearchBar from '@/components/common/SearchBar'
+import PositionSelectModal from '@/components/feature/projects/PositionSelectModal'
+import TasksChildSection from '@/components/feature/projects/TasksChildSection'
 import { type Task, type BoardMember } from '@/types/entities/board/board.entitites.types'
 import type { Position } from '@/types/entities/recruit-post/recruitPost.types'
-
-import PositionSelectModal from './components/PositionSelectModal'
-import TasksChildSection from './components/TasksChildSection'
 
 // interface ProjectBoardPageProps {
 //   projectTitle: string
@@ -108,7 +107,7 @@ export default function ProjectBoardPage(): JSX.Element {
   }, [searchValue, tasks])
 
   return (
-    <div className="flex min-h-full flex-1 flex-col pt-12">
+    <div className="flex min-h-full flex-col">
       <div className="mb-9 flex items-center justify-between">
         <div className="font-['Pretendard'] text-3xl leading-10 font-semibold text-black">
           프로젝트 이름

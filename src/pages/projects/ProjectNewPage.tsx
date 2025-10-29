@@ -8,17 +8,16 @@ import Button from '@/components/atoms/Button'
 import Chip from '@/components/atoms/Chip'
 import Tab from '@/components/atoms/Tab'
 import Modal from '@/components/common/Modal'
+import ProjectHeader from '@/components/feature/projects/ProjectHeader'
+import ProjectNewLabel from '@/components/feature/projects/ProjectNewLabel'
+import { RichTextEditor } from '@/components/feature/projects/RichTextEditor'
+import Separator from '@/components/feature/projects/Separator'
 import { activityTypeToDetailTypeMap } from '@/config/converters/activityTypeDetailTypeMap'
 import { activityTypeEngToKorMap } from '@/config/converters/activityTypeEngToKorMap'
 import { detailTypeEngToKorMap } from '@/config/converters/detailTypeEngToKorMap'
 import type { PostBoard } from '@/types/apis/board/board.api.types'
 import { activityTypeArray } from '@/types/entities/board/board.entities.schemas'
 import { type ActivityType, type DetailType } from '@/types/entities/board/board.entitites.types'
-
-import ProjectHeader from './components/ProjectHeader'
-import ProjectNewLabel from './components/ProjectNewLabel'
-import { RichTextEditor } from './components/RichTextEditor'
-import Separator from './components/Separator'
 
 export default function ProjectNewPage(): JSX.Element {
   const navigate = useNavigate()

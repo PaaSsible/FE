@@ -78,10 +78,11 @@ const TasksChildSection = ({
     try {
       const body: PostTask['Body'] = {
         title,
-        dueDate: String(dueDate),
+        dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
         assigneeIds: selectedMembers,
         positionIds: selectedPositions,
       }
+      console.log(body)
       // toast
       toast.promise(() => postTask({ boardId: Number(projectId) }, body), {
         loading: '처리 중...',

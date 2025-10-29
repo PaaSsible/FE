@@ -9,10 +9,9 @@ import { ZodError } from 'zod'
 
 import { getTaskDetail, getTaskDetailComments, postTaskDetailComment } from '@/apis/task.api'
 import Button from '@/components/atoms/Button'
+import Separator from '@/components/feature/projects/Separator'
 import { Textarea } from '@/components/ui/textarea'
 import { type Comment, type Task } from '@/types/entities/board/board.entitites.types'
-
-import Separator from './components/Separator'
 
 const ProjectTaskPage = (): JSX.Element => {
   const navigate = useNavigate()
@@ -75,12 +74,12 @@ const ProjectTaskPage = (): JSX.Element => {
   }
   return (
     <div className="flex min-h-full flex-col">
-      <div className="mb-[3.375rem] flex items-center justify-start gap-3.5">
+      <div className="mb-[3.375rem] flex items-center gap-3.5">
         <button onClick={() => void navigate(-1)}>
           <ChevronLeft className="h-10 w-10" />
         </button>
 
-        <div className="justify-center text-3xl leading-10 font-semibold">{task.title}</div>
+        <span className="justify-center text-3xl leading-10 font-semibold">{task.title}</span>
       </div>
 
       <div className="flex justify-between text-lg font-semibold opacity-80">
@@ -95,7 +94,7 @@ const ProjectTaskPage = (): JSX.Element => {
         </span>
       </div>
       <Separator className="mt-[1.8125rem] mb-[2.9375rem]" />
-      <h3 className="mb-3 self-start text-xl font-medium">설명</h3>
+
       <p className="flex justify-start text-left text-lg font-normal break-all">
         {task.description}
       </p>

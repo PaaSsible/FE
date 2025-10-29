@@ -37,7 +37,7 @@ export const boardMemberSchema = z.object({
   role: z.string(),
 })
 
-export const linkSchema = z.object({ id: z.number(), name: z.string(), url: z.url() })
+export const linkSchema = z.object({ id: z.number(), name: z.string(), url: z.string() })
 
 export const taskStatusArray = ['PENDING', 'ONGOING', 'COMPLETED'] as const
 export const taskSchema = z.object({
