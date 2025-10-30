@@ -107,3 +107,15 @@ export const patchBoardMember = async (
   )
   return boardAPISchemas.patchBoardMemberSchema.response.parse(res.data)
 }
+
+/**
+ * @name 보드포트폴리오생성
+ * @param path
+ */
+export const postBoardPortfolio = async (
+  path: BoardAPITypes.PostBoardPortfolio['Path'],
+): Promise<BoardAPITypes.PostBoardPortfolio['Response']> => {
+  const parsedPath = boardAPISchemas.postBoardPortfolioSchema.path.parse(path)
+  const res = await PaaSsibleBoard.post(`/boards/${parsedPath.boardId}/portfolio`)
+  return boardAPISchemas.postBoardPortfolioSchema.response.parse(res.data)
+}

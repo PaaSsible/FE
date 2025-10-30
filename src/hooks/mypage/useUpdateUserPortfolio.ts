@@ -31,6 +31,7 @@ export function useUpdateUserPortfolio(
       title,
       summary,
       description,
+      image,
     }: UpdateUserPortfolioInput): Promise<PutUserPortfolioTypes['Response']> => {
       if (portfolioId === null || portfolioId === undefined || Number.isNaN(portfolioId)) {
         throw new Error('유효하지 않은 포트폴리오입니다.')
@@ -44,6 +45,7 @@ export function useUpdateUserPortfolio(
           title: title.trim(),
           summary: summary?.trim() || null,
           description,
+          image: image ?? null,
         }
 
         const response = await putUserPortfolio({ portfolioId }, payload)

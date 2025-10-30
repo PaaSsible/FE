@@ -7,6 +7,7 @@ import type {
   getBoardListSchema,
   getBoardMemberSchema,
   patchBoardMemberSchema,
+  postBoardPortfolioSchema,
   postBoardSchema,
   putBoardSchema,
 } from './board.api.schemas'
@@ -99,4 +100,15 @@ export type PatchBoardMember = {
   Path: z.infer<typeof patchBoardMemberSchema.path>
   Query: z.infer<typeof patchBoardMemberSchema.query>
   Response: z.infer<typeof patchBoardMemberSchema.response>
+}
+
+/**
+ * @name 보드포트폴리오생성
+ * @method POST
+ * @path `/boards/{boardId}/portfolio`
+ * @description 보드 포트폴리오 생성을 요청하는 API의 타입
+ */
+export type PostBoardPortfolio = {
+  Path: z.infer<typeof postBoardPortfolioSchema.path>
+  Response: z.infer<typeof postBoardPortfolioSchema.response>
 }

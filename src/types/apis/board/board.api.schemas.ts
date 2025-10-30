@@ -177,3 +177,26 @@ export const patchBoardMemberSchema = {
     errors: z.string().nullable(),
   }),
 }
+
+/**
+ * @name 보드포트폴리오생성
+ * @method POST
+ * @path `/boards/{boardId}/portfolio`
+ * @description 보드 포트폴리오 생성을 요청하는 API의 스키마
+ */
+export const postBoardPortfolioSchema = {
+  path: z.object({
+    boardId: boardSchema.shape.boardId,
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string(),
+    data: z
+      .object({
+        portfolioId: z.number().int().positive().optional(),
+      })
+      .nullable(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
