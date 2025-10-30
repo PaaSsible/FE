@@ -40,9 +40,7 @@ export const deleteChatRoom = async (
   path: ChatApiTypes.DeleteChatRoom['Path'],
 ): Promise<ChatApiTypes.DeleteChatRoom['Response']> => {
   const parsedPath = chatApiSchemas.deleteChatRoomSchema.path.parse(path)
-  const res = await PaaSsibleBoard.delete(
-    `/boards/${parsedPath.boardId}/chats/rooms/${parsedPath.roomId}`,
-  )
+  const res = await PaaSsibleChat.delete(`/chats/rooms/${parsedPath.roomId}`)
   return chatApiSchemas.deleteChatRoomSchema.response.parse(res.data)
 }
 
