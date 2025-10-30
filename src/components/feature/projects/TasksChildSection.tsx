@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 
 import { postTask } from '@/apis/task.api'
 import Button from '@/components/atoms/Button'
+import { usePostTask } from '@/queries/task.queries'
 import type { PostTask } from '@/types/apis/board/task.api.types'
 import type { BoardMember, Task, TaskStatus } from '@/types/entities/board/board.entitites.types'
 import { positionsArray } from '@/types/entities/recruit-post/recruitPost.schemas'
@@ -46,6 +47,7 @@ const TasksChildSection = ({
   const [selectedPositions, setSelectedPositions] = useState<Position['id'][]>([])
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(true)
   const [isNewTaskFormVisible, setIsNewTaskFormVisible] = useState<boolean>(false)
+  const { mutate: addTask } = usePostTask({ boardId: Number(projectId) })
 
   const membersToMultiSelectOptions: MultiSelectOption[] = members
     ? members.map((m, _) => ({
@@ -82,20 +84,19 @@ const TasksChildSection = ({
         assigneeIds: selectedMembers,
         positionIds: selectedPositions,
       }
-      console.log(body)
-      // toast
-      toast.promise(() => postTask({ boardId: Number(projectId) }, body), {
-        loading: '처리 중...',
-        success: '작업이 추가되었습니다.',
-        error: '처리 중 오류가 발생하였습니다.',
+      addTask(body, {
+        onSuccess: () => {
+          setIsNewTaskFormVisible(false)
+          setTitle('')
+          setDueDate(undefined)
+          setSelectedMembers([])
+          setSelectedPositions([])
+          toast.success('작업이 추가되었습니다.')
+        },
+        onError: () => {
+          toast.error('작업 추가 중 오류가 발생했습니다.')
+        },
       })
-
-      // 성공 시 폼 초기화
-      setIsNewTaskFormVisible(false)
-      setTitle('')
-      setDueDate(undefined)
-      setSelectedMembers([])
-      setSelectedPositions([])
     } catch (error) {
       console.error(error)
     }

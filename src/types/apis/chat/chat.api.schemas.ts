@@ -54,7 +54,6 @@ export const postChatRoomSchema = {
  */
 export const deleteChatRoomSchema = {
   path: z.object({
-    boardId: boardSchema.shape.boardId,
     roomId: chatRoomSchema.shape.roomId,
   }),
   response: z.object({
@@ -88,7 +87,39 @@ export const postChatRoomInvitationSchema = {
   }),
 }
 
-export const paginationDirectionArray = ['up', 'down'] as const
+/**
+ * @name 채팅방 초대가능 팀원 조회
+ * @method GET
+ * @path `/chats/rooms/{roomId}/member/invite`
+ */
+export const getChatRoomInvitationAvailableMemberSchema = {
+  path: z.object({
+    roomId: chatRoomSchema.shape.roomId,
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string(),
+    data: z.array(z.object({ userId: userSchema.shape.id, nickname: userSchema.shape.nickname })),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+/**
+ * @name 채팅방 팀원 조회
+ * @method GET
+ * @path `/chats/rooms/{roomId}/member`
+ */
+export const getChatRoomMemberSchema = {
+  path: z.object({ roomId: z.number() }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string(),
+    data: z.array(z.object({ userId: z.number(), nickname: z.string() })),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
 
 /**
  * @name 채팅방 메시지 목록 조회
@@ -307,7 +338,7 @@ const messageReadSchema = z.object({
 })
 
 const messagesReadAllSchema = z.object({
-  type: z.literal('MESSAGES_READ_ALL'),
+  type: z.literal('MESSAGE_READ_ALL'),
   userId: z.number(),
   oldLastReadMessageId: z.number(),
   newLastReadMessageId: z.number(),

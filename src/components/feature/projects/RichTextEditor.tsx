@@ -1,5 +1,3 @@
-'use client'
-
 import { Highlight } from '@tiptap/extension-highlight'
 import { Image } from '@tiptap/extension-image'
 import { TaskItem, TaskList } from '@tiptap/extension-list'
@@ -11,6 +9,7 @@ import { Selection } from '@tiptap/extensions'
 import { EditorContent, EditorContext, useEditor } from '@tiptap/react'
 // --- Tiptap Core Extensions ---
 import { StarterKit } from '@tiptap/starter-kit'
+import { useEffect } from 'react'
 import * as React from 'react'
 
 import { ArrowLeftIcon } from '@/components/tiptap-icons/arrow-left-icon'
@@ -53,6 +52,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { useWindowSize } from '@/hooks/use-window-size'
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
+
 // --- Styles ---
 import '@/components/tiptap-templates/simple/simple-editor.scss'
 
@@ -221,6 +221,15 @@ export function RichTextEditor({ content, setContent }: RichTextEditorProps): Re
       setMobileView('main')
     }
   }, [isMobile, mobileView])
+
+  useEffect(() => {
+    if (editor && content) {
+      editor.commands.setContent(content)
+      const lastPos = editor.state.doc.content.size
+      editor.commands.setTextSelection(lastPos)
+      editor.commands.focus()
+    }
+  }, [editor, content])
 
   return (
     <div className="simple-editor-wrapper">

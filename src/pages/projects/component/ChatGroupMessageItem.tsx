@@ -6,26 +6,14 @@ import type { JSX } from 'react'
 
 import type { GroupMessage } from '../ProjectChatRoomPage'
 
+import ViewChatRoomReadMemberButton from './VIewChatRoomReadMemberButton'
+
 interface GroupMessageItemProps {
   item: GroupMessage
 }
 
 const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
   dayjs.locale('ko') // 한글 오전/오후
-
-  const downloadFileAs = async (url: string, saveAsName: string) => {
-    try {
-      const res = await fetch(url, { credentials: 'include' }) // 인증 필요시
-      const blob = await res.blob()
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = saveAsName
-      link.click()
-      URL.revokeObjectURL(link.href)
-    } catch (err) {
-      console.error('파일 다운로드 실패', err)
-    }
-  }
 
   return (
     <div className={`flex ${item.isMine ? 'justify-end' : 'justify-start'} gap-3`}>
@@ -39,11 +27,13 @@ const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
         {item.messages.map((msg) => (
           <div key={msg.id} className="flex items-end gap-2">
             {item.isMine && (
-              <div>
-                <span> </span>
-                <span className="text-xs text-gray-500">
-                  {dayjs(msg.createdAt).format('A HH:mm')}
-                </span>
+              <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                <div className="flex items-center">
+                  <ViewChatRoomReadMemberButton messageId={msg.id} isMine />
+                  {msg.readCount > 0 ? `읽음 ${msg.readCount}` : '읽지 않음'}
+                </div>
+                <div className="h-[3px] w-[3px] rounded-full bg-gray-500" />
+                <span>{dayjs(msg.createdAt).format('A HH:mm')}</span>
               </div>
             )}
             <div
@@ -85,9 +75,14 @@ const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
               )}
             </div>
             {!item.isMine && (
-              <span className="text-xs text-gray-500">
-                {dayjs(msg.createdAt).format('A HH:mm')}
-              </span>
+              <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                <span>{dayjs(msg.createdAt).format('A HH:mm')}</span>
+                <div className="h-[3px] w-[3px] rounded-full bg-gray-500" />
+                <div className="flex items-center">
+                  {msg.readCount > 0 ? `읽음 ${msg.readCount}` : '읽지 않음'}
+                  <ViewChatRoomReadMemberButton messageId={msg.id} />
+                </div>
+              </div>
             )}
           </div>
         ))}

@@ -95,10 +95,10 @@ export const deleteBoardSchema = {
 /**
  * @name 보드진입
  * @method GET
- * @path `/boards/{boardId}`
- * @description 보드 상세 정보를 조회하는 API의 스키마
+ * @path `/boards/{boardId}/enter`
+ * @description 현재 유저의 역할 정보를 조회하는 API의 스키마
  */
-export const getBoardDetailSchema = {
+export const getBoardUserPositionSchema = {
   path: z.object({
     boardId: boardSchema.shape.boardId,
   }),
@@ -107,7 +107,32 @@ export const getBoardDetailSchema = {
     message: z.string(),
     data: z.object({
       boardId: boardSchema.shape.boardId,
-      positionId: z.number().nullable().optional(),
+      positionId: z.number().nullable(),
+    }),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+/**
+ * @name 보드 상세 조회
+ * @method GET
+ * @path `/boards/{boardId}`
+ * @description 보드의 상세 정보를 조회하는 API의 스키마
+ */
+export const getBoardDetailSchema = {
+  path: z.object({
+    boardId: boardSchema.shape.boardId,
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string(),
+    data: boardSchema.pick({
+      boardId: true,
+      name: true,
+      content: true,
+      activityType: true,
+      detailType: true,
     }),
     code: z.string(),
     errors: z.string().nullable(),

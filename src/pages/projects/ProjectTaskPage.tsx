@@ -11,63 +11,43 @@ import { getTaskDetail, getTaskDetailComments, postTaskDetailComment } from '@/a
 import Button from '@/components/atoms/Button'
 import Separator from '@/components/feature/projects/Separator'
 import { Textarea } from '@/components/ui/textarea'
+import { useGetTaskComments, usePostTaskComment } from '@/queries/comment.queries'
+import { useGetTaskDetail } from '@/queries/task.queries'
 import { type Comment, type Task } from '@/types/entities/board/board.entitites.types'
+import { getAuthUser } from '@/utils/authToken'
 
 const ProjectTaskPage = (): JSX.Element => {
   const navigate = useNavigate()
   const { projectId, taskId } = useParams()
-  const [task, setTask] = useState<Task | undefined>()
-  const [comments, setComments] = useState<Comment[] | undefined>()
+  const user = getAuthUser()
+  const { data: taskData } = useGetTaskDetail({
+    boardId: Number(projectId),
+    taskId: Number(taskId),
+  })
+  const task = taskData.data
+  const { data: commentData } = useGetTaskComments({
+    boardId: Number(projectId),
+    taskId: Number(taskId),
+  })
+  const { mutate: addComment, isPending } = usePostTaskComment({
+    boardId: Number(projectId),
+    taskId: Number(taskId),
+  })
+  const comments = commentData.data
   const [newComment, setNewComment] = useState<Comment['comment']>('')
 
   dayjs.extend(relativeTime)
   dayjs.locale('ko')
 
-  const onAddComment = async () => {
-    try {
-      await postTaskDetailComment(
-        {
-          boardId: Number(projectId),
-          taskId: Number(taskId),
-        },
-        { comment: newComment.trim() },
-      )
-      setNewComment('')
-    } catch (error) {
-      if (error instanceof ZodError) {
-        console.error('타입 에러', error)
-      }
-    }
+  const onAddComment = () => {
+    if (!newComment) return
+    addComment(
+      { comment: newComment.trim() },
+      {
+        onSuccess: () => setNewComment(''),
+      },
+    )
   }
-
-  useEffect(() => {
-    const getTaskData = async () => {
-      try {
-        const response = await getTaskDetail({ boardId: Number(projectId), taskId: Number(taskId) })
-        setTask(response.data)
-      } catch (error) {
-        if (error instanceof ZodError) {
-          console.error('타입 불일치', error)
-        }
-      }
-    }
-    void getTaskData()
-
-    const getCommentData = async () => {
-      try {
-        const response = await getTaskDetailComments({
-          boardId: Number(projectId),
-          taskId: Number(taskId),
-        })
-        setComments(response.data)
-      } catch (error) {
-        if (error instanceof ZodError) {
-          console.error('타입 불일치', error)
-        }
-      }
-    }
-    void getCommentData()
-  }, [projectId, taskId])
 
   if (task === undefined) {
     return <div>cannot find task</div>
@@ -112,7 +92,7 @@ const ProjectTaskPage = (): JSX.Element => {
         </h3>
         <div className="mb-3 flex items-center">
           <img className="mr-3 h-9 w-9 rounded-lg bg-zinc-500 p-2.5" />
-          <span className="text-xl leading-8 font-medium">이윤지</span>
+          <span className="text-xl leading-8 font-medium">{user?.username}</span>
         </div>
 
         <div className="flex flex-1 flex-col">
@@ -123,7 +103,11 @@ const ProjectTaskPage = (): JSX.Element => {
               className="h-36 rounded bg-white px-6 py-3.5 text-base font-medium outline-1"
               placeholder="댓글을 입력해주세요"
             />
-            <Button onClick={() => void onAddComment()} className="absolute right-3 bottom-3">
+            <Button
+              disabled={isPending ? true : false}
+              onClick={() => void onAddComment()}
+              className="absolute right-3 bottom-3"
+            >
               등록하기
             </Button>
           </div>
