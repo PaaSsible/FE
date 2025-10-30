@@ -24,3 +24,8 @@ export const chatMessageSchema = z.object({
   createdAt: z.preprocess((val) => (typeof val === 'string' ? new Date(val) : val), z.date()),
   readCount: z.number(),
 })
+
+export const chatRoomMemberSchema = z.object({
+  userId: userSchema.shape.id,
+  nickname: userSchema.shape.nickname,
+})

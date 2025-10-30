@@ -88,7 +88,39 @@ export const postChatRoomInvitationSchema = {
   }),
 }
 
-export const paginationDirectionArray = ['up', 'down'] as const
+/**
+ * @name 채팅방 초대가능 팀원 조회
+ * @method GET
+ * @path `/chats/rooms/{roomId}/member/invite`
+ */
+export const getChatRoomInvitationAvailableMemberSchema = {
+  path: z.object({
+    roomId: chatRoomSchema.shape.roomId,
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string(),
+    data: z.array(z.object({ userId: userSchema.shape.id, nickname: userSchema.shape.nickname })),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+/**
+ * @name 채팅방 팀원 조회
+ * @method GET
+ * @path `/chats/rooms/{roomId}/member`
+ */
+export const getChatRoomMemberSchema = {
+  path: z.object({ roomId: z.number() }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string(),
+    data: z.array(z.object({ userId: z.number(), nickname: z.string() })),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
 
 /**
  * @name 채팅방 메시지 목록 조회
