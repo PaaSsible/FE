@@ -1,12 +1,11 @@
 import { AxiosError } from 'axios'
 import clsx from 'clsx'
-import { Check, MessageSquarePlus } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useEffect, useState, type JSX } from 'react'
 import { useParams } from 'react-router-dom'
 import { ZodError } from 'zod'
 
-import { getBoardMember } from '@/apis/board.api'
-import { postChatRoomInvitation } from '@/apis/chat.api'
+import { getChatRoomInvitationAvailableMember, postChatRoomInvitation } from '@/apis/chat.api'
 import Button from '@/components/atoms/Button'
 import {
   AlertDialog,
@@ -20,7 +19,7 @@ import {
 import { AlertDialogFooter, AlertDialogHeader } from '@/components/ui/alert-dialog'
 import type { PostChatRoom } from '@/types/apis/chat/chat.api.types'
 import type { BoardMember } from '@/types/entities/board/board.entitites.types'
-import { getAuthUser } from '@/utils/authToken'
+import type { ChatRoomMember } from '@/types/entities/chat-room/chatRoom.types'
 
 interface InviteChatRoomButtonProps {
   projectId: string | undefined
@@ -29,7 +28,7 @@ const InviteChatRoomButton = ({ projectId }: InviteChatRoomButtonProps): JSX.Ele
   const { roomId } = useParams<{ roomId: string }>()
   const [open, setOpen] = useState<boolean>(false)
   const [selectedUsers, setSelectedUsers] = useState<PostChatRoom['Body']['participantIds']>([])
-  const [boardMember, setBoardMember] = useState<BoardMember[] | undefined>()
+  const [inviteableMember, setInviteableMember] = useState<ChatRoomMember[] | undefined>()
 
   const onConfirmButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -42,7 +41,7 @@ const InviteChatRoomButton = ({ projectId }: InviteChatRoomButtonProps): JSX.Ele
     } catch (error) {
       if (error instanceof ZodError) console.error('타입에러', error)
       else if (error instanceof AxiosError) console.error('네트워크에러', error)
-      console.error('기타에러', error)
+      else console.error('기타에러', error)
     } finally {
       setOpen(false)
     }
@@ -58,23 +57,17 @@ const InviteChatRoomButton = ({ projectId }: InviteChatRoomButtonProps): JSX.Ele
   }
 
   useEffect(() => {
+    const getInviteableMember = async () => {
+      const response = await getChatRoomInvitationAvailableMember({ roomId: Number(roomId) })
+      setInviteableMember(response.data)
+    }
     if (open) {
-      const user = getAuthUser()
-      const userId = user?.id
-      const getBoardMemberData = async () => {
-        try {
-          const response = await getBoardMember({ boardId: Number(projectId) })
-          setBoardMember(response.data.filter((member) => member.userId !== Number(userId)))
-        } catch (error) {
-          if (error instanceof ZodError) console.error('타입에러', error)
-          else if (error instanceof AxiosError) console.error('네트워크에러', error)
-        }
-      }
-      void getBoardMemberData()
+      void getInviteableMember()
     } else {
+      // 언마운트 시 선택 멤버 초기화
       return () => setSelectedUsers([])
     }
-  }, [projectId, open])
+  }, [roomId, open])
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -91,22 +84,22 @@ const InviteChatRoomButton = ({ projectId }: InviteChatRoomButtonProps): JSX.Ele
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="flex flex-col gap-1">
-          {boardMember?.map((b) => (
+          {inviteableMember?.map((m) => (
             <div
-              key={b.userId}
-              onClick={() => void onSelectMember(b.userId)}
+              key={m.userId}
+              onClick={() => void onSelectMember(m.userId)}
               className={clsx(
                 'flex flex-1 items-center justify-between rounded-lg p-3 text-sm leading-5 font-medium text-slate-500',
-                selectedUsers.some((s) => s === b.userId)
+                selectedUsers.some((s) => s === m.userId)
                   ? 'bg-locallit-red-200 !text-black'
                   : 'bg-white',
               )}
             >
-              {b.userName}
+              {m.nickname}
               <Check
                 className={clsx(
                   'h-4 w-4',
-                  selectedUsers.some((s) => s === b.userId) ? 'visible' : 'hidden',
+                  selectedUsers.some((s) => s === m.userId) ? 'visible' : 'hidden',
                 )}
               />
             </div>
