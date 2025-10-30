@@ -32,7 +32,6 @@ import TermsPage from './pages/policy/TermsPage'
 import ProjectBoardPage from './pages/projects/ProjectBoardPage'
 import ProjectChatPage from './pages/projects/ProjectChatPage'
 import ProjectChatRoomPage from './pages/projects/ProjectChatRoomPage'
-import ProjectDetailPage from './pages/projects/ProjectDetailPage'
 import ProjectEditPage from './pages/projects/ProjectEditPage'
 import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
 import ProjectMeetingRoomPage from './pages/projects/ProjectMeetingRoomPage'
@@ -87,9 +86,8 @@ function App(): JSX.Element {
           {/* Projects */}
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/new" element={<ProjectNewPage />} />
+          <Route path="projects/:projectId/edit" element={<ProjectEditPage />} />
           <Route path="projects/:projectId" element={<ProjectsLayout />}>
-            <Route index element={<ProjectDetailPage />} />
-            <Route path="edit" element={<ProjectEditPage />} />
             <Route path="board" element={<ProjectBoardPage />} />
             <Route path="board/:taskId" element={<ProjectTaskPage />} />
 

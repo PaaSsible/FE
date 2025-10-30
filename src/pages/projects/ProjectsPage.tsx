@@ -27,15 +27,11 @@ export default function ProjectsPage(): JSX.Element {
         }
         const res = await getBoardList(query)
         setProjects(res.data)
-        console.log(projects)
-      } catch (error: unknown) {
-        if (error instanceof ZodError) {
-          console.log('파싱 실패', error)
-        }
+      } catch (error) {
+        if (error instanceof ZodError) console.log('파싱 실패', error)
       }
     }
     void getData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTab, searchValue])
 
   return (

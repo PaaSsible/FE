@@ -1,6 +1,10 @@
+import { AxiosError } from 'axios'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { type JSX } from 'react'
+import { useEffect, useState, type JSX } from 'react'
+import { useParams } from 'react-router-dom'
+import { ZodError } from 'zod'
 
+import { getChatRoomMessageReadUser } from '@/apis/chat.api'
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -10,31 +14,59 @@ import {
   AlertDialogCancel,
   AlertDialogHeader,
 } from '@/components/ui/alert-dialog'
+import type { GetChatRoomReadUser } from '@/types/apis/chat/chat.api.types'
 
+interface ViewChatRoomReadMemberButtonProps {
+  messageId: number
+  isMine?: boolean
+}
 //읽음 선택 시 읽은 팀원 보는 다이얼로그
-const ViewChatRoomReadMemberButton = (): JSX.Element => {
+const ViewChatRoomReadMemberButton = ({
+  messageId,
+  isMine = false,
+}: ViewChatRoomReadMemberButtonProps): JSX.Element => {
+  const { roomId } = useParams<{ roomId: string }>()
+  const [readInfo, setReadInfo] = useState<GetChatRoomReadUser['Response']['data']>()
+  useEffect(() => {
+    const getReadInfo = async () => {
+      try {
+        const response = await getChatRoomMessageReadUser({
+          roomId: Number(roomId),
+          messageId: messageId,
+        })
+        setReadInfo(response.data)
+      } catch (error) {
+        if (error instanceof ZodError) console.log('타입에러', error)
+        else if (error instanceof AxiosError) console.log('네트워크 에러', error)
+        else console.log('기타에러', error)
+      }
+    }
+    void getReadInfo()
+  }, [])
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <ChevronRight className="h-4 w-4" />
+        {isMine ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
       </AlertDialogTrigger>
       <AlertDialogContent className="rounded-2xl border-none p-8">
         <AlertDialogHeader className="mb-8 flex flex-col gap-4">
           <AlertDialogTitle className="flex items-center justify-start gap-2.5 font-['Pretendard'] text-3xl leading-10 font-bold text-neutral-900">
-            <AlertDialogCancel asChild>
-              <button type="button" className="flex border-none">
-                <ChevronLeft className="h-10 w-10 text-stone-500" />
-              </button>
+            <AlertDialogCancel className="border-none">
+              <ChevronLeft className="h-10 w-10 text-stone-500" />
             </AlertDialogCancel>
             읽은 팀원 보기
           </AlertDialogTitle>
           <AlertDialogDescription className="font-['Pretendard'] text-base leading-5 font-normal text-zinc-800">
-            현재 대화에 참여 중인 팀원 중 2명이 읽었습니다.
+            현재 대화에 참여 중인 팀원 중 {readInfo?.readCount}명이 읽었습니다.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="flex flex-col gap-1">
-          <div>박우진</div>
-        </div>
+        {readInfo &&
+          readInfo.readUsers.map((user, index) => (
+            <div className="flex flex-col gap-1" key={`${user.nickname}-${index}`}>
+              <div>{user.nickname}</div>
+            </div>
+          ))}
       </AlertDialogContent>
     </AlertDialog>
   )

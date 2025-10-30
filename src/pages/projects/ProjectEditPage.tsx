@@ -3,7 +3,7 @@ import { useEffect, useState, type JSX } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ZodError } from 'zod'
 
-import { getBoardDetail, postBoard } from '@/apis/board.api'
+import { getBoardDetail, postBoard, putBoard } from '@/apis/board.api'
 import Button from '@/components/atoms/Button'
 import Chip from '@/components/atoms/Chip'
 import Tab from '@/components/atoms/Tab'
@@ -15,36 +15,52 @@ import Separator from '@/components/feature/projects/Separator'
 import { activityTypeToDetailTypeMap } from '@/config/converters/activityTypeDetailTypeMap'
 import { activityTypeEngToKorMap } from '@/config/converters/activityTypeEngToKorMap'
 import { detailTypeEngToKorMap } from '@/config/converters/detailTypeEngToKorMap'
-import type { GetBoardDetail, PostBoard, PutBoard } from '@/types/apis/board/board.api.types'
+import type { PutBoard } from '@/types/apis/board/board.api.types'
 import { activityTypeArray } from '@/types/entities/board/board.entities.schemas'
-import type { ActivityType, Board, DetailType } from '@/types/entities/board/board.entitites.types'
+import type { ActivityType, DetailType } from '@/types/entities/board/board.entitites.types'
 
 export default function ProjectEditPage(): JSX.Element {
   const { projectId } = useParams<{ projectId: string }>()
   const navigate = useNavigate()
   const [selectedActivityType, setSelectedActivityType] = useState<ActivityType>('CONTEST')
   const [selectedDetailType, setSelectedDetailType] = useState<DetailType>('CONTEST_PLANNING')
-  const [title, setTitle] = useState<PostBoard['Body']['name']>('')
-  const [content, setContent] = useState<PostBoard['Body']['content']>('')
+  const [title, setTitle] = useState<PutBoard['Body']['name']>('')
+  const [content, setContent] = useState<PutBoard['Body']['content']>('')
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
-  const [project, setProject] = useState<Board | undefined>()
 
-  const getData = async () => {}
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await getBoardDetail({ boardId: Number(projectId) })
+        setTitle(response.data.name)
+        setContent(response.data.content)
+        setSelectedActivityType(response.data.activityType)
+        setSelectedDetailType(response.data.detailType)
+      } catch (error) {
+        if (error instanceof ZodError) console.log('타입에러', error)
+        else if (error instanceof AxiosError) console.log('네트워크 에러', error)
+        else console.log('기타에러', error)
+      }
+    }
     void getData()
-  }, [])
+  }, [projectId])
 
   const onEditButton = async () => {
     try {
       if (title && content) {
+        console.log('projectId:', projectId)
+        console.log('Number(projectId):', Number(projectId))
         const body: PutBoard['Body'] = {
           name: title,
           content: content,
           activityType: selectedActivityType,
           detailType: selectedDetailType,
         }
-        await postBoard(body)
+        const path: PutBoard['Path'] = {
+          boardId: Number(projectId),
+        }
+        await putBoard(path, body)
         void navigate(-1)
       }
     } catch (error) {
@@ -104,10 +120,10 @@ export default function ProjectEditPage(): JSX.Element {
 
       <div className="mt-[1.4375rem] flex gap-[0.6875rem] self-end">
         <Button variant="secondary" onClick={() => setIsModalVisible(!isModalVisible)}>
-          생성취소
+          수정취소
         </Button>
         <Button variant="primary" onClick={() => void onEditButton()}>
-          생성하기
+          수정하기
         </Button>
       </div>
 

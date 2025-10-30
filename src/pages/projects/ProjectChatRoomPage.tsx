@@ -13,6 +13,7 @@ import {
   postChatRoomImageUpload,
 } from '@/apis/chat.api'
 import ChatRoomMoreButton from '@/components/feature/projects/ChatRoomMoreButton'
+import type { SubScribeChatRoomMessageRead } from '@/types/apis/chat/chat.api.types'
 import type { ChatRoom, Message, MessageType } from '@/types/entities/chat-room/chatRoom.types'
 import { getAccessToken, getAuthUser, type AuthUser } from '@/utils/authToken'
 
@@ -131,7 +132,7 @@ const ProjectChatRoomPage = (): JSX.Element => {
         SetGroupedMessages(groupedByDate)
       }
     }
-  }, [messages])
+  }, [])
 
   // websocket
   const client = useRef<Client>(null)
@@ -152,14 +153,22 @@ const ProjectChatRoomPage = (): JSX.Element => {
 
           client.current?.subscribe(`/topic/chats/rooms/${roomId}`, (message) => {
             const payload = JSON.parse(message.body) as Message
-
+            console.log(payload)
             setMessages((prev) => {
               const updated = [...prev, payload]
-              console.log(updated) // 여기서 찍으면 최신 상태 확인 가능
+              //console.log(updated) // 여기서 찍으면 최신 상태 확인 가능
               return updated
             })
+            setTimeout(() => {
+              mainRef.current?.scrollTo({ top: mainRef.current.scrollHeight, behavior: 'smooth' })
+            }, 100)
 
-            //console.log(payload)
+            const readPayload = { messageId: payload.id }
+            client.current?.publish({
+              destination: `/app/chats/rooms/${roomId}/read`,
+              body: JSON.stringify(readPayload),
+            })
+            console.log(readPayload)
           })
 
           client.current?.subscribe(`/topic/chats/rooms/${roomId}/system`, (message) => {
@@ -169,9 +178,32 @@ const ProjectChatRoomPage = (): JSX.Element => {
           })
 
           client.current?.subscribe(`/topic/chats/rooms/${roomId}/read`, (message) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const payload = JSON.parse(message.body)
-            console.log(payload)
+            const payload = JSON.parse(message.body) as SubScribeChatRoomMessageRead['Response']
+            console.log(payload.type)
+            setMessages((prevMessages) => {
+              if (!prevMessages) return prevMessages
+
+              const updated = prevMessages.map((m) => {
+                // 전체 읽음 처리
+                if (
+                  payload.type === 'MESSAGE_READ_ALL' &&
+                  payload.newLastReadMessageId >= m.id &&
+                  m.id > payload.oldLastReadMessageId
+                ) {
+                  console.log('Detected')
+                  return { ...m, readCount: m.readCount + 1 }
+                }
+
+                // 개별 메시지 읽음 처리
+                if (payload.type === 'MESSAGE_READ' && payload.messageId === m.id) {
+                  return { ...m, readCount: m.readCount + 1 }
+                }
+
+                return m
+              })
+
+              return updated
+            })
           })
         },
         onWebSocketClose: (close) => console.log('WebSocket closed', close),
@@ -187,12 +219,6 @@ const ProjectChatRoomPage = (): JSX.Element => {
   }, [])
 
   const mainRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setTimeout(() => {
-      mainRef.current?.scrollTo({ top: mainRef.current.scrollHeight, behavior: 'smooth' })
-    }, 100)
-  }, [groupedMessages])
 
   const sendMessage = (content: string) => {
     if (!content) return
@@ -211,6 +237,9 @@ const ProjectChatRoomPage = (): JSX.Element => {
       destination: `/app/chats/rooms/${roomId}`,
       body: JSON.stringify(payload),
     })
+    setTimeout(() => {
+      mainRef.current?.scrollTo({ top: mainRef.current.scrollHeight, behavior: 'smooth' })
+    }, 100)
   }
 
   const sendFile = async (file: File | undefined) => {
@@ -252,9 +281,9 @@ const ProjectChatRoomPage = (): JSX.Element => {
         </span>
 
         <span className="flex items-center gap-5">
-          <button type="button" className="cursor-pointer">
+          {/* <button type="button" className="cursor-pointer">
             <Search className="h-8 w-8 text-stone-700" />
-          </button>
+          </button> */}
           <ChatRoomMoreButton projectId={projectId} />
         </span>
       </header>

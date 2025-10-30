@@ -28,7 +28,7 @@ interface SemiDoughnutChartProps {
 }
 
 export function SemiDoughnutChart({ data }: SemiDoughnutChartProps): JSX.Element {
-  const completedTaskNum = data.tasks.filter((t) => t.status === 'COMPLETED').length
+  const completedTaskNum = data.tasks.find((t) => t.status === 'COMPLETED')?.count ?? 0
   const totalTaskNum = data.total
   const completedRate = (completedTaskNum / totalTaskNum) * 100
   const chartData = [

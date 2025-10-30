@@ -1,8 +1,7 @@
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
-import { ChevronRight, File } from 'lucide-react'
-import { ChevronLeft } from 'lucide-react'
+import { File } from 'lucide-react'
 import type { JSX } from 'react'
 
 import type { GroupMessage } from '../ProjectChatRoomPage'
@@ -30,8 +29,8 @@ const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
             {item.isMine && (
               <div className="flex items-center gap-1.5 text-xs text-gray-500">
                 <div className="flex items-center">
-                  <ChevronLeft className="h-4 w-4" />
-                  {msg.readCount > 0 ? `읽음 ${msg.readCount}` : '읽지 않음'}{' '}
+                  <ViewChatRoomReadMemberButton messageId={msg.id} isMine />
+                  {msg.readCount > 0 ? `읽음 ${msg.readCount}` : '읽지 않음'}
                 </div>
                 <div className="h-[3px] w-[3px] rounded-full bg-gray-500" />
                 <span>{dayjs(msg.createdAt).format('A HH:mm')}</span>
@@ -81,7 +80,7 @@ const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
                 <div className="h-[3px] w-[3px] rounded-full bg-gray-500" />
                 <div className="flex items-center">
                   {msg.readCount > 0 ? `읽음 ${msg.readCount}` : '읽지 않음'}
-                  <ViewChatRoomReadMemberButton />
+                  <ViewChatRoomReadMemberButton messageId={msg.id} />
                 </div>
               </div>
             )}

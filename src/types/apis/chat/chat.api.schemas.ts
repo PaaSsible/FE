@@ -339,7 +339,7 @@ const messageReadSchema = z.object({
 })
 
 const messagesReadAllSchema = z.object({
-  type: z.literal('MESSAGES_READ_ALL'),
+  type: z.literal('MESSAGE_READ_ALL'),
   userId: z.number(),
   oldLastReadMessageId: z.number(),
   newLastReadMessageId: z.number(),

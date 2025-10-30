@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { AxiosError } from 'axios'
 import clsx from 'clsx'
 import { Check } from 'lucide-react'
@@ -29,7 +32,7 @@ const InviteChatRoomButton = ({ projectId }: InviteChatRoomButtonProps): JSX.Ele
   const { roomId } = useParams<{ roomId: string }>()
   const [open, setOpen] = useState<boolean>(false)
   const [selectedUsers, setSelectedUsers] = useState<PostChatRoom['Body']['participantIds']>([])
-  const [inviteableMember, setInviteableMember] = useState<ChatRoomMember[] | undefined>()
+  const [inviteableMember, setInviteableMember] = useState<ChatRoomMember[]>()
 
   const onConfirmButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -85,26 +88,27 @@ const InviteChatRoomButton = ({ projectId }: InviteChatRoomButtonProps): JSX.Ele
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="flex flex-col gap-1">
-          {inviteableMember?.map((m) => (
-            <div
-              key={m.userId}
-              onClick={() => void onSelectMember(m.userId)}
-              className={clsx(
-                'flex flex-1 items-center justify-between rounded-lg p-3 text-sm leading-5 font-medium text-slate-500',
-                selectedUsers.some((s) => s === m.userId)
-                  ? 'bg-locallit-red-200 !text-black'
-                  : 'bg-white',
-              )}
-            >
-              {m.nickname}
-              <Check
+          {inviteableMember &&
+            inviteableMember.map((m) => (
+              <div
+                key={m.userId}
+                onClick={() => void onSelectMember(m.userId)}
                 className={clsx(
-                  'h-4 w-4',
-                  selectedUsers.some((s) => s === m.userId) ? 'visible' : 'hidden',
+                  'flex flex-1 items-center justify-between rounded-lg p-3 text-sm leading-5 font-medium text-slate-500',
+                  selectedUsers.some((s) => s === m.userId)
+                    ? 'bg-locallit-red-200 !text-black'
+                    : 'bg-white',
                 )}
-              />
-            </div>
-          ))}
+              >
+                {m.nickname}
+                <Check
+                  className={clsx(
+                    'h-4 w-4',
+                    selectedUsers.some((s) => s === m.userId) ? 'visible' : 'hidden',
+                  )}
+                />
+              </div>
+            ))}
         </div>
 
         <AlertDialogFooter className="flex gap-4">
