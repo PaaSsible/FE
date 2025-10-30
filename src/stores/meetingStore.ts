@@ -32,6 +32,14 @@ export interface MeetingChatMessage {
   timestamp: string
 }
 
+export interface ScreenShareState {
+  ownerId: string
+  ownerName: string
+  profileImageUrl: string | null
+  stream: MediaStream
+  isLocal: boolean
+}
+
 export interface MeetingState {
   mode: MeetingMode
   setMode: (mode: MeetingMode) => void
@@ -64,6 +72,12 @@ export interface MeetingState {
     isCameraOn: boolean
   }
   setCurrentUserMedia: (media: Partial<{ isMicOn: boolean; isCameraOn: boolean }>) => void
+  localPreviewStream: MediaStream | null
+  setLocalPreviewStream: (stream: MediaStream | null) => void
+
+  screenShare: ScreenShareState | null
+  setScreenShare: (share: ScreenShareState | null) => void
+  clearScreenShare: () => void
 
   presentMembers: MeetingMember[]
   absentMembers: MeetingMember[]
@@ -175,6 +189,12 @@ export const useMeetingStore = create<MeetingState>((set) => ({
         ...media,
       },
     })),
+  localPreviewStream: null,
+  setLocalPreviewStream: (stream) => set({ localPreviewStream: stream }),
+
+  screenShare: null,
+  setScreenShare: (share) => set({ screenShare: share }),
+  clearScreenShare: () => set({ screenShare: null }),
 
   presentMembers: [],
   absentMembers: [],

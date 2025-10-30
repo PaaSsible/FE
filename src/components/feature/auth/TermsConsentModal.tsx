@@ -25,7 +25,7 @@ const TermsConsentModal: React.FC<TermsConsentModalProps> = ({
   const description = (
     <div className="flex flex-col gap-8">
       <p className="text-b5-medium text-gray-800">
-        마이페이지에서 프로필을 설정하고 로컬잇과 함께 온라인 IT 협업을 효과적으로 진행해 보세요.
+        마이페이지에서 프로필을 설정하고 CoDo와 함께 온라인 IT 협업을 효과적으로 진행해 보세요.
         <br />
         프로필 설정 이전에는 둘러보기만 가능합니다.
       </p>

@@ -15,6 +15,9 @@ interface MeetingMainVideoProps {
   userName?: string | null
   profileImageUrl?: string | null
   className?: string
+  isLocalFeed?: boolean
+  showSpeakingBadge?: boolean
+  showInactiveBadge?: boolean
 }
 
 export default function MeetingMainVideo({
@@ -25,6 +28,9 @@ export default function MeetingMainVideo({
   userName,
   profileImageUrl,
   className,
+  isLocalFeed = true,
+  showSpeakingBadge = true,
+  showInactiveBadge = true,
 }: MeetingMainVideoProps): ReactElement {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const isSpeaking = useAudioAnalyzer(stream, isMicOn)
@@ -36,33 +42,46 @@ export default function MeetingMainVideo({
   const userIdStr = userId != null ? String(userId) : null
   const isHighlighted = userIdStr != null && highlightedSpeakerUserId === userIdStr
   const isInactive = userIdStr != null && inactiveUserIds.includes(userIdStr)
-  const showSpeakingBadge = isSpeaking || isHighlighted
+  const shouldShowSpeaking = showSpeakingBadge && (isSpeaking || isHighlighted)
+  const shouldShowInactive = showInactiveBadge && isInactive
 
   useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream
+    const el = videoRef.current
+    if (!el) return
+
+    try {
+      if (stream) {
+        if (el.srcObject !== stream) {
+          el.srcObject = stream
+        }
+      } else {
+        el.srcObject = null
+      }
+    } catch (error) {
+      console.warn('[MeetingMainVideo] failed to attach stream', error)
     }
   }, [stream])
 
   useEffect(() => {
+    if (!isLocalFeed) return
     setCurrentUserSpeaking(isSpeaking)
     if (isSpeaking && userIdStr) {
       removeInactiveUserIds([userIdStr])
     }
-  }, [isSpeaking, removeInactiveUserIds, setCurrentUserSpeaking, userIdStr])
+  }, [isLocalFeed, isSpeaking, removeInactiveUserIds, setCurrentUserSpeaking, userIdStr])
 
   const innerContent = (
     <div
       className={clsx(
         'relative flex h-full flex-col items-center justify-center overflow-hidden rounded-xl transition-all duration-300',
         {
-          'border-locallit-red-500 border-2': showSpeakingBadge && !isInactive,
-          'border border-transparent': !showSpeakingBadge && !isInactive,
-          'bg-locallit-red-950 animate-freezeGlow': isInactive,
+          'border-locallit-red-500 border-2': shouldShowSpeaking && !shouldShowInactive,
+          'border border-transparent': !shouldShowSpeaking && !shouldShowInactive,
+          'bg-locallit-red-950 animate-freezeGlow': shouldShowInactive,
         },
       )}
     >
-      {isInactive && (
+      {shouldShowInactive && (
         <div className="animate-freezeOverlay pointer-events-none absolute inset-0 rounded-xl bg-white/5" />
       )}
 
@@ -104,16 +123,16 @@ export default function MeetingMainVideo({
 
   const tileWithBadge = (
     <div className="relative h-full">
-      {(showSpeakingBadge || isInactive) && (
+      {(shouldShowSpeaking || shouldShowInactive) && (
         <div className="bg-locallit-red-500 text-b5-bold absolute top-3 left-3 z-50 rounded-full px-3 py-1 text-gray-900">
-          {isInactive ? '비발언자' : '발언자'}
+          {shouldShowInactive ? '비발언자' : '발언자'}
         </div>
       )}
       {innerContent}
     </div>
   )
 
-  if (isInactive) {
+  if (shouldShowInactive) {
     return (
       <div className={clsx('h-full', className)}>
         <div

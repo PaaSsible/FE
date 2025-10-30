@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  ConnectionState,
   Room,
   RoomEvent,
   Track,
@@ -68,6 +69,8 @@ export function useLiveKitRoom({
     updateParticipant,
     clearParticipants,
     removeInactiveUserIds,
+    setScreenShare,
+    clearScreenShare,
   } = useMeetingStore()
 
   const applyParticipantSnapshot = useCallback(
@@ -123,8 +126,49 @@ export function useLiveKitRoom({
           isSpeaking: false,
         })
       }
+
+      const screenPub = participant.getTrackPublication(Track.Source.ScreenShare) as
+        | RemoteTrackPublication
+        | undefined
+      const screenMuted = screenPub?.isMuted ?? false
+      const screenTrack = (screenPub?.track as RemoteVideoTrack | null) ?? null
+      const currentShare = useMeetingStore.getState().screenShare
+
+      if (screenTrack && !screenMuted) {
+        if (!currentShare || !currentShare.isLocal) {
+          const mediaTrack = screenTrack.mediaStreamTrack
+          if (mediaTrack) {
+            const previousTrackId =
+              currentShare && currentShare.ownerId === participant.identity
+                ? (currentShare.stream.getVideoTracks()[0]?.id ?? null)
+                : null
+            if (
+              !currentShare ||
+              currentShare.ownerId !== participant.identity ||
+              previousTrackId !== mediaTrack.id ||
+              currentShare.ownerName !== userName ||
+              currentShare.profileImageUrl !== (profileImageUrl ?? null)
+            ) {
+              const stream = new MediaStream([mediaTrack])
+              setScreenShare({
+                ownerId: participant.identity,
+                ownerName: userName,
+                profileImageUrl: profileImageUrl ?? null,
+                stream,
+                isLocal: false,
+              })
+            }
+          }
+        }
+      } else if (
+        currentShare &&
+        !currentShare.isLocal &&
+        currentShare.ownerId === participant.identity
+      ) {
+        clearScreenShare()
+      }
     },
-    [addOrUpdateParticipant, updateParticipant],
+    [addOrUpdateParticipant, clearScreenShare, setScreenShare, updateParticipant],
   )
 
   const refreshParticipants = useCallback(() => {
@@ -154,6 +198,7 @@ export function useLiveKitRoom({
           setIsConnected(false)
           setRemoteParticipants([])
           clearParticipants()
+          clearScreenShare()
         })
 
         .on(RoomEvent.ParticipantConnected, (p) => {
@@ -164,6 +209,10 @@ export function useLiveKitRoom({
         .on(RoomEvent.ParticipantDisconnected, (p) => {
           debug('participant disconnected', p.identity)
           refreshParticipants()
+          const shareState = useMeetingStore.getState().screenShare
+          if (shareState && !shareState.isLocal && shareState.ownerId === p.identity) {
+            clearScreenShare()
+          }
           removeParticipant(p.identity)
         })
         .on(RoomEvent.TrackSubscribed, (track, pub, p) => {
@@ -211,6 +260,7 @@ export function useLiveKitRoom({
       clearParticipants,
       applyParticipantSnapshot,
       refreshParticipants,
+      clearScreenShare,
       removeInactiveUserIds,
       removeParticipant,
       updateParticipant,
@@ -231,8 +281,9 @@ export function useLiveKitRoom({
       setRemoteParticipants([])
       setLivekitInfo(null)
       clearParticipants()
+      clearScreenShare()
     }
-  }, [clearParticipants])
+  }, [clearParticipants, clearScreenShare])
 
   const connect = useCallback(async () => {
     if (!meetId || !displayName) {
@@ -373,6 +424,7 @@ export function useLiveKitRoom({
     const room = roomRef.current
     const participant = room?.localParticipant
     if (!room || !participant) return
+    if (room.state !== ConnectionState.Connected) return
 
     const syncTrack = async (
       lp: LocalParticipant,
@@ -387,6 +439,9 @@ export function useLiveKitRoom({
         if (nextTrack) await lp.publishTrack(nextTrack, { source })
       } catch (err) {
         const msg = err instanceof Error ? err.message : typeof err === 'string' ? err : 'Unknown'
+        if (room.state !== ConnectionState.Connected && /not connected/i.test(String(msg))) {
+          return
+        }
         console.error(`[LiveKit] Failed to sync ${String(source)} track: ${msg}`)
       }
     }

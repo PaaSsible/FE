@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 
 import { useLiveKitRoom } from '@/hooks/meeting/useLiveKitRoom'
 import { useMediaStream } from '@/hooks/meeting/useMediaStream'
+import { useScreenShare } from '@/hooks/meeting/useScreenShare'
 import { useMeetingStore } from '@/stores/meetingStore'
 import { getAuthUser } from '@/utils/authToken'
 
@@ -38,6 +39,7 @@ export default function MeetingLeftSection({
     displayName: authUser?.username,
     localStream: media.stream,
   })
+  const screenShareControls = useScreenShare({ room: livekit.room })
   // Select individual primitives from the store instead of returning a new
   // object each render. Returning a fresh object causes getSnapshot to produce
   // a new reference on every call which can trigger React's "Maximum update
@@ -47,6 +49,8 @@ export default function MeetingLeftSection({
   const currentUserId = useMeetingStore((state) => state.currentUserId)
   const currentUserName = useMeetingStore((state) => state.currentUserName)
   const currentUserProfileImageUrl = useMeetingStore((state) => state.currentUserProfileImageUrl)
+  const participants = useMeetingStore((state) => state.participants)
+  const screenShareState = useMeetingStore((state) => state.screenShare)
 
   const shouldRenderTimer = isHost
     ? isTimerVisible || timerStatus === 'running' || timerStatus === 'paused'
@@ -58,32 +62,62 @@ export default function MeetingLeftSection({
     }
   }, [livekit.error])
 
+  const screenShareOwnerParticipant = screenShareState
+    ? participants.find((participant) => participant.userId === screenShareState.ownerId)
+    : undefined
+  const mainStream = screenShareState?.stream ?? media.stream
+  const mainIsCameraOn = screenShareState ? true : media.isCameraOn
+  const mainIsMicOn = screenShareState
+    ? screenShareState.isLocal
+      ? media.isMicOn
+      : (screenShareOwnerParticipant?.isMicOn ?? false)
+    : media.isMicOn
+  const mainUserId = screenShareState?.ownerId ?? currentUserId ?? authUser?.id ?? null
+  const mainUserName = screenShareState?.ownerName ?? currentUserName ?? authUser?.username ?? null
+  const mainProfileImageUrl = screenShareState
+    ? screenShareState.profileImageUrl
+    : currentUserProfileImageUrl
+  const isMainLocalFeed = !screenShareState || screenShareState.isLocal
+  const shouldShowInactiveBadge = !screenShareState
+  const shouldShowSpeakingBadge = !screenShareState
+
   return (
-    <div className="bg-gray-850 flex h-full min-h-0 flex-1 flex-col overflow-hidden px-5 pt-8 pb-4 sm:px-7 sm:pt-12 sm:pb-6 xl:px-8 xl:pt-30 xl:pb-8">
+    <div className="bg-gray-850 flex h-full min-h-0 flex-1 flex-col overflow-hidden px-5 pt-3 pb-4 sm:px-7 sm:pt-12 sm:pb-6 xl:px-8 xl:pt-30 xl:pb-8">
       <div className="flex min-h-0 flex-1 flex-col gap-3 sm:gap-4 xl:gap-6">
         <div
           className="flex-none"
           style={{
-            height: 'clamp(150px, 20vh, 190px)',
+            height: 'clamp(160px, 30vh, 190px)',
           }}
         >
           <MeetingParticipantsBar />
         </div>
         <div className="flex min-h-0 flex-1">
           <MeetingMainVideo
-            stream={media.stream}
-            isCameraOn={media.isCameraOn}
-            isMicOn={media.isMicOn}
-            userId={currentUserId ?? authUser?.id ?? null}
-            userName={currentUserName ?? authUser?.username ?? null}
-            profileImageUrl={currentUserProfileImageUrl}
+            stream={mainStream}
+            isCameraOn={mainIsCameraOn}
+            isMicOn={mainIsMicOn}
+            userId={mainUserId}
+            userName={mainUserName}
+            profileImageUrl={mainProfileImageUrl}
+            isLocalFeed={isMainLocalFeed}
+            showInactiveBadge={shouldShowInactiveBadge}
+            showSpeakingBadge={shouldShowSpeakingBadge}
             className="max-h-[clamp(320px,52vh,620px)] min-h-[clamp(220px,40vh,540px)] flex-1"
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-3 pt-4 sm:gap-4 sm:pt-6">
-        <MeetingControlsBar {...media} meetId={meetId} projectId={projectId} />
+        <MeetingControlsBar
+          {...media}
+          meetId={meetId}
+          projectId={projectId}
+          isScreenSharing={screenShareControls.isScreenSharing}
+          isAnotherSharing={screenShareControls.isAnotherSharing}
+          startScreenShare={screenShareControls.startScreenShare}
+          stopScreenShare={screenShareControls.stopScreenShare}
+        />
         {shouldRenderTimer && (
           <WorkTimer
             isHost={isHost}

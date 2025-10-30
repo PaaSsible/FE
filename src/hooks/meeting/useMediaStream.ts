@@ -22,6 +22,7 @@ export function useMediaStream(): UseMediaStreamResult {
   const [isMicOn, setIsMicOn] = useState(true)
   const streamRef = useRef<MediaStream | null>(null)
   const setCurrentUserMedia = useMeetingStore((state) => state.setCurrentUserMedia)
+  const setLocalPreviewStream = useMeetingStore((state) => state.setLocalPreviewStream)
 
   const stopStream = useCallback(() => {
     const currentStream = streamRef.current
@@ -30,7 +31,8 @@ export function useMediaStream(): UseMediaStreamResult {
     setStream(null)
     setIsCameraOn(false)
     setIsMicOn(false)
-  }, [])
+    setLocalPreviewStream(null)
+  }, [setLocalPreviewStream])
 
   const startStream = useCallback(async () => {
     try {
@@ -64,10 +66,11 @@ export function useMediaStream(): UseMediaStreamResult {
       setStream(combinedStream)
       setIsCameraOn(true)
       setIsMicOn(true)
+      setLocalPreviewStream(combinedStream)
     } catch (error) {
       console.error('Media Error:', error)
     }
-  }, [])
+  }, [setLocalPreviewStream])
 
   const toggleCamera = useCallback(async () => {
     const currentStream = streamRef.current
@@ -90,6 +93,7 @@ export function useMediaStream(): UseMediaStreamResult {
       streamRef.current = nextStream
       setStream(nextStream)
       setIsCameraOn(false)
+      setLocalPreviewStream(nextStream)
     } else {
       try {
         const newVideoStream = await navigator.mediaDevices.getUserMedia({
@@ -110,11 +114,12 @@ export function useMediaStream(): UseMediaStreamResult {
         streamRef.current = nextStream
         setStream(nextStream)
         setIsCameraOn(true)
+        setLocalPreviewStream(nextStream)
       } catch (error) {
         console.error('Camera toggle error:', error)
       }
     }
-  }, [])
+  }, [setLocalPreviewStream])
 
   const toggleMic = useCallback(async () => {
     const currentStream = streamRef.current
@@ -135,6 +140,7 @@ export function useMediaStream(): UseMediaStreamResult {
       streamRef.current = nextStream
       setStream(nextStream)
       setIsMicOn(false)
+      setLocalPreviewStream(nextStream)
     } else {
       try {
         const newAudioStream = await navigator.mediaDevices.getUserMedia({
@@ -155,11 +161,12 @@ export function useMediaStream(): UseMediaStreamResult {
         streamRef.current = nextStream
         setStream(nextStream)
         setIsMicOn(true)
+        setLocalPreviewStream(nextStream)
       } catch (error) {
         console.error('Mic toggle error:', error)
       }
     }
-  }, [])
+  }, [setLocalPreviewStream])
 
   useEffect(() => {
     void startStream()

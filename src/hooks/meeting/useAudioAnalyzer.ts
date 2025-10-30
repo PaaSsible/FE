@@ -8,7 +8,31 @@ export function useAudioAnalyzer(stream: MediaStream | null, isMicOn: boolean) {
   const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
+    const teardown = () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+      if (audioCtxRef.current) {
+        try {
+          void audioCtxRef.current.close()
+        } catch {
+          // ignore close errors
+        }
+        audioCtxRef.current = null
+      }
+      analyserRef.current = null
+    }
+
+    teardown()
+
     if (!stream || !isMicOn) {
+      setIsSpeaking(false)
+      return
+    }
+
+    const hasLiveAudioTrack = stream.getAudioTracks().some((track) => track.readyState === 'live')
+    if (!hasLiveAudioTrack) {
       setIsSpeaking(false)
       return
     }
@@ -70,8 +94,7 @@ export function useAudioAnalyzer(stream: MediaStream | null, isMicOn: boolean) {
     rafRef.current = requestAnimationFrame(loop)
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      void ctx.close()
+      teardown()
     }
   }, [stream, isMicOn])
 
