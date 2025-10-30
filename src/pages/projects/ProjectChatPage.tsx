@@ -43,7 +43,7 @@ export default function ProjectChatPage(): JSX.Element {
       {chatRooms ? (
         <section className="flex flex-col gap-3.5">
           {chatRooms.map((c) => (
-            <ChatRoomItem key={c.roomId} item={c} />
+            <ChatRoomItem key={c.roomId} item={c} projectId={projectId} />
           ))}
         </section>
       ) : (

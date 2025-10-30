@@ -6,13 +6,18 @@ import type { ChatRoom } from '@/types/entities/chat-room/chatRoom.types'
 
 interface ChatRoomProps {
   item: ChatRoom
+  projectId: string | undefined
 }
 
-const ChatRoomItem = ({ item }: ChatRoomProps): JSX.Element => {
+const ChatRoomItem = ({ item, projectId }: ChatRoomProps): JSX.Element => {
   const navigate = useNavigate()
   return (
     <div
-      onClick={() => void navigate(`/chat/${item.roomId}`, { state: { roomName: item.roomName } })}
+      onClick={() =>
+        void navigate(`/chat/${item.roomId}`, {
+          state: { roomName: item.roomName, projectId: projectId },
+        })
+      }
       className="flex w-full cursor-pointer items-center justify-between rounded-lg bg-white px-5 py-4 shadow-sm"
     >
       <div className="mr-4 h-12 w-12 rounded-full bg-zinc-300" />

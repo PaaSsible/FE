@@ -82,12 +82,15 @@ const CHAT_API_URL = import.meta.env.VITE_API_CHAT_URL
 
 interface ProjectChatRoomState {
   roomName: ChatRoom['roomName']
+  projectId: string
 }
 const ProjectChatRoomPage = (): JSX.Element => {
   const navigate = useNavigate()
   const location = useLocation() as { state?: ProjectChatRoomState }
   const { roomId } = useParams<{ projectId: string; roomId: string }>()
   const roomName = location.state?.roomName
+  const projectId = location.state?.projectId
+
   const [messages, setMessages] = useState<Message[]>([])
   const [groupedMessages, SetGroupedMessages] = useState<GroupMessageWithDate[]>()
 
@@ -252,7 +255,7 @@ const ProjectChatRoomPage = (): JSX.Element => {
           <button type="button" className="cursor-pointer">
             <Search className="h-8 w-8 text-stone-700" />
           </button>
-          <ChatRoomMoreButton />
+          <ChatRoomMoreButton projectId={projectId} />
         </span>
       </header>
 

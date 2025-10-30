@@ -107,3 +107,11 @@ export const deleteUserPortfolio = async ({
   const res = await PaaSsibleUser.delete(`/users/portfolios/${parsedPath.portfolioId}`)
   return userAPISchemas.deleteUserPortfolioSchema.response.parse(res.data)
 }
+
+export const getUserNotifications = async (
+  query: UserAPITypes.GetUserNotifications['Query'],
+): Promise<UserAPITypes.GetUserNotifications['Response']> => {
+  const parsedQuery = userAPISchemas.getUserNotificationsSchema.query.parse(query)
+  const res = await PaaSsibleUser.get(`/users/notifications`, { params: parsedQuery })
+  return userAPISchemas.getUserNotificationsSchema.response.parse(res.data)
+}
