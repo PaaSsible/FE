@@ -80,19 +80,18 @@ const boardHandlers: HttpHandler[] = [
   }),
   //보드 진입
   http.get<{ boardId: string }>(`${API_URL}/boards/:boardId`, ({ params }) => {
-    const { boardId } = params
-    const data: BoardAPITypes.GetBoardDetail['Response'] = {
-      success: true,
-      message: '요청이 성공적으로 처리되었습니다.',
-      data: {
-        boardId: 1,
-        positionId: null,
-      },
-      code: 'OK',
-      errors: null,
-    }
-
-    return HttpResponse.json(data)
+    // const { boardId } = params
+    // const data: BoardAPITypes.GetBoardDetail['Response'] = {
+    //   success: true,
+    //   message: '요청이 성공적으로 처리되었습니다.',
+    //   data: {
+    //     boardId: 1,
+    //     positionId: null,
+    //   },
+    //   code: 'OK',
+    //   errors: null,
+    // }
+    // return HttpResponse.json(data)
   }),
   //보드 수정
   http.put<{ boardId: string }>(`${API_URL}/boards/:boardId`, async ({ params, request }) => {
