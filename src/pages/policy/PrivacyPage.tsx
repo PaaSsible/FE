@@ -19,9 +19,9 @@ export default function PrivacyPage() {
       {/* 본문 영역 */}
       <main className="flex flex-col gap-11 leading-relaxed text-gray-900">
         <p>
-          로컬잇(LocallIT, 이하 &quot;회사&quot;)은 「개인정보 보호법」 제30조에 따라 정보주체의
-          개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여
-          다음과 같이 개인정보처리방침을 수립·공개합니다.
+          CoDo(이하 &quot;회사&quot;)은 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를
+          보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이
+          개인정보처리방침을 수립·공개합니다.
         </p>
 
         {/* 제1조 */}
@@ -352,8 +352,8 @@ export default function PrivacyPage() {
           <h2 className="text-b3-bold mb-3">부칙</h2>
           <ol className="text-b5-medium space-y-1">
             <li>본 약관은 2025년 10월 10일부터 적용됩니다.</li>
-            <li>로컬잇(LocallIT)</li>
-            <li>연락처: locallit.team@gmail.com</li>
+            <li>CoDo</li>
+            <li>연락처: codo.team@gmail.com</li>
           </ol>
         </section>
       </main>

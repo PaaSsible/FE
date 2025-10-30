@@ -270,7 +270,12 @@ export default function BoardEditPage(): JSX.Element {
       />
       <Modal
         isOpen={isSubmitModalOpen}
-        title="수정된 내용으로 모집글을 등록하시겠어요?"
+        title={
+          <>
+            수정된 내용으로
+            <br /> 모집글을 등록하시겠어요?
+          </>
+        }
         description={
           <div>
             변경 사항이 즉시 적용되며, 이전 내용은 복구할 수 없습니다.
