@@ -1,20 +1,22 @@
 import dayjs from 'dayjs'
+import DOMPurify from 'dompurify'
 import { FileImage } from 'lucide-react'
-import { useMemo } from 'react'
+import { useMemo, type ReactElement } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import Button from '@/components/atoms/Button'
 import { MypageHeader } from '@/components/feature/mypage/MypageHeader'
 import { useUserPortfolioDetail } from '@/hooks/mypage/useUserPortfolioDetail'
+import { detailTypeToLabel, mainCategoryToLabel } from '@/utils/recruitMeta'
 
-type PortfolioDetailRouteParams = {
-  portfolioId?: string
-  userId?: string
-}
+// params shape is dynamic at runtime; we'll coerce from useParams instead of using a strict generic
 
-export default function PortfolioDetailPage() {
+export default function PortfolioDetailPage(): ReactElement {
   const navigate = useNavigate()
-  const { portfolioId, userId } = useParams<PortfolioDetailRouteParams>()
+  // react-router's useParams can be untyped at runtime; coerce to a record of optional strings
+  const params = useParams() as Record<string, string | undefined>
+  const { portfolioId, userId } = params
 
   const numericPortfolioId = portfolioId ? Number(portfolioId) : NaN
   const isValidPortfolioId = Number.isInteger(numericPortfolioId) && numericPortfolioId > 0
@@ -27,6 +29,17 @@ export default function PortfolioDetailPage() {
 
   const pageTitle = data?.title ?? '포트폴리오 상세'
 
+  const sanitizedDescription = useMemo(() => {
+    if (!data?.description || typeof data.description !== 'string') return ''
+    const purifier = DOMPurify as unknown as { sanitize: (s: string) => string }
+    return purifier.sanitize(data.description)
+  }, [data?.description])
+
+  const hasHtml = useMemo(() => {
+    if (!data?.description || typeof data.description !== 'string') return false
+    return /<\/?[a-z][\s\S]*>/i.test(data.description)
+  }, [data?.description])
+
   const formattedDate = useMemo(() => {
     if (!data?.createdAt) return null
     return dayjs(data.createdAt).format('YYYY.MM.DD')
@@ -35,7 +48,12 @@ export default function PortfolioDetailPage() {
   const primaryMeta = useMemo(() => {
     if (!data) return null
     if (data.mainCategory && data.subCategory) {
-      return `${data.mainCategory} > ${data.subCategory}`
+      const mainCategoryLabel = mainCategoryToLabel(data.mainCategory)
+      const subCategoryLabel = detailTypeToLabel(data.subCategory)
+      return `${mainCategoryLabel} > ${subCategoryLabel}`
+    }
+    if (data.mainCategory) {
+      return mainCategoryToLabel(data.mainCategory)
     }
     if (data.summary) {
       return data.summary
@@ -108,9 +126,17 @@ export default function PortfolioDetailPage() {
             </div>
           </header>
 
-          <section className="prose prose-base text-b5-medium max-w-none text-left text-gray-800">
+          <section className="prose prose-base text-b5-medium mt-6 max-w-none text-left text-gray-800">
             {data.description ? (
-              <div dangerouslySetInnerHTML={{ __html: data.description }} />
+              hasHtml ? (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizedDescription,
+                  }}
+                />
+              ) : (
+                <ReactMarkdown>{data.description}</ReactMarkdown>
+              )
             ) : (
               <p>본문 내용이 없습니다.</p>
             )}

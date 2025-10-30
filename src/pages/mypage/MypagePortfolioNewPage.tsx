@@ -10,6 +10,7 @@ import Button from '@/components/atoms/Button'
 import Dropdown from '@/components/atoms/Dropdown'
 import TextEditor from '@/components/common/TextEditor'
 import { MypageHeader } from '@/components/feature/mypage/MypageHeader'
+import { Spinner } from '@/components/ui/spinner'
 import { useUpdateUserPortfolio } from '@/hooks/mypage/useUpdateUserPortfolio'
 import { useUserPortfolioDetail } from '@/hooks/mypage/useUserPortfolioDetail'
 import { positionsArray } from '@/types/entities/recruit-post/recruitPost.schemas'
@@ -48,6 +49,10 @@ export default function MypagePortfolioNewPage() {
   })
 
   const { updatePortfolio, isSubmitting: isUpdating } = useUpdateUserPortfolio()
+  const isSubmitting = isCreating || isUpdating
+  const submittingMessage = isEditMode
+    ? '포트폴리오를 수정하는 중입니다...'
+    : '포트폴리오를 등록하는 중입니다...'
 
   useEffect(() => {
     if (!isEditMode || !portfolioDetail) return
@@ -102,8 +107,7 @@ export default function MypagePortfolioNewPage() {
   const isSubmitDisabled =
     isCoverUploading ||
     isUploading ||
-    isCreating ||
-    isUpdating ||
+    isSubmitting ||
     (isEditMode && isDetailLoading) ||
     !title.trim() ||
     !selectedPositionId ||
@@ -421,10 +425,28 @@ export default function MypagePortfolioNewPage() {
             {isEditMode ? '수정 취소' : '작성 취소'}
           </Button>
           <Button onClick={() => void handleSubmit()} disabled={isSubmitDisabled}>
-            {isEditMode ? '수정 완료' : '등록하기'}
+            {isSubmitting ? (
+              <>
+                <Spinner className="text-gray-0 mr-2 size-4" />
+                {isEditMode ? '수정 중...' : '등록 중...'}
+              </>
+            ) : isEditMode ? (
+              '수정 완료'
+            ) : (
+              '등록하기'
+            )}
           </Button>
         </div>
       </section>
+
+      {isSubmitting && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
+          <div className="flex flex-col items-center gap-3 rounded-lg bg-white px-8 py-6 shadow-lg">
+            <Spinner className="text-locallit-red-500 size-6" />
+            <span className="text-b4-medium text-gray-800">{submittingMessage}</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

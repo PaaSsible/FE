@@ -24,6 +24,8 @@ const createDisplayMediaStream = async (): Promise<MediaStream> => {
     return await navigator.mediaDevices.getDisplayMedia({
       video: {
         frameRate: { ideal: 30, max: 60 },
+        // cursor 옵션은 실제 브라우저에서 유효하지만 TS 타입에는 없음
+        // @ts-expect-error 'cursor'는 MediaTrackConstraints 표준에 포함되지 않음
         cursor: 'always',
       },
       audio: true,
@@ -50,46 +52,42 @@ export function useScreenShare({ room }: UseScreenShareOptions): UseScreenShareR
   const localScreenStreamRef = useRef<MediaStream | null>(null)
 
   const stopScreenShare = useCallback(async () => {
-    const participant = room?.localParticipant
+    const roomInstance = room
+    const participant = roomInstance?.localParticipant
     const currentLocalStream = localScreenStreamRef.current
     localScreenStreamRef.current = null
 
-    const ensureCleared = () => {
-      const shareState = useMeetingStore.getState().screenShare
-      if (shareState?.isLocal) {
-        clearScreenShare()
+    const unpublishTrack = async (source: Track.Source) => {
+      if (!participant) return
+      try {
+        const publication = participant.getTrackPublication(source)
+        const publishedTrack = publication?.track ?? null
+        if (publishedTrack) {
+          await participant.unpublishTrack(publishedTrack)
+        }
+      } catch (err) {
+        console.warn('[ScreenShare] failed to unpublish track', source, err)
       }
     }
 
-    try {
-      const unpublishTrack = async (source: Track.Source) => {
-        if (!participant) return
-        try {
-          const publication = participant.getTrackPublication(source)
-          const publishedTrack = publication?.track ?? null
-          if (publishedTrack) {
-            await participant.unpublishTrack(publishedTrack)
-          }
-        } catch (err) {
-          console.warn('[ScreenShare] failed to unpublish track', source, err)
-        }
-      }
+    await Promise.all([
+      unpublishTrack(Track.Source.ScreenShare),
+      unpublishTrack(Track.Source.ScreenShareAudio),
+    ])
 
-      await Promise.all([
-        unpublishTrack(Track.Source.ScreenShare),
-        unpublishTrack(Track.Source.ScreenShareAudio),
-      ])
-    } finally {
-      if (currentLocalStream) {
-        currentLocalStream.getTracks().forEach((track) => {
-          try {
-            track.stop()
-          } catch (err) {
-            console.warn('[ScreenShare] failed to stop track', err)
-          }
-        })
-      }
-      ensureCleared()
+    if (currentLocalStream) {
+      currentLocalStream.getTracks().forEach((track) => {
+        try {
+          track.stop()
+        } catch (err) {
+          console.warn('[ScreenShare] failed to stop track', err)
+        }
+      })
+    }
+
+    const shareState = useMeetingStore.getState().screenShare
+    if (shareState?.isLocal) {
+      clearScreenShare()
     }
   }, [clearScreenShare, room])
 

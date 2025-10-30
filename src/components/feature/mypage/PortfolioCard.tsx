@@ -3,6 +3,7 @@ import { EllipsisVertical } from 'lucide-react'
 import type { KeyboardEvent } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { detailTypeToLabel, mainCategoryToLabel } from '@/utils/recruitMeta'
 import { formatDate } from '@/utils/relativeTime'
 
 interface PortfolioCardProps {
@@ -123,7 +124,7 @@ export default function PortfolioCard({
         <div>
           {showCategory && (
             <div className="text-l2-medium text-gray-550">
-              {mainCategory} &gt; {subCategory}
+              {mainCategoryToLabel(mainCategory)} &gt; {detailTypeToLabel(subCategory)}
             </div>
           )}
           {showContribution && (
