@@ -37,6 +37,8 @@ jobs:
             --build-arg VITE_API_MEET_URL=${{ secrets.VITE_API_MEET_URL }} \
             --build-arg VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }} \
             --build-arg VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} \
+            --build-arg VITE_WS_MEET_URL=${{ secrets.VITE_WS_MEET_URL }} \
+            --build-arg VITE_WEBSOCKET_CHAT_URL=${{ secrets.VITE_WEBSOCKET_CHAT_URL }} \
             -t seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }} .
           docker push seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
 
