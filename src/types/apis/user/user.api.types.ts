@@ -2,6 +2,7 @@ import z from 'zod'
 
 import type {
   deleteUserPortfolioSchema,
+  getUserNotificationsSchema,
   getUserPortfolioDetailSchema,
   getUserPortfoliosSchema,
   getUserProfileSchema,
@@ -65,4 +66,9 @@ export type PutUserPortfolio = {
 export type DeleteUserPortfolio = {
   Path: z.infer<typeof deleteUserPortfolioSchema.path>
   Response: z.infer<typeof deleteUserPortfolioSchema.response>
+}
+
+export type GetUserNotifications = {
+  Query: z.infer<typeof getUserNotificationsSchema.query>
+  Response: z.infer<typeof getUserNotificationsSchema.response>
 }

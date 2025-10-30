@@ -1,4 +1,6 @@
-import z from 'zod'
+import z, { success } from 'zod'
+
+import { notificationSchema, notificationTypeArray } from '@/types/entities/user/user.schemas'
 
 const degreeTypeSchema = z.enum([
   'HIGH_SCHOOL',
@@ -201,6 +203,19 @@ export const deleteUserPortfolioSchema = {
     success: z.boolean(),
     message: z.string().nullable(),
     data: z.unknown().nullable(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+export const getUserNotificationsSchema = {
+  query: z.object({
+    type: z.enum(notificationTypeArray).optional(),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.array(notificationSchema),
     code: z.string(),
     errors: z.string().nullable(),
   }),
