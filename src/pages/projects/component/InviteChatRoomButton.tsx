@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 import clsx from 'clsx'
-import { Check, MessageSquarePlus } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useEffect, useState, type JSX } from 'react'
 import { useParams } from 'react-router-dom'
 import { ZodError } from 'zod'
@@ -16,8 +16,9 @@ import {
   AlertDialogDescription,
   AlertDialogCancel,
   AlertDialogAction,
+  AlertDialogFooter,
+  AlertDialogHeader,
 } from '@/components/ui/alert-dialog'
-import { AlertDialogFooter, AlertDialogHeader } from '@/components/ui/alert-dialog'
 import type { PostChatRoom } from '@/types/apis/chat/chat.api.types'
 import type { BoardMember } from '@/types/entities/board/board.entitites.types'
 import { getAuthUser } from '@/utils/authToken'
