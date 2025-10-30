@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { FileImage } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -76,6 +77,13 @@ export default function PortfolioDetailPage() {
         </div>
       ) : (
         <div>
+          {data.imageName && (
+            <div className="bg-gray-250 mt-4 flex w-fit items-center justify-center gap-2 rounded-md px-[11px] py-[6px]">
+              <FileImage size={24} />
+              {data.imageName}
+            </div>
+          )}
+
           <header className="mt-6 flex justify-between border-b-[1.5px] border-gray-300 pb-6">
             {primaryMeta && <span className="text-b4-medium text-gray-700">{primaryMeta}</span>}
             <div className="text-b5-medium flex flex-wrap items-center gap-6 text-gray-900">

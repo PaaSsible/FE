@@ -22,9 +22,9 @@ export default function TermsPage() {
         <section>
           <h2 className="text-b3-bold mb-3">제1조 (목적)</h2>
           <p className="text-b5-medium">
-            본 약관은 로컬잇(LocallIT, 이하 &quot;회사&quot;)이 제공하는 지방 대학생 IT 활동 지원
-            플랫폼 서비스(이하 &quot;서비스&quot;)의 이용과 관련하여 회사와 이용자 간의 권리, 의무
-            및 책임사항을 규정함을 목적으로 합니다.
+            본 약관은 Codo(Codo, 이하 &quot;회사&quot;)이 제공하는 지방 대학생 IT 활동 지원 플랫폼
+            서비스(이하 &quot;서비스&quot;)의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및
+            책임사항을 규정함을 목적으로 합니다.
           </p>
         </section>
 
@@ -32,7 +32,7 @@ export default function TermsPage() {
         <section>
           <h2 className="text-b3-bold mb-3">제2조 (정의)</h2>
           <ol className="text-b5-medium list-decimal space-y-2 pl-5">
-            <li>&quot;회사&quot;라 함은 로컬잇(LocallIT) 서비스를 운영하는 사업자를 의미합니다.</li>
+            <li>&quot;회사&quot;라 함은 CoDo 서비스를 운영하는 사업자를 의미합니다.</li>
             <li>
               &quot;서비스&quot;라 함은 지방 대학생들의 IT 활동을 지원하기 위해 회사가 제공하는
               다음의 서비스를 의미합니다:
@@ -282,8 +282,8 @@ export default function TermsPage() {
           <h2 className="text-b3-bold mb-3">부칙</h2>
           <ol className="text-b5-medium space-y-1">
             <li>본 약관은 2025년 10월 10일부터 적용됩니다.</li>
-            <li>로컬잇(LocallIT)</li>
-            <li>연락처: locallit.team@gmail.com</li>
+            <li>CoDo</li>
+            <li>연락처: codo.team@gmail.com</li>
           </ol>
         </section>
       </main>

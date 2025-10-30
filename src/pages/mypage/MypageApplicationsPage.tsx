@@ -152,11 +152,6 @@ export default function MypageApplicationsPage() {
             <h2 className="text-s1-bold text-gray-900">거절 사유 확인</h2>
 
             <div className="text-b5-medium mt-4 text-gray-800">
-              {selectedRejectApplication && (
-                <p className="text-b6-medium mb-2 text-gray-600">
-                  지원한 모집글: {selectedRejectApplication.title}
-                </p>
-              )}
               <p className="mb-4">
                 아쉽게도 이번 팀프로젝트에서는 함께하지 못하게 되었어요.
                 <br />

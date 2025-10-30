@@ -105,6 +105,7 @@ export const postUserPortfolioSchema = {
     title: z.string().min(1, '제목은 필수 항목입니다.'),
     summary: z.string().nullable().optional(),
     description: z.string().min(1, '본문은 필수 항목입니다.'),
+    image: z.string().nullable().optional(),
   }),
   response: z.object({
     success: z.boolean(),
@@ -139,6 +140,8 @@ const userPortfolioItemSchema = z.object({
   subCategory: z.string().nullable(),
   contribution: z.number().nullable(),
   generatedByAi: z.boolean().optional(),
+  imageUrl: z.string().nullable().optional(),
+  imageName: z.string().nullable().optional(),
   createdAt: z.string(),
 })
 

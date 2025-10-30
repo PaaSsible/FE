@@ -3,15 +3,13 @@ import type { JSX } from 'react'
 import GoogleLoginButton from '@/components/feature/auth/GoogleLoginButton'
 
 const StartPage = (): JSX.Element => {
-  const startIllustrationSrc = '/assets/images/start-illustration.png'
-
   return (
     <div className="flex h-screen items-center justify-center bg-white px-[50px]">
       {/* 좌측 */}
       <div className="flex w-[512px] flex-col justify-center gap-[53px] text-left">
         <div className="space-y-2">
           <h1 className="text-h3-medium">시작하기</h1>
-          <p className="text-b4-regular">로컬잇과 함께 온라인 IT 협업을 효과적으로 진행해보세요!</p>
+          <p className="text-b4-regular">CoDo와 함께 온라인 IT 협업을 효과적으로 진행해보세요!</p>
         </div>
         <GoogleLoginButton />
       </div>

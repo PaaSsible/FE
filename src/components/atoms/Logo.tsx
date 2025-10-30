@@ -6,13 +6,11 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ onClick }) => {
-  const logoSrc = '/assets/logo.svg'
-
   return (
     <img
-      src={'assets/images/logo.svg'}
-      alt="로컬잇 로고"
-      style={{ height: 'auto', width: '72px', cursor: onClick ? 'pointer' : 'default' }}
+      src={'assets/images/codo.svg'}
+      alt="CoDo 로고"
+      style={{ height: 'auto', width: '115px', cursor: onClick ? 'pointer' : 'default' }}
       onClick={onClick}
     />
   )
