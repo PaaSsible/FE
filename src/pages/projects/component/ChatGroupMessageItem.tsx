@@ -13,20 +13,6 @@ interface GroupMessageItemProps {
 const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
   dayjs.locale('ko') // 한글 오전/오후
 
-  const downloadFileAs = async (url: string, saveAsName: string) => {
-    try {
-      const res = await fetch(url, { credentials: 'include' }) // 인증 필요시
-      const blob = await res.blob()
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = saveAsName
-      link.click()
-      URL.revokeObjectURL(link.href)
-    } catch (err) {
-      console.error('파일 다운로드 실패', err)
-    }
-  }
-
   return (
     <div className={`flex ${item.isMine ? 'justify-end' : 'justify-start'} gap-3`}>
       {!item.isMine && <div className="h-10 w-10 shrink-0 rounded-full bg-zinc-300" />}
