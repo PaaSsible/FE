@@ -1,6 +1,7 @@
 import { MoreVertical } from 'lucide-react'
-import type { JSX, MouseEvent } from 'react'
+import { useState, type JSX, type MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'storybook/internal/preview-api'
 
 import {
   DropdownMenu,
@@ -8,6 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
+import ProjectDeleteButton from './ProjectDeleteButton'
 
 interface MoreDropdownProps {
   projectId: number
@@ -40,11 +43,8 @@ const MoreDropdown = ({ projectId }: MoreDropdownProps): JSX.Element => {
         >
           수정
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={onDeleteButton}
-          className="w-full justify-start px-5 py-2.5 font-['Inter'] text-base leading-normal font-normal text-white"
-        >
-          삭제
+        <DropdownMenuItem asChild onSelect={(e) => e.preventDefault()}>
+          <ProjectDeleteButton boardId={projectId} />
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={onWithdrawalButton}
