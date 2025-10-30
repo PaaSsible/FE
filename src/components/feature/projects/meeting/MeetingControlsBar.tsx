@@ -13,6 +13,10 @@ type TransferCandidate = NonNullable<NonNullable<MeetingLeaveResponse['candidate
 interface MeetingControlsBarProps extends UseMediaStreamResult {
   meetId?: number
   projectId?: number
+  isScreenSharing: boolean
+  isAnotherSharing: boolean
+  startScreenShare: () => Promise<void>
+  stopScreenShare: () => Promise<void>
 }
 
 export default function MeetingControlsBar({
@@ -20,6 +24,10 @@ export default function MeetingControlsBar({
   isCameraOn,
   toggleMic,
   toggleCamera,
+  isScreenSharing,
+  isAnotherSharing,
+  startScreenShare,
+  stopScreenShare,
   meetId,
   projectId,
 }: MeetingControlsBarProps) {
@@ -50,6 +58,34 @@ export default function MeetingControlsBar({
     setTransferCandidates([])
     setSelectedHostId(null)
   }, [])
+
+  const handleToggleScreenShare = useCallback(async () => {
+    if (isScreenSharing) {
+      try {
+        await stopScreenShare()
+        toast.success('화면 공유를 종료했습니다.')
+      } catch (error) {
+        console.error(error)
+        const message = error instanceof Error ? error.message : '화면 공유를 종료하지 못했습니다.'
+        toast.error(message)
+      }
+      return
+    }
+
+    if (isAnotherSharing) {
+      toast.error('다른 참가자가 이미 화면을 공유 중입니다.')
+      return
+    }
+
+    try {
+      await startScreenShare()
+      toast.success('화면 공유를 시작했습니다.')
+    } catch (error) {
+      console.error(error)
+      const message = error instanceof Error ? error.message : '화면 공유를 시작하지 못했습니다.'
+      toast.error(message)
+    }
+  }, [isAnotherSharing, isScreenSharing, startScreenShare, stopScreenShare])
 
   const handleSelectHost = (id: number) => setSelectedHostId(id)
 
@@ -174,7 +210,7 @@ export default function MeetingControlsBar({
 
   return (
     <>
-      <div className="flex items-center justify-center gap-2">
+      <div className="mb-5 flex items-center justify-center gap-2">
         <button
           onClick={() => void toggleMic()}
           className={`flex h-[50px] w-[50px] items-center justify-center rounded-lg transition-colors ${
@@ -193,7 +229,13 @@ export default function MeetingControlsBar({
           {isCameraOn ? <Video size={24} /> : <VideoOff size={24} />}
         </button>
 
-        <button className="flex h-[50px] w-[50px] items-center justify-center rounded-lg bg-gray-700 hover:bg-gray-600">
+        <button
+          onClick={() => void handleToggleScreenShare()}
+          disabled={!isScreenSharing && isAnotherSharing}
+          className={`flex h-[50px] w-[50px] items-center justify-center rounded-lg transition-colors ${
+            isScreenSharing ? 'bg-[#2F80ED] hover:bg-[#2563EB]' : 'bg-gray-700 hover:bg-gray-600'
+          } disabled:cursor-not-allowed disabled:opacity-60`}
+        >
           <Airplay size={24} />
         </button>
 

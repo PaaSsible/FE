@@ -13,6 +13,13 @@ export default function MeetingParticipantsBar(): ReactElement {
   const participants = useMeetingStore((state) => state.participants)
   const inactiveUserIds = useMeetingStore((state) => state.inactiveUserIds)
   const highlightedSpeakerUserId = useMeetingStore((state) => state.highlightedSpeakerUserId)
+  const screenShare = useMeetingStore((state) => state.screenShare)
+  const localPreviewStream = useMeetingStore((state) => state.localPreviewStream)
+  const currentUserId = useMeetingStore((state) => state.currentUserId)
+  const currentUserName = useMeetingStore((state) => state.currentUserName)
+  const currentUserProfileImageUrl = useMeetingStore((state) => state.currentUserProfileImageUrl)
+  const currentUserMedia = useMeetingStore((state) => state.currentUserMedia)
+  const isCurrentUserSpeaking = useMeetingStore((state) => state.isCurrentUserSpeaking)
   const [carouselApi, setCarouselApi] = useState<CarouselApi>()
   const [canScrollPrev, setCanScrollPrev] = useState(false)
   const [canScrollNext, setCanScrollNext] = useState(false)
@@ -32,10 +39,48 @@ export default function MeetingParticipantsBar(): ReactElement {
     }
   }, [carouselApi])
 
-  const totalPages = Math.ceil(Math.max(participants.length, 1) / SLIDES_PER_PAGE)
-  const cells = [
-    ...participants,
-    ...Array.from({ length: totalPages * SLIDES_PER_PAGE - participants.length }).map(() => null),
+  const localUserId = currentUserId ?? 'local'
+  const shouldShowLocalPreview = Boolean(screenShare?.isLocal && localPreviewStream)
+
+  const renderParticipants: ParticipantTileProps[] = [
+    ...(shouldShowLocalPreview && localPreviewStream
+      ? [
+          {
+            variant: 'local',
+            userId: localUserId,
+            userName: currentUserName ?? '나',
+            isMicOn: currentUserMedia.isMicOn,
+            isCameraOn: currentUserMedia.isCameraOn,
+            isSpeaking: isCurrentUserSpeaking,
+            isHighlighted: highlightedSpeakerUserId === localUserId,
+            isInactive: inactiveUserIds.includes(localUserId),
+            profileImageUrl: currentUserProfileImageUrl ?? null,
+            stream: localPreviewStream,
+          } satisfies ParticipantTileProps,
+        ]
+      : []),
+    ...participants.map(
+      (user) =>
+        ({
+          variant: 'remote',
+          userId: user.userId,
+          userName: user.userName,
+          isMicOn: user.isMicOn,
+          isCameraOn: user.isCameraOn,
+          isSpeaking: user.isSpeaking,
+          isHighlighted: highlightedSpeakerUserId === user.userId,
+          isInactive: inactiveUserIds.includes(user.userId),
+          profileImageUrl: user.profileImageUrl ?? null,
+          videoTrack: user.videoTrack ?? null,
+        }) satisfies ParticipantTileProps,
+    ),
+  ]
+  const totalParticipants = renderParticipants.length
+  const totalPages = Math.ceil(Math.max(totalParticipants, 1) / SLIDES_PER_PAGE)
+  const fillerCount = totalPages * SLIDES_PER_PAGE - totalParticipants
+  const cells: Array<ParticipantTileProps | null> = [
+    ...renderParticipants,
+    ...Array.from({ length: fillerCount }).map(() => null),
   ]
 
   useEffect(() => {
@@ -43,8 +88,8 @@ export default function MeetingParticipantsBar(): ReactElement {
   }, [carouselApi, cells.length])
 
   return (
-    <div className="carousel-viewport relative flex h-full max-h-[190px] min-h-[150px] w-full flex-col justify-center rounded-xl bg-gray-800 px-6 py-5">
-      {participants.length === 0 ? (
+    <div className="carousel-viewport relative flex h-full max-h-[190px] min-h-[150px] w-full flex-col justify-center rounded-xl bg-gray-800 px-6 py-4">
+      {totalParticipants === 0 ? (
         <p className="text-b4-medium text-gray-500">아직 참석한 팀원이 없습니다.</p>
       ) : (
         <Carousel
@@ -63,18 +108,7 @@ export default function MeetingParticipantsBar(): ReactElement {
                 {cells.map((user, i) => (
                   <CarouselItem key={i} className="basis-1/4 pt-4 pl-3">
                     {user ? (
-                      <ParticipantTile
-                        key={user.userId}
-                        userId={user.userId}
-                        userName={user.userName}
-                        isMicOn={user.isMicOn}
-                        isCameraOn={user.isCameraOn}
-                        isSpeaking={user.isSpeaking}
-                        isHighlighted={highlightedSpeakerUserId === user.userId}
-                        isInactive={inactiveUserIds.includes(user.userId)}
-                        videoTrack={user.videoTrack ?? null}
-                        profileImageUrl={user.profileImageUrl}
-                      />
+                      <ParticipantTile key={user.userId} {...user} />
                     ) : (
                       <div className="flex h-full flex-col items-center justify-center rounded-xl border border-transparent bg-transparent" />
                     )}
@@ -86,7 +120,7 @@ export default function MeetingParticipantsBar(): ReactElement {
         </Carousel>
       )}
 
-      {participants.length > 0 && (
+      {totalParticipants > 0 && (
         <>
           <button
             type="button"
@@ -110,7 +144,8 @@ export default function MeetingParticipantsBar(): ReactElement {
   )
 }
 
-type TileProps = {
+type ParticipantTileProps = {
+  variant: 'remote' | 'local'
   userId: string
   userName: string
   isMicOn: boolean
@@ -118,11 +153,13 @@ type TileProps = {
   isSpeaking: boolean
   isHighlighted: boolean
   isInactive: boolean
-  videoTrack: import('livekit-client').RemoteVideoTrack | null
-  profileImageUrl?: string
+  videoTrack?: import('livekit-client').RemoteVideoTrack | null
+  stream?: MediaStream | null
+  profileImageUrl?: string | null
 }
 
 function ParticipantTile({
+  variant,
   userId,
   userName,
   isMicOn,
@@ -131,16 +168,17 @@ function ParticipantTile({
   isHighlighted,
   isInactive,
   videoTrack,
+  stream,
   profileImageUrl,
-}: TileProps) {
+}: ParticipantTileProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const attachedTrackRef = useRef<import('livekit-client').RemoteVideoTrack | null>(null)
 
   useEffect(() => {
+    if (variant !== 'remote') return
     const el = videoRef.current
     if (!el) return
 
-    // If the attached track changed, detach the previous one first.
     if (attachedTrackRef.current && attachedTrackRef.current !== videoTrack) {
       try {
         attachedTrackRef.current.detach(el)
@@ -166,7 +204,6 @@ function ParticipantTile({
       }
     }
 
-    // camera is off or track missing: ensure we detach any previously attached track
     try {
       if (attachedTrackRef.current) {
         attachedTrackRef.current.detach(el)
@@ -176,7 +213,33 @@ function ParticipantTile({
     try {
       el.srcObject = null
     } catch {}
-  }, [videoTrack, isCameraOn])
+  }, [variant, videoTrack, isCameraOn])
+
+  useEffect(() => {
+    if (variant !== 'local') return
+    const el = videoRef.current
+    if (!el) return
+
+    if (isCameraOn && stream) {
+      try {
+        if (el.srcObject !== stream) {
+          el.srcObject = stream
+        }
+      } catch (error) {
+        console.warn('[ParticipantTile] failed to attach local preview stream', error)
+      }
+    } else {
+      try {
+        el.srcObject = null
+      } catch {}
+    }
+
+    return () => {
+      try {
+        el.srcObject = null
+      } catch {}
+    }
+  }, [isCameraOn, stream, variant])
 
   const showSpeakingBadge = isSpeaking || isHighlighted
 
@@ -196,11 +259,12 @@ function ParticipantTile({
         {isInactive && (
           <div className="animate-freezeOverlay pointer-events-none absolute inset-0 z-10 rounded-md bg-white/5" />
         )}
-        {isCameraOn && videoTrack ? (
+        {isCameraOn && ((variant === 'remote' && videoTrack) || (variant === 'local' && stream)) ? (
           <video
             ref={videoRef}
             autoPlay
             playsInline
+            muted={variant === 'local'}
             className="absolute inset-0 h-full w-full rounded-lg object-cover"
           />
         ) : (
