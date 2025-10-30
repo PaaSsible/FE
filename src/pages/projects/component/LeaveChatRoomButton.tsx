@@ -24,13 +24,10 @@ const LeaveChatRoomButton = (): JSX.Element => {
 
   const onLeaveButton = () => {
     try {
-      // 3은 temp
-      const projectId = '3'
-
-      toast.promise(() => deleteChatRoom({ boardId: Number(projectId), roomId: Number(roomId) }), {
+      toast.promise(() => deleteChatRoom({ roomId: Number(roomId) }), {
         loading: '처리 중...',
         success: () => {
-          void navigate(`/projects/${projectId}/chat`)
+          void navigate(`/projects`)
           return '채팅방이 삭제되었습니다.'
         },
         error: '처리 중 오류가 발생하였습니다.',

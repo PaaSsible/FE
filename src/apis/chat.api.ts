@@ -36,7 +36,7 @@ export const postChatRoom = async (
 /**
  * @name 채팅방 퇴장
  * @method DELETE
- * @path `/boards/{boardId}/chats/rooms/{roomId}`
+ * @path `/chats/rooms/{roomId}`
  */
 export const deleteChatRoom = async (
   path: ChatApiTypes.DeleteChatRoom['Path'],

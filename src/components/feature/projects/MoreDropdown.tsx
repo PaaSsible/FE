@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import ProjectDeleteButton from './ProjectDeleteButton'
+import ProjectLeaveButton from './ProjectLeaveButton'
 
 interface MoreDropdownProps {
   projectId: number
@@ -22,13 +23,6 @@ const MoreDropdown = ({ projectId }: MoreDropdownProps): JSX.Element => {
   const onEditButton = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     void navigate(`${projectId}/edit`)
-  }
-  const onDeleteButton = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
-  }
-
-  const onWithdrawalButton = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
   }
 
   return (
@@ -46,11 +40,8 @@ const MoreDropdown = ({ projectId }: MoreDropdownProps): JSX.Element => {
         <DropdownMenuItem asChild onSelect={(e) => e.preventDefault()}>
           <ProjectDeleteButton boardId={projectId} />
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={onWithdrawalButton}
-          className="w-full justify-start px-5 py-2.5 font-['Inter'] text-base leading-normal font-normal text-white"
-        >
-          나가기
+        <DropdownMenuItem asChild onSelect={(e) => e.preventDefault()}>
+          <ProjectLeaveButton boardId={projectId} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

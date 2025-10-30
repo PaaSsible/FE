@@ -103,7 +103,6 @@ const ProjectChatRoomPage = (): JSX.Element => {
           { roomId: Number(roomId) },
           { page: 0, size: 20 },
         )
-        console.log(response)
         setMessages(response.data.messages)
       } catch (error) {
         if (error instanceof ZodError) console.error('타입에러', error)
@@ -132,7 +131,7 @@ const ProjectChatRoomPage = (): JSX.Element => {
         SetGroupedMessages(groupedByDate)
       }
     }
-  }, [])
+  }, [messages])
 
   // websocket
   const client = useRef<Client>(null)

@@ -54,7 +54,6 @@ export const postChatRoomSchema = {
  */
 export const deleteChatRoomSchema = {
   path: z.object({
-    boardId: boardSchema.shape.boardId,
     roomId: chatRoomSchema.shape.roomId,
   }),
   response: z.object({
