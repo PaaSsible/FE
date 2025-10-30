@@ -24,7 +24,18 @@ export type PostChatRoomInvitation = {
   Response: z.infer<(typeof chatApiSchema)['postChatRoomInvitationSchema']['response']>
 }
 
-export type PaginationDirectionEnum = typeof chatApiSchema.paginationDirectionArray
+export type GetChatRoomInvitationAvailableMember = {
+  Path: z.infer<(typeof chatApiSchema)['getChatRoomInvitationAvailableMemberSchema']['path']>
+  Response: z.infer<
+    (typeof chatApiSchema)['getChatRoomInvitationAvailableMemberSchema']['response']
+  >
+}
+
+export type GetChatRoomMember = {
+  Path: z.infer<(typeof chatApiSchema)['getChatRoomMemberSchema']['path']>
+  Response: z.infer<(typeof chatApiSchema)['getChatRoomMemberSchema']['response']>
+}
+
 export type GetChatRoomMessages = {
   Path: z.infer<(typeof chatApiSchema)['getChatRoomMessagesSchema']['path']>
   Query: z.infer<(typeof chatApiSchema)['getChatRoomMessagesSchema']['query']>

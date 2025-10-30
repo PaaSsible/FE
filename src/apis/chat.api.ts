@@ -1,3 +1,5 @@
+import type z from 'zod'
+
 import PaaSsibleBoard from '@/config/interceptors/board.interceptor'
 import PaaSsibleChat from '@/config/interceptors/chat.interceptor'
 import * as chatApiSchemas from '@/types/apis/chat/chat.api.schemas'
@@ -60,6 +62,32 @@ export const postChatRoomInvitation = async (
     parsedBody,
   )
   return chatApiSchemas.postChatRoomInvitationSchema.response.parse(res.data)
+}
+
+/**
+ * @name 채팅방 초대가능 팀원 조회
+ * @method GET
+ * @path `/chats/rooms/{roomId}/member/invite`
+ */
+export const getChatRoomInvitationAvailableMember = async (
+  path: ChatApiTypes.GetChatRoomInvitationAvailableMember['Path'],
+): Promise<ChatApiTypes.GetChatRoomInvitationAvailableMember['Response']> => {
+  const parsedPath = chatApiSchemas.getChatRoomInvitationAvailableMemberSchema.path.parse(path)
+  const res = await PaaSsibleChat.get(`/chats/rooms/${parsedPath.roomId}/member/invite`)
+  return chatApiSchemas.getChatRoomInvitationAvailableMemberSchema.response.parse(res.data)
+}
+
+/**
+ * @name 채팅방 팀원 조회
+ * @method GET
+ * @path `/chats/rooms/{roomId}/member`
+ */
+export const getChatRoomMember = async (
+  path: ChatApiTypes.GetChatRoomMember['Path'],
+): Promise<ChatApiTypes.GetChatRoomMember['Response']> => {
+  const parsedPath = chatApiSchemas.getChatRoomMemberSchema.path.parse(path)
+  const res = await PaaSsibleChat.get(`/chats/rooms/${parsedPath.roomId}/member`)
+  return chatApiSchemas.getChatRoomMemberSchema.response.parse(res.data)
 }
 
 /**
