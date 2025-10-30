@@ -22,30 +22,36 @@ export default function ProfileHeader({
   if (!profile) return null
 
   return (
-    <header className="flex w-full flex-col bg-white px-15">
+    <header className="flex w-full flex-col bg-white p-12">
       {showBackButton && (
-        <div className="flex items-center gap-3 py-4">
+        <div className="mb-8 flex items-center gap-[15px]">
           <button
             onClick={() => void navigate(-1)}
             className="flex h-9 w-9 cursor-pointer items-center justify-center"
           >
-            <ChevronLeft size={28} className="text-gray-500" />
+            <ChevronLeft size={36} className="text-gray-900" />
           </button>
 
-          <h1 className="text-[18px] font-semibold text-gray-900">{title}</h1>
+          <h1 className="text-s1-bold text-gray-900">{title}</h1>
         </div>
       )}
 
       {/* 프로필 본문 */}
-      <div className="flex items-start justify-between pb-6">
+      <div className="flex items-start justify-between pt-2 pb-4">
         <div className="flex items-center gap-6">
           <div className="h-[161px] w-[161px] rounded-full bg-gray-300" />
-          <div className="flex flex-col items-start">
-            <div className="text-[20px] font-semibold text-gray-900">{profile.nickname}</div>
-            <div className="text-gray-500">{profile.positionName}</div>
-            <div className="text-sm text-gray-400">{profile.university}</div>
+          <div className="flex flex-col items-start gap-6">
+            <div className="flex flex-col gap-[5px]">
+              <div className="flex items-center gap-4">
+                <div className="text-b1-bold text-gray-900">{profile.nickname}</div>
+                <div className="text-b4-medium text-gray-500">{profile.positionName}</div>
+              </div>
+              <div className="text-b5-regular text-gray-500">
+                {profile.university} · {profile.major}
+              </div>
+            </div>
 
-            <div className="mt-3 flex gap-2">
+            <div className="flex gap-2">
               {profile.stackNames.map((stack, i) => (
                 <Tag key={`${stack}-${i}`} label={stack} />
               ))}
@@ -53,7 +59,11 @@ export default function ProfileHeader({
           </div>
         </div>
 
-        {showEditButton && <Button variant="secondary">프로필 수정</Button>}
+        {showEditButton && (
+          <Button variant="secondary" size="big" className="!text-b5-bold !h-[42px]">
+            프로필 수정
+          </Button>
+        )}
       </div>
     </header>
   )

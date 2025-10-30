@@ -3,6 +3,8 @@ import '@/styles/App.css'
 import { Toaster } from 'react-hot-toast'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import { Toaster as ShadcnToaster } from '@/components/ui/sonner'
+
 // Public
 import Layout from './components/common/Layout'
 import MypageLayout from './components/common/MypageLayout'
@@ -23,17 +25,19 @@ import MypageNotificationsPage from './pages/mypage/MypageNotificationsPage'
 import MypagePortfolioNewPage from './pages/mypage/MypagePortfolioNewPage'
 import MypagePortfolioPage from './pages/mypage/MypagePortfolioPage'
 import MypageProfilePage from './pages/mypage/MypageProfilePage'
+import PortfolioDetailPage from './pages/mypage/PortfolioDetailPage'
 import PrivacyPage from './pages/policy/PrivacyPage'
 import TermsPage from './pages/policy/TermsPage'
 // Projects
 import ProjectBoardPage from './pages/projects/ProjectBoardPage'
 import ProjectChatPage from './pages/projects/ProjectChatPage'
-import ProjectDetailPage from './pages/projects/ProjectDetailPage'
+import ProjectChatRoomPage from './pages/projects/ProjectChatRoomPage'
 import ProjectEditPage from './pages/projects/ProjectEditPage'
 import ProjectMeetingPage from './pages/projects/ProjectMeetingPage'
 import ProjectMeetingRoomPage from './pages/projects/ProjectMeetingRoomPage'
 import ProjectNewPage from './pages/projects/ProjectNewPage'
 import ProjectStatusPage from './pages/projects/ProjectStatusPage'
+import ProjectTaskPage from './pages/projects/ProjectTaskPage'
 import ProjectsPage from './pages/projects/ProjectsPage'
 import UserProfilePage from './pages/users/UserProfilePage'
 
@@ -61,7 +65,7 @@ function App(): JSX.Element {
           },
         }}
       />
-
+      <ShadcnToaster position="top-right" />
       <Routes>
         {/* Public */}
         <Route element={<Layout isLoggedIn={false} />}>
@@ -82,10 +86,11 @@ function App(): JSX.Element {
           {/* Projects */}
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/new" element={<ProjectNewPage />} />
+          <Route path="projects/:projectId/edit" element={<ProjectEditPage />} />
           <Route path="projects/:projectId" element={<ProjectsLayout />}>
-            <Route index element={<ProjectDetailPage />} />
-            <Route path="edit" element={<ProjectEditPage />} />
             <Route path="board" element={<ProjectBoardPage />} />
+            <Route path="board/:taskId" element={<ProjectTaskPage />} />
+
             <Route path="status" element={<ProjectStatusPage />} />
             <Route path="meeting" element={<ProjectMeetingPage />} />
             <Route path="chat" element={<ProjectChatPage />} />
@@ -98,10 +103,16 @@ function App(): JSX.Element {
             <Route path="applications" element={<MypageApplicationsPage />} />
             <Route path="notifications" element={<MypageNotificationsPage />} />
           </Route>
+          <Route path="mypage/portfolio/:portfolioId" element={<PortfolioDetailPage />} />
           <Route path="mypage/portfolio/new" element={<MypagePortfolioNewPage />} />
 
           <Route path="users/:userId/profile" element={<UserProfilePage />} />
+          <Route
+            path="users/:userId/profile/portfolio/:portfolioId"
+            element={<PortfolioDetailPage />}
+          />
         </Route>
+        <Route path="chat/:roomId" element={<ProjectChatRoomPage />} />
 
         <Route path="start" element={<StartPage />} />
         <Route path="login/oauth2/code/google" element={<AuthCallBackPage />} />

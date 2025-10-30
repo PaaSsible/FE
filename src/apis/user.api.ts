@@ -50,6 +50,16 @@ export const postUserUpload = async (
   return userAPISchemas.postUserUploadSchema.response.parse(res.data)
 }
 
+export const getUserProfile = async ({
+  userId,
+}: {
+  userId: number
+}): Promise<UserAPITypes.GetUserProfile['Response']> => {
+  const parsedPath = userAPISchemas.getUserProfileSchema.path.parse({ userId })
+  const res = await PaaSsibleUser.get(`/users/profile/${parsedPath.userId}`)
+  return userAPISchemas.getUserProfileSchema.response.parse(res.data)
+}
+
 export const getUserPortfolios = async ({
   userId,
   page,
@@ -66,4 +76,42 @@ export const getUserPortfolios = async ({
     params: parsedQuery,
   })
   return userAPISchemas.getUserPortfoliosSchema.response.parse(res.data)
+}
+
+export const getUserPortfolioDetail = async ({
+  portfolioId,
+}: {
+  portfolioId: number
+}): Promise<UserAPITypes.GetUserPortfolioDetail['Response']> => {
+  const parsedPath = userAPISchemas.getUserPortfolioDetailSchema.path.parse({ portfolioId })
+  const res = await PaaSsibleUser.get(`/users/portfolios/${parsedPath.portfolioId}`)
+  return userAPISchemas.getUserPortfolioDetailSchema.response.parse(res.data)
+}
+
+export const putUserPortfolio = async (
+  { portfolioId }: { portfolioId: number },
+  body: UserAPITypes.PutUserPortfolio['Body'],
+): Promise<UserAPITypes.PutUserPortfolio['Response']> => {
+  const parsedPath = userAPISchemas.putUserPortfolioSchema.path.parse({ portfolioId })
+  const parsedBody = userAPISchemas.putUserPortfolioSchema.body.parse(body)
+  const res = await PaaSsibleUser.put(`/users/portfolios/${parsedPath.portfolioId}`, parsedBody)
+  return userAPISchemas.putUserPortfolioSchema.response.parse(res.data)
+}
+
+export const deleteUserPortfolio = async ({
+  portfolioId,
+}: {
+  portfolioId: number
+}): Promise<UserAPITypes.DeleteUserPortfolio['Response']> => {
+  const parsedPath = userAPISchemas.deleteUserPortfolioSchema.path.parse({ portfolioId })
+  const res = await PaaSsibleUser.delete(`/users/portfolios/${parsedPath.portfolioId}`)
+  return userAPISchemas.deleteUserPortfolioSchema.response.parse(res.data)
+}
+
+export const getUserNotifications = async (
+  query: UserAPITypes.GetUserNotifications['Query'],
+): Promise<UserAPITypes.GetUserNotifications['Response']> => {
+  const parsedQuery = userAPISchemas.getUserNotificationsSchema.query.parse(query)
+  const res = await PaaSsibleUser.get(`/users/notifications`, { params: parsedQuery })
+  return userAPISchemas.getUserNotificationsSchema.response.parse(res.data)
 }

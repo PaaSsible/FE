@@ -1,32 +1,42 @@
 import PaaSsibleRecruit from '@/config/interceptors/recruit.interceptor'
 import {
+  deleteRecruitApplicationSchema,
   deleteRecruitCommentSchema,
   deleteRecruitSchema,
+  getMyRecruitApplicationsSchema,
   getMyRecruitSchema,
   getPositionsSchema,
   getRecruitApplicantsSchema,
+  postRecruitApplicationSchema,
   getRecruitCommentsSchema,
   getRecruitDetailSchema,
   getRecruitsSchema,
   getStacksSchema,
   postRecruitApplicantAcceptSchema,
+  postRecruitApplicantRejectSchema,
+  getRecruitApplicationRejectReasonSchema,
   postRecruitCommentSchema,
   postRecruitSchema,
   putRecruitCommentSchema,
   putRecruitSchema,
 } from '@/types/apis/recruit/recruit.api.schemas'
 import type {
+  DeleteRecruitApplication,
   DeleteRecruit,
   DeleteRecruitComment,
+  GetMyRecruitApplications,
   GetMyRecruit,
   GetPositions,
   GetRecruitApplicants,
+  PostRecruitApplication,
   GetRecruitComments,
   GetRecruitDetail,
   GetRecruits,
   GetStacks,
   PostRecruit,
   PostRecruitApplicantAccept,
+  PostRecruitApplicantReject,
+  GetRecruitApplicationRejectReason,
   PostRecruitComment,
   PutRecruit,
   PutRecruitComment,
@@ -125,6 +135,40 @@ export const getRecruitApplicants = async (
   return getRecruitApplicantsSchema.response.parse(res.data)
 }
 
+/**
+ * @name 나의 지원 내역 조회
+ */
+export const getMyRecruitApplications = async (): Promise<GetMyRecruitApplications['Response']> => {
+  const res = await PaaSsibleRecruit.get(`/recruits/my`)
+  return getMyRecruitApplicationsSchema.response.parse(res.data)
+}
+
+/**
+ * @name 모집글지원
+ * @param path
+ */
+export const postRecruitApplication = async (
+  path: PostRecruitApplication['Path'],
+): Promise<PostRecruitApplication['Response']> => {
+  const parsedPath = postRecruitApplicationSchema.path.parse(path)
+  const res = await PaaSsibleRecruit.post(`/recruits/${parsedPath.postId}/applications`)
+  return postRecruitApplicationSchema.response.parse(res.data)
+}
+
+/**
+ * @name 모집 지원 취소
+ * @param path
+ */
+export const deleteRecruitApplication = async (
+  path: DeleteRecruitApplication['Path'],
+): Promise<DeleteRecruitApplication['Response']> => {
+  const parsedPath = deleteRecruitApplicationSchema.path.parse(path)
+  const res = await PaaSsibleRecruit.delete(`/recruits/${parsedPath.applicationId}/cancel`, {
+    params: { applicationId: parsedPath.applicationId },
+  })
+  return deleteRecruitApplicationSchema.response.parse(res.data)
+}
+
 // 응답 temp
 /**
  * @name 지원수락
@@ -134,14 +178,44 @@ export const getRecruitApplicants = async (
 export const postRecruitApplicantAccept = async (
   path: PostRecruitApplicantAccept['Path'],
   body: PostRecruitApplicantAccept['Body'],
-): Promise<any> => {
+): Promise<PostRecruitApplicantAccept['Response']> => {
   const parsedPath = postRecruitApplicantAcceptSchema.path.parse(path)
   const parsedBody = postRecruitApplicantAcceptSchema.body.parse(body)
   const res = await PaaSsibleRecruit.post(
     `/recruits/${parsedPath.postId}/applications/${parsedPath.applicationId}/accept`,
     parsedBody,
   )
-  return res.data
+  return postRecruitApplicantAcceptSchema.response.parse(res.data)
+}
+
+/**
+ * @name 지원거절
+ * @param path
+ * @param body
+ */
+export const postRecruitApplicantReject = async (
+  path: PostRecruitApplicantReject['Path'],
+  body: PostRecruitApplicantReject['Body'],
+): Promise<PostRecruitApplicantReject['Response']> => {
+  const parsedPath = postRecruitApplicantRejectSchema.path.parse(path)
+  const parsedBody = postRecruitApplicantRejectSchema.body.parse(body)
+  const res = await PaaSsibleRecruit.post(
+    `/recruits/${parsedPath.postId}/applications/${parsedPath.applicationId}/reject`,
+    parsedBody,
+  )
+  return postRecruitApplicantRejectSchema.response.parse(res.data)
+}
+
+/**
+ * @name 지원거절사유조회
+ * @param path
+ */
+export const getRecruitApplicationRejectReason = async (
+  path: GetRecruitApplicationRejectReason['Path'],
+): Promise<GetRecruitApplicationRejectReason['Response']> => {
+  const parsedPath = getRecruitApplicationRejectReasonSchema.path.parse(path)
+  const res = await PaaSsibleRecruit.get(`/recruits/${parsedPath.applicationId}/reject-reason`)
+  return getRecruitApplicationRejectReasonSchema.response.parse(res.data)
 }
 
 /**

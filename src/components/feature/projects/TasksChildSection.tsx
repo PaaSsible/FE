@@ -2,9 +2,12 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { Plus } from 'lucide-react'
 import { useEffect, useState, type JSX } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 import { postTask } from '@/apis/task.api'
 import Button from '@/components/atoms/Button'
+import { usePostTask } from '@/queries/task.queries'
 import type { PostTask } from '@/types/apis/board/task.api.types'
 import type { BoardMember, Task, TaskStatus } from '@/types/entities/board/board.entitites.types'
 import { positionsArray } from '@/types/entities/recruit-post/recruitPost.schemas'
@@ -44,6 +47,7 @@ const TasksChildSection = ({
   const [selectedPositions, setSelectedPositions] = useState<Position['id'][]>([])
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(true)
   const [isNewTaskFormVisible, setIsNewTaskFormVisible] = useState<boolean>(false)
+  const { mutate: addTask } = usePostTask({ boardId: Number(projectId) })
 
   const membersToMultiSelectOptions: MultiSelectOption[] = members
     ? members.map((m, _) => ({
@@ -56,13 +60,15 @@ const TasksChildSection = ({
     value: position,
   }))
 
+  const navigate = useNavigate()
+
   const handleSelectedMembers = (selectedNames: string[]) => {
     if (!members) return
     const selected = members.filter((m) => selectedNames.includes(m.userName)).map((m) => m.userId)
     setSelectedMembers(selected)
   }
 
-  const handleSelectedPostions = (selectedPositions: string[]) => {
+  const handleSelectedPositions = (selectedPositions: string[]) => {
     const positionWithId = positionsArray.map((p, index) => ({ id: index + 1, name: p }))
     const selected = positionWithId
       .filter((p) => selectedPositions.includes(p.name))
@@ -70,23 +76,38 @@ const TasksChildSection = ({
     setSelectedPositions(selected)
   }
 
-  const handleNewTaskAdd = async () => {
+  const handleNewTaskAdd = () => {
     try {
       const body: PostTask['Body'] = {
         title,
-        dueDate: String(dueDate),
+        dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
         assigneeIds: selectedMembers,
         positionIds: selectedPositions,
       }
-      const response = await postTask({ boardId: Number(projectId) }, body)
-      setIsNewTaskFormVisible(false)
-      setTitle('')
-      setDueDate(undefined)
-      setSelectedMembers([])
-      setSelectedPositions([])
+      addTask(body, {
+        onSuccess: () => {
+          setIsNewTaskFormVisible(false)
+          setTitle('')
+          setDueDate(undefined)
+          setSelectedMembers([])
+          setSelectedPositions([])
+          toast.success('작업이 추가되었습니다.')
+        },
+        onError: () => {
+          toast.error('작업 추가 중 오류가 발생했습니다.')
+        },
+      })
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const handleNewTaskAddCancel = () => {
+    setIsNewTaskFormVisible(false)
+    setTitle('')
+    setDueDate(undefined)
+    setSelectedMembers([])
+    setSelectedPositions([])
   }
 
   useEffect(() => {
@@ -108,6 +129,7 @@ const TasksChildSection = ({
             <li
               key={task.id}
               className="flex w-full flex-col items-start gap-[2.125rem] rounded bg-white px-3 pt-[0.6875rem] pb-3"
+              onClick={() => void navigate(`${task.id}`)}
             >
               <div className="justify-center text-left text-base leading-normal font-semibold text-zinc-900 opacity-80">
                 {task.title}
@@ -150,7 +172,7 @@ const TasksChildSection = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className={clsx(
-                'mb-[1.125rem] h-6 w-64 text-base leading-normal font-semibold outline-none',
+                'mb-[1.125rem] h-6 w-full text-base leading-normal font-semibold outline-none',
                 { 'text-zinc-900 opacity-50': !title, 'text-black': title },
               )}
             />
@@ -162,10 +184,13 @@ const TasksChildSection = ({
             />
             <MultiSelect
               options={positionsToMultiSelectOptions}
-              onValueChange={(value: string[]) => handleSelectedPostions(value)}
+              onValueChange={(value: string[]) => handleSelectedPositions(value)}
               placeholder="파트 선택"
             />
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-1">
+              <Button variant="secondary" onClick={() => handleNewTaskAddCancel()}>
+                취소
+              </Button>
               <Button disabled={isSubmitButtonDisabled} onClick={() => void handleNewTaskAdd()}>
                 등록
               </Button>

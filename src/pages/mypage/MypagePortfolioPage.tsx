@@ -1,28 +1,42 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import Button from '@/components/atoms/Button'
 import Modal from '@/components/common/Modal'
 import { Pagination } from '@/components/common/Pagination'
 import { MypageHeader } from '@/components/feature/mypage/MypageHeader'
 import PortfolioCard from '@/components/feature/mypage/PortfolioCard'
+import PortfolioCreationNotice from '@/components/feature/mypage/PortfolioCreationNotice'
+import { useDeleteUserPortfolio } from '@/hooks/mypage/useDeleteUserPortfolio'
 import { useUserPortfolios } from '@/hooks/mypage/useUserPortfolios'
 import { getAuthUser } from '@/utils/authToken'
 
+type PortfolioCreationState = {
+  boardId?: number | null
+  boardName?: string | null
+  mainCategory?: string | null
+  subCategory?: string | null
+}
+
 export default function MypagePortfolioPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const authUser = getAuthUser()
   const [currentPage, setCurrentPage] = useState(1)
   const [modalType, setModalType] = useState<'edit' | 'delete' | null>(null)
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const pageSize = 12
 
+  const portfolioCreationState = (
+    location.state as { portfolioCreation?: PortfolioCreationState } | null | undefined
+  )?.portfolioCreation
+  const showPortfolioCreationNotice = Boolean(portfolioCreationState)
+
   const userId = Number(authUser?.id)
 
-  const { data, isLoading, isError } = useUserPortfolios({
+  const { data, isLoading, isError, refetch } = useUserPortfolios({
     userId,
     page: currentPage - 1,
     size: pageSize,
@@ -38,6 +52,13 @@ export default function MypagePortfolioPage() {
   }, [pagination])
 
   const hasPortfolio = portfolios.length > 0
+  const { deletePortfolio, isDeleting } = useDeleteUserPortfolio({
+    onSuccess: () => {
+      setModalType(null)
+      setSelectedId(null)
+      refetch()
+    },
+  })
 
   useEffect(() => {
     if (!pagination || isLoading) return
@@ -57,13 +78,22 @@ export default function MypagePortfolioPage() {
     setModalType('delete')
   }
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (modalType === 'edit' && selectedId !== null) {
+      setModalType(null)
+      setSelectedId(null)
       void navigate('/mypage/portfolio/new', { state: { editId: selectedId } })
-    } else if (modalType === 'delete' && selectedId !== null) {
-      console.log(`포트폴리오 ${selectedId} 삭제됨`)
-      toast.success('포트폴리오가 삭제되었습니다.')
+      return
     }
+
+    if (modalType === 'delete' && selectedId !== null) {
+      const success = await deletePortfolio(selectedId)
+      if (!success) {
+        return
+      }
+      return
+    }
+
     setModalType(null)
     setSelectedId(null)
   }
@@ -89,6 +119,13 @@ export default function MypagePortfolioPage() {
         <Button onClick={() => void navigate('/mypage/portfolio/new')}>추가하기</Button>
       </div>
 
+      <PortfolioCreationNotice
+        isVisible={showPortfolioCreationNotice}
+        projectName={portfolioCreationState?.boardName}
+        mainCategory={portfolioCreationState?.mainCategory}
+        subCategory={portfolioCreationState?.subCategory}
+      />
+
       <div className="flex min-h-[850px] flex-col">
         {isError ? (
           <div className="flex flex-1 items-center justify-center text-gray-500">
@@ -101,11 +138,14 @@ export default function MypagePortfolioPage() {
         ) : hasPortfolio ? (
           <>
             <div className="flex-1">
-              <div className="grid grid-cols-4 gap-6">
+              <div className="grid grid-cols-4 gap-[19px]">
                 {portfolios.map((p) => (
                   <PortfolioCard
                     key={p.id}
                     {...p}
+                    onSelect={() => {
+                      void navigate(`/mypage/portfolio/${p.id}`)
+                    }}
                     onEdit={() => handleEditClick(p.id)}
                     onDelete={() => handleDeleteClick(p.id)}
                   />
@@ -154,7 +194,11 @@ export default function MypagePortfolioPage() {
         cancelLabel="뒤로가기"
         confirmLabel={modalType === 'edit' ? '수정하기' : '삭제하기'}
         onCancel={handleCloseModal}
-        onConfirm={handleConfirm}
+        onConfirm={() => {
+          void handleConfirm()
+        }}
+        cancelDisabled={modalType === 'delete' && isDeleting}
+        confirmDisabled={modalType === 'delete' && isDeleting}
       />
     </div>
   )

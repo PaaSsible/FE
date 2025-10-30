@@ -36,7 +36,7 @@ export const putBoard = async (
   body: BoardAPITypes.PutBoard['Body'],
 ): Promise<BoardAPITypes.PutBoard['Response']> => {
   const parsedPath = boardAPISchemas.putBoardSchema.path.parse(path)
-  const parsedBody = boardAPISchemas.putBoardSchema.path.parse(body)
+  const parsedBody = boardAPISchemas.putBoardSchema.body.parse(body)
   const res = await PaaSsibleBoard.put(`/boards/${parsedPath.boardId}`, parsedBody)
   return boardAPISchemas.putBoardSchema.response.parse(res.data)
 }
@@ -54,7 +54,19 @@ export const deleteBoard = async (
 }
 
 /**
- * @name 보드진입
+ * @name 보드 진입
+ * @param path
+ */
+export const getBoardUserPosition = async (
+  path: BoardAPITypes.GetBoardUserPosition['Path'],
+): Promise<BoardAPITypes.GetBoardUserPosition['Response']> => {
+  const parsedPath = boardAPISchemas.getBoardUserPositionSchema.path.parse(path)
+  const res = await PaaSsibleBoard.get(`/boards/${parsedPath.boardId}/enter`)
+  return boardAPISchemas.getBoardUserPositionSchema.response.parse(res.data)
+}
+
+/**
+ * @name 보드 상세 조회
  * @param path
  */
 export const getBoardDetail = async (
@@ -106,4 +118,16 @@ export const patchBoardMember = async (
     { params: parsedQuery },
   )
   return boardAPISchemas.patchBoardMemberSchema.response.parse(res.data)
+}
+
+/**
+ * @name 보드포트폴리오생성
+ * @param path
+ */
+export const postBoardPortfolio = async (
+  path: BoardAPITypes.PostBoardPortfolio['Path'],
+): Promise<BoardAPITypes.PostBoardPortfolio['Response']> => {
+  const parsedPath = boardAPISchemas.postBoardPortfolioSchema.path.parse(path)
+  const res = await PaaSsibleBoard.post(`/boards/${parsedPath.boardId}/portfolio`)
+  return boardAPISchemas.postBoardPortfolioSchema.response.parse(res.data)
 }

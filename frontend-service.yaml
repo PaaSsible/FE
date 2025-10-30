@@ -12,7 +12,7 @@ metadata:
   labels:
     app: frontend-app # Deployment 라벨
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: frontend-app # Pod 선택용 selector

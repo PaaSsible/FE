@@ -1,4 +1,39 @@
-import z from 'zod'
+import z, { success } from 'zod'
+
+import { notificationSchema, notificationTypeArray } from '@/types/entities/user/user.schemas'
+
+const degreeTypeSchema = z.enum([
+  'HIGH_SCHOOL',
+  'COLLEGE',
+  'UNIVERSITY',
+  'GRADUATE_MASTER',
+  'GRADUATE_DOCTOR',
+])
+
+const graduationStatusSchema = z.enum([
+  'ENROLLED',
+  'LEAVE_OF_ABSENCE',
+  'GRADUATED',
+  'EXPECTED',
+  'COMPLETED',
+  'DROPPED_OUT',
+])
+
+const userProfileSchema = z.object({
+  id: z.number(),
+  nickname: z.string(),
+  email: z.string().nullable().optional(),
+  profileImageUrl: z.string().nullable().optional(),
+  positionName: z.string().nullable().optional(),
+  stackNames: z.array(z.string()).nullable().optional(),
+  degreeType: degreeTypeSchema.nullable().optional(),
+  university: z.string().nullable().optional(),
+  major: z.string().nullable().optional(),
+  graduationStatus: graduationStatusSchema.nullable().optional(),
+  introductionTitle: z.string().nullable().optional(),
+  introductionContent: z.string().nullable().optional(),
+  role: z.string().nullable().optional(),
+})
 
 export const postLoginSchema = {
   body: z.object({
@@ -51,12 +86,26 @@ export const patchUserTermsSchema = {
   }),
 }
 
+export const getUserProfileSchema = {
+  path: z.object({
+    userId: z.number().int().positive(),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: userProfileSchema,
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
 export const postUserPortfolioSchema = {
   body: z.object({
     positionId: z.number().int().positive(),
     title: z.string().min(1, '제목은 필수 항목입니다.'),
     summary: z.string().nullable().optional(),
     description: z.string().min(1, '본문은 필수 항목입니다.'),
+    image: z.string().nullable().optional(),
   }),
   response: z.object({
     success: z.boolean(),
@@ -91,6 +140,8 @@ const userPortfolioItemSchema = z.object({
   subCategory: z.string().nullable(),
   contribution: z.number().nullable(),
   generatedByAi: z.boolean().optional(),
+  imageUrl: z.string().nullable().optional(),
+  imageName: z.string().nullable().optional(),
   createdAt: z.string(),
 })
 
@@ -115,6 +166,59 @@ export const getUserPortfoliosSchema = {
       hasNext: z.boolean(),
       hasPrevious: z.boolean(),
     }),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+const userPortfolioDetailSchema = userPortfolioItemSchema.extend({
+  positionId: z.number().int().positive().optional(),
+  description: z.string().optional(),
+  updatedAt: z.string().nullable().optional(),
+})
+
+export const getUserPortfolioDetailSchema = {
+  path: z.object({
+    portfolioId: z.number().int().positive(),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: userPortfolioDetailSchema,
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+export const putUserPortfolioSchema = {
+  path: z.object({
+    portfolioId: z.number().int().positive(),
+  }),
+  body: postUserPortfolioSchema.body,
+  response: postUserPortfolioSchema.response,
+}
+
+export const deleteUserPortfolioSchema = {
+  path: z.object({
+    portfolioId: z.number().int().positive(),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.unknown().nullable(),
+    code: z.string(),
+    errors: z.string().nullable(),
+  }),
+}
+
+export const getUserNotificationsSchema = {
+  query: z.object({
+    type: z.enum(notificationTypeArray).optional(),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    message: z.string().nullable(),
+    data: z.array(notificationSchema),
     code: z.string(),
     errors: z.string().nullable(),
   }),

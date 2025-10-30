@@ -1,20 +1,16 @@
 import { AxiosError } from 'axios'
 import { useEffect, useState, type JSX } from 'react'
 import { useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { ZodError } from 'zod'
 
-import { getBoardDetail, getBoardMember, patchBoardMember } from '@/apis/board.api'
-import { getTaskList } from '@/apis/task.api'
+import { getBoardMember, getBoardUserPosition, patchBoardMember } from '@/apis/board.api'
 import SearchBar from '@/components/common/SearchBar'
+import PositionSelectModal from '@/components/feature/projects/PositionSelectModal'
+import TasksChildSection from '@/components/feature/projects/TasksChildSection'
+import { useGetProjectTasks } from '@/queries/task.queries'
 import { type Task, type BoardMember } from '@/types/entities/board/board.entitites.types'
 import type { Position } from '@/types/entities/recruit-post/recruitPost.types'
-
-import PositionSelectModal from './components/PositionSelectModal'
-import TasksChildSection from './components/TasksChildSection'
-
-// interface ProjectBoardPageProps {
-//   projectTitle: string
-// }
 
 export default function ProjectBoardPage(): JSX.Element {
   const { projectId } = useParams<{ projectId: string }>()
@@ -22,34 +18,38 @@ export default function ProjectBoardPage(): JSX.Element {
   const [isPositionSelectModalVisible, setIsPositionSelectModalVisible] = useState<boolean>(false)
   const [members, setMembers] = useState<BoardMember[]>()
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
-  const [tasks, setTasks] = useState<Task[]>([])
+
+  const { data: taskData, isLoading } = useGetProjectTasks({ boardId: Number(projectId) })
+  const tasks = taskData.data
   const [searchValue, setSearchValue] = useState<string>('')
 
-  const onPositionSelectConfirmButton = async (position: Position) => {
-    try {
-      await patchBoardMember({ boardId: Number(projectId) }, { positionId: position.id })
-      // 새로고침 필요
-      setIsPositionSelectModalVisible(false)
-    } catch (error) {
-      if (error instanceof ZodError) console.error('타입에러')
-      else if (error instanceof AxiosError) console.error('네트워크에러')
-    }
+  const onPositionSelectConfirmButton = (position: Position) => {
+    toast.promise(patchBoardMember({ boardId: Number(projectId) }, { positionId: position.id }), {
+      success: () => {
+        setIsPositionSelectModalVisible(false)
+        return '포지션이 선택되었습니다.'
+      },
+      error: '처리 중 오류가 발생하였습니다.',
+      loading: '처리 중...',
+    })
   }
 
   useEffect(() => {
-    // const getUserPositionData = async () => {
-    //   try {
-    //     const data = await getBoardDetail({ boardId: Number(projectId) }).then((res) => res.data)
-    //     const positionId = data.positionId
-    //     if (positionId === null) {
-    //       setIsPositionSelectModalVisible(true)
-    //     }
-    //   } catch (error) {
-    //     if (error instanceof ZodError) console.error('타입에러', error)
-    //     else if (error instanceof AxiosError) console.error('네트워크 에러', error)
-    //   }
-    // }
-    // void getUserPositionData()
+    const getUserPositionData = async () => {
+      try {
+        const data = await getBoardUserPosition({ boardId: Number(projectId) }).then(
+          (res) => res.data,
+        )
+        const positionId = data.positionId
+        if (positionId === null) {
+          setIsPositionSelectModalVisible(true)
+        }
+      } catch (error) {
+        if (error instanceof ZodError) console.error('타입에러', error)
+        else if (error instanceof AxiosError) console.error('네트워크 에러', error)
+      }
+    }
+    void getUserPositionData()
 
     const getProjectMember = async () => {
       try {
@@ -61,18 +61,6 @@ export default function ProjectBoardPage(): JSX.Element {
       }
     }
     void getProjectMember()
-
-    const getProjectTasks = async () => {
-      try {
-        const response = await getTaskList({ boardId: Number(projectId) })
-        setTasks(response.data)
-        setFilteredTasks(response.data)
-      } catch (error) {
-        if (error instanceof ZodError) console.error('타입에러', error)
-        else if (error instanceof AxiosError) console.error('네트워크 에러', error)
-      }
-    }
-    void getProjectTasks()
   }, [projectId])
 
   useEffect(() => {
@@ -108,7 +96,7 @@ export default function ProjectBoardPage(): JSX.Element {
   }, [searchValue, tasks])
 
   return (
-    <div className="flex min-h-full flex-1 flex-col px-[6.4375rem] pt-12">
+    <div className="flex min-h-full flex-col">
       <div className="mb-9 flex items-center justify-between">
         <div className="font-['Pretendard'] text-3xl leading-10 font-semibold text-black">
           프로젝트 이름
@@ -138,6 +126,7 @@ export default function ProjectBoardPage(): JSX.Element {
           members={members}
           projectId={projectId}
         />
+
         <TasksChildSection
           tasks={filteredTasks.filter((task) => task.status === 'ONGOING')}
           status={'ONGOING'}
@@ -157,7 +146,7 @@ export default function ProjectBoardPage(): JSX.Element {
         cancelLabel={'취소'}
         confirmLabel={'선택하기'}
         onCancel={() => setIsPositionSelectModalVisible(false)}
-        onConfirm={(p: Position) => void onPositionSelectConfirmButton(p)}
+        onConfirm={(p: Position) => onPositionSelectConfirmButton(p)}
       />
     </div>
   )

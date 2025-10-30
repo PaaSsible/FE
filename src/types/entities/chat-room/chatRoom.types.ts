@@ -1,7 +1,13 @@
 import type z from 'zod'
 
-import type { chatRoomSchema, messageTypeArray, messageSchema } from './chatRoom.schemas'
+import type {
+  chatMessageSchema,
+  chatMessageTypeArray,
+  chatRoomMemberSchema,
+  chatRoomSchema,
+} from './chatRoom.schemas'
 
-export type ChatRooom = z.infer<typeof chatRoomSchema>
-export type MessageType = (typeof messageTypeArray)[number]
-export type Message = z.infer<typeof messageSchema>
+export type ChatRoom = z.infer<typeof chatRoomSchema>
+export type MessageType = (typeof chatMessageTypeArray)[number]
+export type Message = z.infer<typeof chatMessageSchema>
+export type ChatRoomMember = z.infer<typeof chatRoomMemberSchema>

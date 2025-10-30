@@ -18,6 +18,50 @@
   border-top: none;
 }
 
+@keyframes freezeGlow {
+  0% {
+    box-shadow:
+      0 0 4px #bde0fe,
+      0 0 8px #a2d2ff,
+      0 0 12px #ffafcc;
+  }
+  50% {
+    box-shadow:
+      0 0 10px #caf0f8,
+      0 0 20px #90e0ef,
+      0 0 30px #ffb3c6;
+  }
+  100% {
+    box-shadow:
+      0 0 4px #bde0fe,
+      0 0 8px #a2d2ff,
+      0 0 12px #ffafcc;
+  }
+}
+
+@keyframes freezeOverlay {
+  0% {
+    opacity: 0.2;
+    filter: blur(0px);
+  }
+  50% {
+    opacity: 0.5;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 0.2;
+    filter: blur(0px);
+  }
+}
+
+.animate-freezeGlow {
+  animation: freezeGlow 2s ease-in-out infinite alternate;
+}
+
+.animate-freezeOverlay {
+  animation: freezeOverlay 3s ease-in-out infinite alternate;
+}
+
 @font-face {
   font-family: 'Pretendard';
   font-weight: 100 900;
@@ -32,10 +76,18 @@
   src: url('/assets/fonts/RobotoVariable.ttf') format('ttf');
 }
 
+@font-face {
+  font-family: 'Digital';
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/Digital-7.ttf') format('truetype');
+}
+
 /* Font */
 @theme {
   --font-pretendard: 'Pretendard', san-serif;
   --font-roboto: 'Roboto', sans-serif;
+  --font-digital: 'Digital', sans-serif;
 
   --text-roboto-medium: 0.875rem;
   --text-roboto-medium--leading: 1.25rem;

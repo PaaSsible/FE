@@ -6,6 +6,7 @@ import type {
   getBoardDetailSchema,
   getBoardListSchema,
   getBoardMemberSchema,
+  getBoardUserPositionSchema,
   patchBoardMemberSchema,
   postBoardSchema,
   putBoardSchema,
@@ -58,6 +59,17 @@ export type DeleteBoard = {
 
 /**
  * @name 보드진입
+ * @method GET
+ * @path `/boards/{boardId}`
+ * @description 현재 유저의 역할 정보를 조회하는 API의 타입
+ */
+export type GetBoardUserPosition = {
+  Path: z.infer<typeof getBoardUserPositionSchema.path>
+  Response: z.infer<typeof getBoardUserPositionSchema.response>
+}
+
+/**
+ * @name 보드 상세 조회
  * @method GET
  * @path `/boards/{boardId}`
  * @description 보드 상세 정보를 조회하는 API의 타입
