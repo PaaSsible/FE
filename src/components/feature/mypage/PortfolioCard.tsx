@@ -15,6 +15,7 @@ interface PortfolioCardProps {
   mainCategory?: string | null
   subCategory?: string | null
   generatedByAi?: boolean | null
+  imageUrl?: string | null
   createdAt: string
   onEdit?: (id: number) => void
   onDelete?: (id: number) => void
@@ -31,6 +32,7 @@ export default function PortfolioCard({
   positionName,
   generatedByAi = false,
   createdAt,
+  imageUrl,
   onEdit,
   onDelete,
   onSelect,
@@ -38,7 +40,7 @@ export default function PortfolioCard({
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement | null>(null)
   const hasActions = Boolean(onEdit || onDelete)
-  const displayTag = generatedByAi ? '로컬잇' : null
+  const displayTag = generatedByAi ? 'CoDo' : null
   const showContribution = generatedByAi && contribution !== null && contribution !== undefined
   const showCategory = generatedByAi && (mainCategory || subCategory)
   const shouldShowFallbackPosition = !showCategory && !showContribution
@@ -94,7 +96,13 @@ export default function PortfolioCard({
       )}
     >
       {/* 상단 이미지 */}
-      <div className="h-[125px] w-full rounded-t-md bg-gray-300" />
+      <div className="relative h-[125px] w-full overflow-hidden rounded-t-md bg-gray-300">
+        <img
+          src={imageUrl || '/assets/images/portfolio_default.png'}
+          alt={`${title} 대표 이미지`}
+          className="h-full w-full object-cover"
+        />
+      </div>
 
       {/* 내용 영역 */}
       <div className="flex h-[125px] flex-col justify-between p-[14px] text-left">

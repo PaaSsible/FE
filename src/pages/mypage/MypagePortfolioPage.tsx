@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import Button from '@/components/atoms/Button'
 import Modal from '@/components/common/Modal'
@@ -13,13 +13,26 @@ import { useDeleteUserPortfolio } from '@/hooks/mypage/useDeleteUserPortfolio'
 import { useUserPortfolios } from '@/hooks/mypage/useUserPortfolios'
 import { getAuthUser } from '@/utils/authToken'
 
+type PortfolioCreationState = {
+  boardId?: number | null
+  boardName?: string | null
+  mainCategory?: string | null
+  subCategory?: string | null
+}
+
 export default function MypagePortfolioPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const authUser = getAuthUser()
   const [currentPage, setCurrentPage] = useState(1)
   const [modalType, setModalType] = useState<'edit' | 'delete' | null>(null)
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const pageSize = 12
+
+  const portfolioCreationState = (
+    location.state as { portfolioCreation?: PortfolioCreationState } | null | undefined
+  )?.portfolioCreation
+  const showPortfolioCreationNotice = Boolean(portfolioCreationState)
 
   const userId = Number(authUser?.id)
 
@@ -106,7 +119,12 @@ export default function MypagePortfolioPage() {
         <Button onClick={() => void navigate('/mypage/portfolio/new')}>추가하기</Button>
       </div>
 
-      <PortfolioCreationNotice />
+      <PortfolioCreationNotice
+        isVisible={showPortfolioCreationNotice}
+        projectName={portfolioCreationState?.boardName}
+        mainCategory={portfolioCreationState?.mainCategory}
+        subCategory={portfolioCreationState?.subCategory}
+      />
 
       <div className="flex min-h-[850px] flex-col">
         {isError ? (

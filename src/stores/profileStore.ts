@@ -17,11 +17,17 @@ interface Portfolio {
 interface Profile {
   id: number | null
   nickname: string
+  email: string | null
+  profileImageUrl: string | null
   positionName: string
   university: string
   stackNames: string[]
+  degreeType: string | null
+  major: string | null
+  graduationStatus: string | null
   introductionTitle: string
   introductionContent: string
+  role: string | null
   portfolios: Portfolio[]
 }
 
