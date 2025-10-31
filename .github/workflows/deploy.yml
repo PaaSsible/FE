@@ -9,24 +9,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 코드 체크아웃
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Node.js 세팅
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # Docker Hub 로그인
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 이미지 태그 생성 (GitHub Actions 실행 번호 기반)
       - name: Set image tag
         id: meta
         run: echo "TAG=fe-${{ github.run_number }}" >> $GITHUB_OUTPUT
 
+      # Docker 이미지 빌드 및 푸시 (버전 + latest 동시 푸시)
       - name: Build and push image
         run: |
           docker build \
@@ -40,7 +45,12 @@ jobs:
             --build-arg VITE_WS_MEET_URL=${{ secrets.VITE_WS_MEET_URL }} \
             --build-arg VITE_WEBSOCKET_CHAT_URL=${{ secrets.VITE_WEBSOCKET_CHAT_URL }} \
             -t seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }} .
+
           docker push seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
+
+          # latest 태그로도 push
+          docker tag seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }} seungjulee1228/contest-18-image-frontend:latest
+          docker push seungjulee1228/contest-18-image-frontend:latest
 
       - name: Set Kubeconfig
         env:
@@ -50,7 +60,7 @@ jobs:
             mkdir -p ~/.kube
             echo "$KUBE_CONFIG" > ~/.kube/config
           else
-            echo "No KUBE_CONFIG secret found, skipping kubeconfig setup."
+            echo "❌ No KUBE_CONFIG secret found, skipping kubeconfig setup."
           fi
 
       - name: Rollout new image
@@ -58,9 +68,11 @@ jobs:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         run: |
           if [ -n "$KUBE_CONFIG" ]; then
+            echo "🚀 Rolling out new image: fe-${{ github.run_number }}"
             kubectl -n frontend set image deployment/frontend-app-deployment \
               frontend-container=seungjulee1228/contest-18-image-frontend:${{ steps.meta.outputs.TAG }}
+            
             kubectl -n frontend rollout status deployment/frontend-app-deployment
           else
-            echo "No KUBE_CONFIG secret found, skipping rollout."
+            echo "❌ No KUBE_CONFIG secret found, skipping rollout."
           fi
