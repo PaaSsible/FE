@@ -8,8 +8,15 @@ import {
   type UseSuspenseQueryResult,
 } from '@tanstack/react-query'
 
-import { getTaskDetail, getTaskList, patchTaskDescription, postTask } from '@/apis/task.api'
+import {
+  deleteTask,
+  getTaskDetail,
+  getTaskList,
+  patchTaskDescription,
+  postTask,
+} from '@/apis/task.api'
 import type {
+  DeleteTask,
   GetTaskDetail,
   GetTaskList,
   PatchTaskDescription,
@@ -64,5 +71,22 @@ export const usePatchTaskDescription = (
       queryClient.refetchQueries({
         queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
       }),
+  })
+}
+
+export const useDeleteTask = (
+  path: DeleteTask['Path'],
+): UseMutationResult<DeleteTask['Response'], Error, DeleteTask['Path']> => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => deleteTask(path),
+    onSuccess: () => [
+      queryClient.refetchQueries({
+        queryKey: taskQueryKeys.list(path.boardId).queryKey,
+      }),
+      queryClient.invalidateQueries({
+        queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
+      }),
+    ],
   })
 }

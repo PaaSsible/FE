@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { Plus } from 'lucide-react'
+import { EllipsisVertical, Plus, Trash } from 'lucide-react'
 import { useEffect, useState, type JSX } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -14,6 +14,7 @@ import type { BoardMember, Task, TaskStatus } from '@/types/entities/board/board
 import { positionsArray } from '@/types/entities/recruit-post/recruitPost.schemas'
 import type { Position } from '@/types/entities/recruit-post/recruitPost.types'
 
+import DeleteTaskConfirmButton from './DeleteTaskConfirmButton'
 import { DueDatePicker } from './DueDatePicker'
 import { MultiSelect, type MultiSelectOption } from './MultiSelect'
 
@@ -114,6 +115,8 @@ const TasksChildSection = ({
     setSelectedPositions([])
   }
 
+  const onDeleteButton = () => {}
+
   useEffect(() => {
     if (title && dueDate && selectedMembers && selectedPositions) setIsSubmitButtonDisabled(false)
     else setIsSubmitButtonDisabled(true)
@@ -132,11 +135,12 @@ const TasksChildSection = ({
           return (
             <li
               key={task.id}
-              className="flex w-full flex-col items-start gap-[2.125rem] rounded bg-white px-3 pt-[0.6875rem] pb-3"
+              className="flex w-full cursor-pointer flex-col items-start gap-[2.125rem] rounded bg-white px-3 pt-[0.6875rem] pb-3"
               onClick={() => void navigate(`${task.id}`)}
             >
-              <div className="justify-center text-left text-base leading-normal font-semibold text-zinc-900 opacity-80">
-                {task.title}
+              <div className="flex w-full items-start justify-between text-left text-base leading-normal font-semibold text-zinc-900 opacity-80">
+                <div className="flex max-w-[80%]">{task.title}</div>
+                <DeleteTaskConfirmButton taskId={task.id} />
               </div>
               <div className="flex flex-col items-start gap-1">
                 <div className="text-sm leading-tight font-medium text-zinc-900 opacity-80">
