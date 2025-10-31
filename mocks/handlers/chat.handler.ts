@@ -69,23 +69,23 @@ export const chatHandlers: HttpHandler[] = [
   /**
    * @name 채팅방 생성
    */
-  http.post<{ boardId: string }>(
-    `${BOARD_API_URL}/boards/:boardId/chats/rooms`,
-    async ({ request, params }) => {
-      const { boardId } = params
-      const body = (await request.clone().json()) as ChatAPITypes.PostChatRoom['Body']
+  // http.post<{ boardId: string }>(
+  //   `${BOARD_API_URL}/boards/:boardId/chats/rooms`,
+  //   async ({ request, params }) => {
+  //     const { boardId } = params
+  //     const body = (await request.clone().json()) as ChatAPITypes.PostChatRoom['Body']
 
-      const data: ChatAPITypes.PostChatRoom['Response'] = {
-        success: true,
-        message: '리소스가 생성되었습니다.',
-        data: { roomId: 1 },
-        code: 'CREATED',
-        errors: null,
-      }
+  //     const data: ChatAPITypes.PostChatRoom['Response'] = {
+  //       success: true,
+  //       message: '리소스가 생성되었습니다.',
+  //       data: { roomId: 1 },
+  //       code: 'CREATED',
+  //       errors: null,
+  //     }
 
-      return HttpResponse.json(data)
-    },
-  ),
+  //     return HttpResponse.json(data)
+  //   },
+  // ),
 
   /**
    * @name 채팅방 퇴장
