@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import { File } from 'lucide-react'
-import type { JSX } from 'react'
+import { useEffect, type JSX } from 'react'
 
 import type { GroupMessage } from '../ProjectChatRoomPage'
 
@@ -15,6 +15,9 @@ interface GroupMessageItemProps {
 const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
   dayjs.locale('ko') // 한글 오전/오후
 
+  useEffect(() => {
+    //console.log(item)
+  }, [item])
   return (
     <div className={`flex ${item.isMine ? 'justify-end' : 'justify-start'} gap-3`}>
       {!item.isMine && <div className="h-10 w-10 shrink-0 rounded-full bg-zinc-300" />}
@@ -29,7 +32,11 @@ const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
             {item.isMine && (
               <div className="flex items-center gap-1.5 text-xs text-gray-500">
                 <div className="flex items-center">
-                  <ViewChatRoomReadMemberButton messageId={msg.id} isMine />
+                  <ViewChatRoomReadMemberButton
+                    messageId={msg.id}
+                    readCount={msg.readCount}
+                    isMine
+                  />
                   {msg.readCount > 0 ? `읽음 ${msg.readCount}` : '읽지 않음'}
                 </div>
                 <div className="h-[3px] w-[3px] rounded-full bg-gray-500" />
@@ -80,7 +87,7 @@ const GroupMessageItem = ({ item }: GroupMessageItemProps): JSX.Element => {
                 <div className="h-[3px] w-[3px] rounded-full bg-gray-500" />
                 <div className="flex items-center">
                   {msg.readCount > 0 ? `읽음 ${msg.readCount}` : '읽지 않음'}
-                  <ViewChatRoomReadMemberButton messageId={msg.id} />
+                  <ViewChatRoomReadMemberButton messageId={msg.id} readCount={msg.readCount} />
                 </div>
               </div>
             )}

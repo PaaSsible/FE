@@ -11,6 +11,7 @@ interface ChatRoomProps {
 
 const ChatRoomItem = ({ item, projectId }: ChatRoomProps): JSX.Element => {
   const navigate = useNavigate()
+  console.log(item)
   return (
     <div
       onClick={() =>

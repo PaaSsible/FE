@@ -34,6 +34,7 @@ const CreateNewChatRoomButton = (): JSX.Element => {
   const onSelectMember = (id: BoardMember['userId']) => {
     if (selectedUsers.some((s) => s === id)) {
       const newSelectedUsers = selectedUsers.filter((s) => s !== id)
+
       setSelectedUsers(newSelectedUsers)
     } else {
       setSelectedUsers((prev) => [...prev, id])
