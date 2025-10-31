@@ -1,5 +1,3 @@
-/* eslint-disable import/extensions */
-
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { ChevronDownIcon } from 'lucide-react'
@@ -24,11 +22,12 @@ export function DueDatePicker({ date, setDate }: DueDatePickerProps): JSX.Elemen
           <Button
             id="date"
             className={clsx(
-              'w-full justify-between bg-transparent text-sm leading-tight font-medium hover:bg-transparent',
+              'flex h-auto min-h-10 items-center justify-between rounded-md bg-inherit px-3 py-2 text-sm leading-tight font-medium hover:bg-inherit [&_svg]:pointer-events-auto',
               {
                 'text-black': date,
                 'text-zinc-900 opacity-50': !date,
               },
+              'border-2 [border-color:oklch(0.985_0_0)]',
             )}
           >
             {date ? dayjs(date).format('YYYY년 MM월 DD일') : '마감기한 설정'}

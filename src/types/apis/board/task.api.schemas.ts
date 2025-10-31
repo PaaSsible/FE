@@ -40,7 +40,7 @@ export const getTaskListSchema = {
 export const postTaskSchema = {
   path: z.object({ boardId: boardSchema.shape.boardId }),
   body: taskSchema
-    .pick({ title: true, dueDate: true })
+    .pick({ title: true, dueDate: true, description: true })
     .extend({ assigneeIds: z.array(userSchema.shape.id), positionIds: z.array(z.number()) }),
   response: z.object({
     success: z.boolean(),

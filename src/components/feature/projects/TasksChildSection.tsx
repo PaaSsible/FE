@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 
 import { postTask } from '@/apis/task.api'
 import Button from '@/components/atoms/Button'
+import { Textarea } from '@/components/ui/textarea'
 import { usePostTask } from '@/queries/task.queries'
 import type { PostTask } from '@/types/apis/board/task.api.types'
 import type { BoardMember, Task, TaskStatus } from '@/types/entities/board/board.entitites.types'
@@ -42,6 +43,7 @@ const TasksChildSection = ({
   projectId,
 }: TasksChildSectionProps): JSX.Element => {
   const [title, setTitle] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
   const [selectedMembers, setSelectedMembers] = useState<BoardMember['userId'][]>([])
   const [selectedPositions, setSelectedPositions] = useState<Position['id'][]>([])
@@ -80,6 +82,7 @@ const TasksChildSection = ({
     try {
       const body: PostTask['Body'] = {
         title,
+        description,
         dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
         assigneeIds: selectedMembers,
         positionIds: selectedPositions,
@@ -88,6 +91,7 @@ const TasksChildSection = ({
         onSuccess: () => {
           setIsNewTaskFormVisible(false)
           setTitle('')
+          setDescription('')
           setDueDate(undefined)
           setSelectedMembers([])
           setSelectedPositions([])
@@ -116,7 +120,7 @@ const TasksChildSection = ({
   }, [title, dueDate, selectedMembers, selectedPositions])
 
   return (
-    <div className="item-start mt-6 flex flex-1/3 flex-col rounded-lg bg-zinc-100 px-3 pt-4">
+    <div className="item-start mt-6 flex flex-1/3 flex-col rounded-lg bg-zinc-100 px-3 py-4">
       <span className="mb-[1.875rem] inline-flex items-center justify-start gap-2.5 font-['Pretendard'] text-lg leading-relaxed font-semibold text-zinc-900 opacity-80">
         <div className={clsx('h-3.5 w-3.5 rounded-full', taskStatusToColorMap[status])} />
         {taskStatusToTitleMap[status]}
@@ -166,7 +170,7 @@ const TasksChildSection = ({
           )
         })}
         {isNewTaskFormVisible && (
-          <li className="flex flex-col rounded bg-white px-3 py-3">
+          <li className="flex flex-col gap-1 rounded bg-white px-3 py-3">
             <input
               placeholder="해야할 작업을 입력하세요"
               value={title}
@@ -174,6 +178,16 @@ const TasksChildSection = ({
               className={clsx(
                 'mb-[1.125rem] h-6 w-full text-base leading-normal font-semibold outline-none',
                 { 'text-zinc-900 opacity-50': !title, 'text-black': title },
+              )}
+            />
+            <Textarea
+              placeholder="세부사항을 입력하세요"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className={clsx(
+                'mb-[1.125rem] h-6 w-full text-base leading-normal font-semibold outline-none',
+                { 'text-zinc-900 opacity-50': !description, 'text-black': description },
+                'focus-visible:ring-0',
               )}
             />
             <DueDatePicker date={dueDate} setDate={setDueDate} />
@@ -199,7 +213,7 @@ const TasksChildSection = ({
         )}
       </ul>
 
-      {status === 'PENDING' && (
+      {status === 'PENDING' && !isNewTaskFormVisible && (
         <button
           onClick={() => setIsNewTaskFormVisible(true)}
           className="mt-4 flex cursor-pointer items-center justify-start gap-2.5"
