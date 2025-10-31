@@ -13,6 +13,7 @@ import {
   getTaskDetail,
   getTaskList,
   patchTaskDescription,
+  patchTaskStatus,
   postTask,
 } from '@/apis/task.api'
 import type {
@@ -20,6 +21,7 @@ import type {
   GetTaskDetail,
   GetTaskList,
   PatchTaskDescription,
+  PatchTaskStatus,
   PostTask,
 } from '@/types/apis/board/task.api.types'
 
@@ -85,6 +87,23 @@ export const useDeleteTask = (
         queryKey: taskQueryKeys.list(path.boardId).queryKey,
       }),
       queryClient.invalidateQueries({
+        queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
+      }),
+    ],
+  })
+}
+
+export const usePatchTaskStatus = (
+  path: PatchTaskStatus['Path'],
+): UseMutationResult<PatchTaskStatus['Response'], Error, PatchTaskStatus['Body']> => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (body: PatchTaskStatus['Body']) => patchTaskStatus(path, body),
+    onSuccess: () => [
+      queryClient.refetchQueries({
+        queryKey: taskQueryKeys.list(path.boardId).queryKey,
+      }),
+      queryClient.refetchQueries({
         queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
       }),
     ],
