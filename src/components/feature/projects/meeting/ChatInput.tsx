@@ -30,7 +30,7 @@ export default function ChatInput({ onSend, isSending = false }: ChatInputProps)
   }
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 flex-shrink-0">
       <div className="flex flex-col">
         <div className="text-b5-medium flex items-center gap-2 bg-gray-700 px-3 py-2 text-gray-400">
           <AtSign size={16} className="text-locallit-red-50" /> 언급한 사람에게만 메시지 보내기

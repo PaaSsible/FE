@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import { cva, type VariantProps } from 'class-variance-authority'
 import { CheckIcon, XCircle, ChevronDown, XIcon, WandSparkles } from 'lucide-react'
 import * as React from 'react'
@@ -764,6 +763,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                 screenSize === 'mobile' && 'min-h-12 text-base',
                 disabled && 'cursor-not-allowed opacity-50',
                 className,
+                'border-2',
               )}
               style={{
                 ...widthConstraints,

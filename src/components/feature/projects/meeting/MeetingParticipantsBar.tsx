@@ -1,6 +1,7 @@
 'use client'
 
 import clsx from 'clsx'
+import type { RemoteAudioTrack } from 'livekit-client'
 import { Mic, MicOff, Video, VideoOff } from 'lucide-react'
 import { useEffect, useState, useRef, type ReactElement } from 'react'
 
@@ -71,6 +72,7 @@ export default function MeetingParticipantsBar(): ReactElement {
           isHighlighted: highlightedSpeakerUserId === user.userId,
           isInactive: inactiveUserIds.includes(user.userId),
           profileImageUrl: user.profileImageUrl ?? null,
+          audioTrack: user.audioTrack ?? null,
           videoTrack: user.videoTrack ?? null,
         }) satisfies ParticipantTileProps,
     ),
@@ -153,6 +155,7 @@ type ParticipantTileProps = {
   isSpeaking: boolean
   isHighlighted: boolean
   isInactive: boolean
+  audioTrack?: RemoteAudioTrack | null
   videoTrack?: import('livekit-client').RemoteVideoTrack | null
   stream?: MediaStream | null
   profileImageUrl?: string | null
@@ -167,12 +170,15 @@ function ParticipantTile({
   isSpeaking,
   isHighlighted,
   isInactive,
+  audioTrack,
   videoTrack,
   stream,
   profileImageUrl,
 }: ParticipantTileProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const attachedTrackRef = useRef<import('livekit-client').RemoteVideoTrack | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const attachedAudioTrackRef = useRef<RemoteAudioTrack | null>(null)
 
   useEffect(() => {
     if (variant !== 'remote') return
@@ -214,6 +220,50 @@ function ParticipantTile({
       el.srcObject = null
     } catch {}
   }, [variant, videoTrack, isCameraOn])
+
+  useEffect(() => {
+    if (variant !== 'remote') return
+    const el = audioRef.current
+    if (!el) return
+
+    const detach = () => {
+      if (attachedAudioTrackRef.current) {
+        try {
+          attachedAudioTrackRef.current.detach(el)
+        } catch (error) {
+          console.warn('[ParticipantTile] failed to detach audio track', error)
+        }
+        attachedAudioTrackRef.current = null
+      }
+      try {
+        el.srcObject = null
+      } catch {}
+    }
+
+    if (!audioTrack || !isMicOn) {
+      detach()
+      return
+    }
+
+    if (attachedAudioTrackRef.current && attachedAudioTrackRef.current !== audioTrack) {
+      detach()
+    }
+
+    try {
+      audioTrack.attach(el)
+      attachedAudioTrackRef.current = audioTrack
+      void el.play().catch(() => {
+        // Autoplay can fail without user gesture; rely on subsequent interactions.
+      })
+    } catch (error) {
+      console.warn('[ParticipantTile] failed to attach audio track', error)
+      detach()
+    }
+
+    return () => {
+      detach()
+    }
+  }, [audioTrack, isMicOn, variant])
 
   useEffect(() => {
     if (variant !== 'local') return
@@ -286,6 +336,7 @@ function ParticipantTile({
           </div>
         </div>
       </div>
+      {variant === 'remote' && <audio ref={audioRef} autoPlay className="hidden" />}
     </div>
   )
 

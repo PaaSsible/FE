@@ -3,7 +3,7 @@ import { useEffect, useState, type JSX } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ZodError } from 'zod'
 
-import { getBoardDetail, postBoard, putBoard } from '@/apis/board.api'
+import { getBoardDetail, putBoard } from '@/apis/board.api'
 import Button from '@/components/atoms/Button'
 import Chip from '@/components/atoms/Chip'
 import Tab from '@/components/atoms/Tab'
