@@ -48,8 +48,8 @@ const CreateNewChatRoomButton = (): JSX.Element => {
       { participantIds: selectedUsers },
       {
         onSuccess: (response) => {
-          const { roomId } = response.data
-          void navigate(`/chat/${roomId}`)
+          const { roomId, roomName } = response.data
+          void navigate(`/chat/${roomId}`, { state: { roomName } })
           setOpen(false)
         },
       },

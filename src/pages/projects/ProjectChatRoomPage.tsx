@@ -98,6 +98,9 @@ const ProjectChatRoomPage = (): JSX.Element => {
   // 메세지 전송, 초기 렌더링 이벤트 발생시 하단으로 스크롤
   const mainRef = useRef<HTMLDivElement>(null)
 
+  // 최초 렌더링 여부 파악
+  const initialReadAllRef = useRef<boolean>(null)
+
   // 데이터 페칭
   useEffect(() => {
     const getChatMessages = async () => {
@@ -107,6 +110,7 @@ const ProjectChatRoomPage = (): JSX.Element => {
           { page: 0, size: 20 },
         )
         setMessages(response.data.messages)
+        initialReadAllRef.current = false
       } catch (error) {
         if (error instanceof ZodError) console.error('타입에러', error)
         else if (error instanceof AxiosError) console.error('네트워크에러', error)
@@ -115,14 +119,12 @@ const ProjectChatRoomPage = (): JSX.Element => {
     void getChatMessages()
   }, [roomId])
 
-  // 최초 렌더링 여부 파악
-  const initialReadAllRef = useRef<boolean>(false)
-
   // 메세지 그룹핑 및 모두 읽음 처리
 
   useEffect(() => {
     const user = getAuthUser()
     if (!user || messages.length === 0) {
+      initialReadAllRef.current = true
       return
     }
     const groupedByDate = getGroupedMessages(messages, Number(user.id))
