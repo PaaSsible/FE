@@ -117,18 +117,21 @@ const ProjectChatRoomPage = (): JSX.Element => {
 
   // 최초 렌더링 여부 파악
   const initialReadAllRef = useRef<boolean>(false)
-  // 메세지 그룹핑
-  // 최초 렌더링시 모두 읽음 처리
+
+  // 메세지 그룹핑 및 모두 읽음 처리
 
   useEffect(() => {
     const user = getAuthUser()
-    if (!user || messages.length === 0) return
+    if (!user || messages.length === 0) {
+      return
+    }
     const groupedByDate = getGroupedMessages(messages, Number(user.id))
     SetGroupedMessages(groupedByDate)
 
+    // 최초 렌더링시 모두 읽음 처리
     if (initialReadAllRef.current === false) {
       const lastMessageId = messages[messages.length - 1].id
-      console.log('last', lastMessageId)
+
       const readAll = async () => {
         try {
           await patchChatRoomMessageReadAll(
