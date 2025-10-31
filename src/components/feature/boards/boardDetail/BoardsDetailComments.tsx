@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import Avatar from '@/components/atoms/Avatar'
 import Modal from '@/components/common/Modal'
@@ -13,6 +13,7 @@ interface Props {
   comments: RecruitComment[]
   totalCount?: number | null
   currentUserId?: string | number | null
+  postWriterId?: string | number | null
   isLoading?: boolean
   error?: string | null
   onRetry?: () => void
@@ -32,6 +33,7 @@ export default function BoardsDetailComments({
   comments,
   totalCount,
   currentUserId,
+  postWriterId,
   isLoading = false,
   error = null,
   onRetry,
@@ -76,6 +78,19 @@ export default function BoardsDetailComments({
   })
 
   const authUser = getAuthUser()
+  const normalizedPostWriterId =
+    postWriterId === undefined || postWriterId === null ? null : String(postWriterId)
+
+  const isPostAuthor = useCallback(
+    (writerId: number | string) => {
+      if (normalizedPostWriterId === null) {
+        return false
+      }
+
+      return String(writerId) === normalizedPostWriterId
+    },
+    [normalizedPostWriterId],
+  )
 
   // 댓글 총합 (댓글 + 대댓글)
   const totalComments = useMemo(() => {
@@ -131,6 +146,7 @@ export default function BoardsDetailComments({
         onEditSubmit={handleEditSubmit}
         onDeleteClick={handleDeleteClick}
         isOwnComment={isOwnComment}
+        isPostAuthor={isPostAuthor}
         isUpdating={isUpdatingState}
         isSubmitting={isSubmitting}
       />

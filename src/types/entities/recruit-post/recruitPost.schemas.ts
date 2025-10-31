@@ -86,6 +86,7 @@ export const recruitCommentSchema = z.object({
   content: z.string().nullable(),
   writerId: userSchema.shape.id,
   writerName: userSchema.shape.nickname,
+  writerImageUrl: z.string().nullable(),
   deleted: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),

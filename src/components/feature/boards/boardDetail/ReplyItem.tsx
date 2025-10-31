@@ -17,6 +17,7 @@ interface Props {
   onEditSubmit: (c: RecruitComment) => Promise<void>
   onDeleteClick: (c: RecruitComment) => void
   isOwnComment: (id: number | string) => boolean
+  isPostAuthor: (id: number | string) => boolean
   isUpdating?: boolean
 }
 
@@ -31,6 +32,7 @@ export default function ReplyItem({
   onEditSubmit,
   onDeleteClick,
   isOwnComment,
+  isPostAuthor,
   isUpdating,
 }: Props) {
   const isEditing = activeEditId === reply.id
@@ -38,7 +40,12 @@ export default function ReplyItem({
   const displayContent = reply.deleted ? '삭제된 댓글입니다.' : (reply.content ?? '')
   const writerLabel = reply.writerName ? String(reply.writerName) : '작성자'
   const createdAtLabel = formatRelativeTime(reply.createdAt)
+  const writerImageUrl = reply.writerImageUrl ?? null
   const canManage = isOwnComment(reply.writerId) && !reply.deleted
+  const isHighlightedAuthor = !reply.deleted && isPostAuthor(reply.writerId)
+  const writerClassName = isHighlightedAuthor
+    ? 'text-b4-bold text-locallit-red-500'
+    : 'text-b4-bold text-gray-900'
 
   const normalizedReply = { ...reply, parentId }
 
@@ -47,10 +54,10 @@ export default function ReplyItem({
       {/* ㄴ 모양 */}
       <div className="absolute top-[-10px] left-[5px] h-[30px] w-[20px] rounded-bl-sm border-b border-l border-gray-300" />
 
-      <Avatar name={writerLabel} className="mr-[11px]" />
+      <Avatar name={writerLabel} src={writerImageUrl} className="mr-[11px]" />
       <div className="flex-1">
         <div className="flex items-start justify-between leading-8">
-          <div className="text-b4-bold text-gray-900">{writerLabel}</div>
+          <div className={writerClassName}>{writerLabel}</div>
           <div className="flex items-center gap-[30px] text-gray-500">
             <span className="text-b4-regular">{createdAtLabel}</span>
             <div className="flex gap-5">
