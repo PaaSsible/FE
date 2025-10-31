@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 
 import { getMyRecruit, deleteRecruit } from '@/apis/recruit.api'
 import type { GetMyRecruit } from '@/types/apis/recruit/recruit.api.types'
+import { formatRecruitDateLabel } from '@/utils/date'
 import { positionIdToLabel, stackIdToLabel } from '@/utils/recruitMeta'
 import { formatRelativeTime } from '@/utils/relativeTime'
 
@@ -66,6 +67,8 @@ export default function MyBoardList() {
       <div className="flex flex-col gap-4">
         {boards.map((board) => {
           const createdAtLabel = formatRelativeTime(board.createdAt)
+          const deadlineLabel = formatRecruitDateLabel(board.deadline)
+          const deadlineDisplay = deadlineLabel === '-' ? '미정' : deadlineLabel
           const positionLabel =
             board.recruits.length > 0
               ? (positionIdToLabel(board.recruits[0].position) ?? '미지정')
@@ -82,7 +85,7 @@ export default function MyBoardList() {
               postId={board.postId}
               title={board.title}
               createdAt={createdAtLabel}
-              deadline={board.deadline}
+              deadline={deadlineDisplay}
               position={positionLabel}
               tags={stackLabels}
               views={board.viewCount}

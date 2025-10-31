@@ -1,5 +1,3 @@
-import { format, formatDistanceToNow } from 'date-fns'
-import { ko } from 'date-fns/locale'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -22,7 +20,9 @@ import {
 import usePositionsOptions from '@/hooks/boards/usePositionsOptions'
 import useRecruitList from '@/hooks/boards/useRecruitList'
 import useTermsConsent from '@/hooks/boards/useTermsConsent'
+import { formatRecruitDateLabel } from '@/utils/date'
 import { positionIdToLabel, stackIdToLabel } from '@/utils/recruitMeta'
+import { formatRelativeTime } from '@/utils/relativeTime'
 
 const BoardsPage: React.FC = () => {
   const navigate = useNavigate()
@@ -111,17 +111,9 @@ const BoardsPage: React.FC = () => {
 
   const boardItems = useMemo(() => {
     return posts.map((post) => {
-      const createdAt =
-        post.createdAt instanceof Date ? post.createdAt : new Date(post.createdAt as Date | string)
-      const timeAgo = formatDistanceToNow(createdAt, { addSuffix: true, locale: ko }).replace(
-        /^약\s*/,
-        '',
-      )
-
-      const deadlineDate = new Date(post.deadline)
-      const deadline = Number.isNaN(deadlineDate.getTime())
-        ? '미정'
-        : format(deadlineDate, 'yyyy.MM.dd')
+      const timeAgo = formatRelativeTime(post.createdAt)
+      const deadlineLabel = formatRecruitDateLabel(post.deadline)
+      const deadline = deadlineLabel === '-' ? '미정' : deadlineLabel
 
       const positionNames = new Set<string>()
       const stackNames = new Set<string>()

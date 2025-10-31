@@ -21,6 +21,7 @@ interface Props {
   onEditSubmit: (c: RecruitComment) => Promise<void>
   onDeleteClick: (c: RecruitComment) => void
   isOwnComment: (id: number | string) => boolean
+  isPostAuthor: (id: number | string) => boolean
   isUpdating?: boolean
   isSubmitting?: boolean
 }
