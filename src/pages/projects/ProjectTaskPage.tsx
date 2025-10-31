@@ -3,18 +3,30 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/ko' // 한국어 로케일
 import { ChevronLeft } from 'lucide-react'
-import { Fragment, useEffect, useState, type JSX } from 'react'
+import { Fragment, useState, type JSX } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ZodError } from 'zod'
+import { toast } from 'sonner'
 
-import { getTaskDetail, getTaskDetailComments, postTaskDetailComment } from '@/apis/task.api'
 import Button from '@/components/atoms/Button'
+import Chip from '@/components/atoms/Chip'
 import Separator from '@/components/feature/projects/Separator'
+import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
+import { taskStatusEngToKorMap } from '@/config/converters/taskStatusEngToKorMap'
 import { useGetTaskComments, usePostTaskComment } from '@/queries/comment.queries'
-import { useGetTaskDetail } from '@/queries/task.queries'
-import { type Comment, type Task } from '@/types/entities/board/board.entitites.types'
+import {
+  useGetTaskDetail,
+  usePatchTaskDescription,
+  usePatchTaskStatus,
+} from '@/queries/task.queries'
+import { type Comment, type TaskStatus } from '@/types/entities/board/board.entitites.types'
 import { getAuthUser } from '@/utils/authToken'
+
+import { TaskStatusRadioGroup } from './component/TaskStatusRadioGroup'
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const modeArray = ['DescriptionEdit', 'StatusEdit', 'Default'] as const
+type Mode = (typeof modeArray)[number]
 
 const ProjectTaskPage = (): JSX.Element => {
   const navigate = useNavigate()
@@ -33,9 +45,20 @@ const ProjectTaskPage = (): JSX.Element => {
     boardId: Number(projectId),
     taskId: Number(taskId),
   })
+  const { mutate: patchDescription } = usePatchTaskDescription({
+    boardId: Number(projectId),
+    taskId: Number(taskId),
+  })
+  const { mutate: patchTaskStatus, isPending: patchTaskStatusPending } = usePatchTaskStatus({
+    boardId: Number(projectId),
+    taskId: Number(taskId),
+  })
+
   const comments = commentData.data
   const [newComment, setNewComment] = useState<Comment['comment']>('')
-
+  const [newDescription, setNewDescription] = useState<string>(task.description ?? '')
+  const [mode, setMode] = useState<Mode>('Default')
+  const [newTaskStatus, setNewTaskStatus] = useState<TaskStatus>(task.status)
   dayjs.extend(relativeTime)
   dayjs.locale('ko')
 
@@ -49,38 +72,156 @@ const ProjectTaskPage = (): JSX.Element => {
     )
   }
 
+  const onEditConfirm = () => {
+    patchDescription(
+      { description: newDescription },
+      {
+        onSuccess: () => {
+          toast.success('수정이 완료되었습니다.')
+          setMode('Default')
+        },
+        onError: () => {
+          toast.error('처리 중 오류가 발생하였습니다.')
+        },
+      },
+    )
+  }
+
+  const onTaskStatusEditConfirm = () => {
+    patchTaskStatus(
+      {
+        status: newTaskStatus,
+      },
+      {
+        onSuccess: () => {
+          toast.success('작업 상태 수정이 완료되었습니다.')
+          setMode('Default')
+        },
+        onError: () => {
+          toast.error('처리 중 오류가 발생하였습니다.')
+        },
+      },
+    )
+  }
+
+  const onTaskStatusEditCancel = () => {
+    setNewTaskStatus(task.status)
+    setMode('Default')
+  }
+
   if (task === undefined) {
     return <div>cannot find task</div>
   }
   return (
     <div className="flex min-h-full flex-col">
-      <div className="mb-[3.375rem] flex items-center gap-3.5">
+      <div className="mb-[3.375rem] flex items-start gap-3.5">
         <button onClick={() => void navigate(-1)}>
           <ChevronLeft className="h-10 w-10" />
         </button>
 
-        <span className="justify-center text-3xl leading-10 font-semibold">{task.title}</span>
+        <span className="justify-center text-start text-3xl leading-10 font-semibold">
+          {task.title}
+        </span>
       </div>
 
-      <div className="flex justify-between text-lg font-semibold opacity-80">
-        <span>{task.assignees.map((a) => a.name).join(',')}</span>
-        <span className="flex gap-6">
-          <span>
-            <span>마감일:</span> <span>{dayjs(task.dueDate).format('YYYY.MM.DD')}</span>
-          </span>
-          <span>
-            <span>관련 파트:</span> <span>{task.positions.join(',')}</span>
-          </span>
-        </span>
+      <div className="flex flex-col justify-between gap-2 text-lg font-semibold opacity-80">
+        <div className="flex gap-2">
+          <span>담당자:</span>
+          <span className="font-normal">{task.assignees.map((a) => a.name).join(', ')}</span>
+        </div>
+        <div className="flex gap-2">
+          <span>마감일: </span>
+          <span className="font-normal">{dayjs(task.dueDate).format('YYYY.MM.DD')}</span>
+        </div>
+        <div className="flex gap-2">
+          <span>관련 파트:</span>
+          <span className="font-normal">{task.positions.join(', ')}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span>작업 상태:</span>
+          {patchTaskStatusPending ? (
+            <Spinner className="ml-1" />
+          ) : (
+            <>
+              {mode === 'StatusEdit' ? (
+                <div className="flex items-center gap-4">
+                  <TaskStatusRadioGroup
+                    currentTaskStatus={newTaskStatus}
+                    onChange={(status: TaskStatus) => setNewTaskStatus(status)}
+                  />
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => onTaskStatusEditCancel()}
+                      className={clsx(
+                        'font-pretendard text-l1-bold rounded-full border border-gray-500 px-4 py-1 text-gray-500 transition-colors select-none',
+                      )}
+                    >
+                      취소
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onTaskStatusEditConfirm()}
+                      className={clsx(
+                        'font-pretendard border-locallit-red-500 bg-locallit-red-500 text-l1-bold rounded-full border px-4 py-1 text-gray-50 transition-colors select-none',
+                      )}
+                    >
+                      적용하기
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <span className="font-normal">{taskStatusEngToKorMap[task.status]}</span>
+                  <button
+                    type="button"
+                    onClick={() => setMode('StatusEdit')}
+                    className={clsx(
+                      'font-pretendard border-locallit-red-500 text-l1-bold text-locallit-red-500 rounded-full border px-4 py-1 transition-colors select-none',
+                    )}
+                  >
+                    수정하기
+                  </button>
+                </>
+              )}
+            </>
+          )}
+        </div>
       </div>
       <Separator className="mt-[1.8125rem] mb-[2.9375rem]" />
 
-      <p className="flex justify-start text-left text-lg font-normal break-all">
-        {task.description}
-      </p>
-      {/* <button className="mt-3 cursor-pointer self-start text-lg font-medium opacity-50">
-        설명 편집
-      </button> */}
+      {mode === 'DescriptionEdit' && (
+        <>
+          <Textarea
+            className="h-36 text-left text-lg font-normal"
+            placeholder="세부사항을 입력하세요"
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
+          />
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" className="mt-3" onClick={() => setMode('Default')}>
+              취소
+            </Button>
+            <Button className="mt-3" onClick={onEditConfirm}>
+              저장
+            </Button>
+          </div>
+        </>
+      )}
+
+      {(mode === 'Default' || mode === 'StatusEdit') && (
+        <>
+          <p className="flex justify-start text-left text-lg font-normal break-all">
+            {task.description}
+          </p>
+          <button
+            className="mt-3 cursor-pointer self-start text-lg font-medium opacity-50"
+            onClick={() => setMode('DescriptionEdit')}
+          >
+            설명 편집
+          </button>
+        </>
+      )}
 
       {/* 댓글 섹션 */}
       <section className="flex flex-1 flex-col">

@@ -1,5 +1,6 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory'
 import {
+  QueryClient,
   useMutation,
   useQueryClient,
   useSuspenseQuery,
@@ -7,8 +8,22 @@ import {
   type UseSuspenseQueryResult,
 } from '@tanstack/react-query'
 
-import { getTaskDetail, getTaskList, postTask } from '@/apis/task.api'
-import type { GetTaskDetail, GetTaskList, PostTask } from '@/types/apis/board/task.api.types'
+import {
+  deleteTask,
+  getTaskDetail,
+  getTaskList,
+  patchTaskDescription,
+  patchTaskStatus,
+  postTask,
+} from '@/apis/task.api'
+import type {
+  DeleteTask,
+  GetTaskDetail,
+  GetTaskList,
+  PatchTaskDescription,
+  PatchTaskStatus,
+  PostTask,
+} from '@/types/apis/board/task.api.types'
 
 export const taskQueryKeys = createQueryKeys('Task', {
   list: (projectId: number) => ({
@@ -45,5 +60,52 @@ export const useGetTaskDetail = (
   return useSuspenseQuery({
     queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
     queryFn: () => getTaskDetail(path),
+  })
+}
+
+export const usePatchTaskDescription = (
+  path: PatchTaskDescription['Path'],
+): UseMutationResult<PatchTaskDescription['Response'], Error, PatchTaskDescription['Body']> => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (body: PatchTaskDescription['Body']) => patchTaskDescription(path, body),
+    onSuccess: () =>
+      queryClient.refetchQueries({
+        queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
+      }),
+  })
+}
+
+export const useDeleteTask = (
+  path: DeleteTask['Path'],
+): UseMutationResult<DeleteTask['Response'], Error, DeleteTask['Path']> => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => deleteTask(path),
+    onSuccess: () => [
+      queryClient.refetchQueries({
+        queryKey: taskQueryKeys.list(path.boardId).queryKey,
+      }),
+      queryClient.invalidateQueries({
+        queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
+      }),
+    ],
+  })
+}
+
+export const usePatchTaskStatus = (
+  path: PatchTaskStatus['Path'],
+): UseMutationResult<PatchTaskStatus['Response'], Error, PatchTaskStatus['Body']> => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (body: PatchTaskStatus['Body']) => patchTaskStatus(path, body),
+    onSuccess: () => [
+      queryClient.refetchQueries({
+        queryKey: taskQueryKeys.list(path.boardId).queryKey,
+      }),
+      queryClient.refetchQueries({
+        queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
+      }),
+    ],
   })
 }
