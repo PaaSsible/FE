@@ -50,7 +50,7 @@ export default function MeetingRightPanel({
 
   return (
     <>
-      <aside className="text-gray-0 flex w-[384px] flex-col bg-gray-800">
+      <aside className="text-gray-0 flex h-full w-[384px] flex-col bg-gray-800">
         <div className="flex flex-col items-center pt-5">
           <SegmentedControl
             variant={activeTab === 'participants' ? 'participant' : 'chatting'}
@@ -60,41 +60,45 @@ export default function MeetingRightPanel({
           />
         </div>
 
-        <div className="mt-[50px] flex flex-1 flex-col justify-between">
-          <div className="flex-1 space-y-8 overflow-y-auto">
-            {activeTab === 'participants' ? (
-              <div className="flex flex-col gap-[55px] px-[30px]">
-                <PresentMembersSection />
-                <AbsentMembersSection onSendAlert={handleSendAlertClick} />
+        <div className="mt-[30px] flex min-h-0 flex-1 flex-col">
+          {activeTab === 'participants' ? (
+            <>
+              <div className="flex-1 space-y-8 overflow-y-auto">
+                <div className="flex flex-col gap-[55px] px-[30px]">
+                  <PresentMembersSection />
+                  <AbsentMembersSection onSendAlert={handleSendAlertClick} />
+                </div>
               </div>
-            ) : (
-              <ChatSection sendPublicMessage={sendPublicMessage} />
-            )}
-          </div>
 
-          {/* 하단 버튼 영역 */}
-          {activeTab === 'participants' && isCurrentUserHost && (
-            <div className="text-b5-medium sticky bottom-0 flex justify-center gap-4 px-6 py-5">
-              <button
-                className="text-gray-0 h-[47px] w-[152px] rounded-md bg-gray-700 py-[10px] hover:bg-gray-600"
-                onClick={() => {
-                  if (typeof onRequestRandomSpeaker === 'function') {
-                    void onRequestRandomSpeaker()
-                  }
-                }}
-              >
-                발언자 랜덤 선정
-              </button>
-              <button
-                className={`h-[47px] w-[152px] rounded-md transition ${
-                  isTimerVisible
-                    ? 'bg-locallit-red-500 text-white'
-                    : 'bg-gray-700 text-gray-100 hover:bg-gray-600'
-                }`}
-                onClick={() => setTimerVisible(!isTimerVisible)}
-              >
-                작업 타이머 시작
-              </button>
+              {/* 하단 버튼 영역 */}
+              {isCurrentUserHost && (
+                <div className="text-b5-medium sticky bottom-0 flex justify-center gap-4 px-6 py-5">
+                  <button
+                    className="text-gray-0 h-[47px] w-[152px] rounded-md bg-gray-700 py-[10px] hover:bg-gray-600"
+                    onClick={() => {
+                      if (typeof onRequestRandomSpeaker === 'function') {
+                        void onRequestRandomSpeaker()
+                      }
+                    }}
+                  >
+                    발언자 랜덤 선정
+                  </button>
+                  <button
+                    className={`h-[47px] w-[152px] rounded-md transition ${
+                      isTimerVisible
+                        ? 'bg-locallit-red-500 text-white'
+                        : 'bg-gray-700 text-gray-100 hover:bg-gray-600'
+                    }`}
+                    onClick={() => setTimerVisible(!isTimerVisible)}
+                  >
+                    작업 타이머 시작
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="flex min-h-0 flex-1 overflow-hidden">
+              <ChatSection sendPublicMessage={sendPublicMessage} />
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo, useState, useEffect, type ReactElement } from 'react'
+import { useCallback, useMemo, useState, useEffect, useRef, type ReactElement } from 'react'
 
 import type { MeetingChatMessage } from '@/stores/meetingStore'
 import { useMeetingStore } from '@/stores/meetingStore'
@@ -28,6 +28,8 @@ export default function ChatSection({ sendPublicMessage }: ChatSectionProps): Re
 
   const [isSending, setIsSending] = useState(false)
   const [lastSentContent, setLastSentContent] = useState<string | null>(null)
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null)
+  const shouldAutoScrollRef = useRef(true)
 
   const handleSendMessage = useCallback(
     (text: string) => {
@@ -111,12 +113,45 @@ export default function ChatSection({ sendPublicMessage }: ChatSectionProps): Re
     }
   }, [publicMessages, isSending, lastSentContent, currentUserId])
 
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    if (!shouldAutoScrollRef.current) return
+
+    const scrollToBottom = () => {
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
+    }
+
+    if ('requestAnimationFrame' in window) {
+      window.requestAnimationFrame(scrollToBottom)
+    } else {
+      scrollToBottom()
+    }
+  }, [publicMessages])
+
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    container.scrollTo({ top: container.scrollHeight })
+  }, [])
+
   const hasMessages = publicMessages.length > 0
+  const handleScroll = () => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    const { scrollTop, scrollHeight, clientHeight } = container
+    shouldAutoScrollRef.current = scrollHeight - (scrollTop + clientHeight) <= 80
+  }
 
   return (
-    <div className="flex h-full flex-col text-white">
+    <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden text-white">
       {/* 상단 영역 (채팅 목록 or 안내 문구) */}
-      <div className="flex-1 space-y-3 overflow-y-auto px-6">
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 space-y-3 overflow-y-auto px-6"
+        onScroll={handleScroll}
+      >
         {hasMessages ? (
           publicMessages.map((msg) => (
             <ChatMessageItem key={msg.id} message={msg} currentUserId={currentUserIdStr} />
