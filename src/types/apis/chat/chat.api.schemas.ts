@@ -41,7 +41,10 @@ export const postChatRoomSchema = {
   response: z.object({
     success: z.boolean(),
     message: z.string(),
-    data: z.object({ roomId: chatRoomSchema.shape.roomId }),
+    data: z.object({
+      roomId: chatRoomSchema.shape.roomId,
+      roomName: chatRoomSchema.shape.roomName,
+    }),
     code: z.string(),
     errors: z.null(),
   }),

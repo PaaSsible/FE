@@ -187,7 +187,7 @@ export default function ApplicantsPage() {
             ))}
           </div>
         ) : (
-          <div className="flex flex-1 flex-col items-center justify-center gap-7 text-center">
+          <div className="flex h-[60vh] flex-col items-center justify-center gap-7">
             <h2 className="text-s1-bold text-gray-1000">지원자가 없습니다.</h2>
             <p className="text-b2-medium text-gray-500">
               아직 지원자가 없습니다. 새로운 팀원을 기다려 보세요!

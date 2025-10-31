@@ -502,12 +502,14 @@ export const recruitHandlers: HttpHandler[] = [
             id: 1,
             content: 'string',
             writerId: 1,
+            writerImageUrl: null,
             deleted: false,
             children: [
               {
                 id: 2,
                 content: '대댓글',
                 writerId: 1,
+                writerImageUrl: null,
                 deleted: false,
                 children: [],
                 createdAt: '',
@@ -518,6 +520,7 @@ export const recruitHandlers: HttpHandler[] = [
                 id: 3,
                 content: '대댓글2',
                 writerId: 1,
+                writerImageUrl: null,
                 deleted: false,
                 children: [],
                 createdAt: '',

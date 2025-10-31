@@ -254,6 +254,7 @@ export default function BoardDetailPage(): JSX.Element {
             comments={recruitComments}
             totalCount={commentTotalCount}
             currentUserId={authUser?.id ?? null}
+            postWriterId={postForDisplay.writerId}
             isLoading={isCommentsLoading}
             error={commentsError}
             onRetry={refetchComments}
