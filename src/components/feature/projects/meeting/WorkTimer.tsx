@@ -195,7 +195,12 @@ export default function WorkTimer({
   }, [isHost, status])
 
   const canEdit = isHost && phase === 'edit'
-  const timerColor = phase === 'paused' ? 'text-locallit-red-500' : 'text-black'
+  const isTimerFinished = status === 'ended' && minutes === 0 && seconds === 0
+  const timerColor = isTimerFinished
+    ? 'text-locallit-red-500 font-bold'
+    : phase === 'paused'
+      ? 'text-locallit-red-500'
+      : 'text-black'
 
   if (!isHost) {
     if (status === 'running' || status === 'paused') {
