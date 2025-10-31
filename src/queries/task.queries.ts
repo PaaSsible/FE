@@ -1,5 +1,6 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory'
 import {
+  QueryClient,
   useMutation,
   useQueryClient,
   useSuspenseQuery,
@@ -7,8 +8,13 @@ import {
   type UseSuspenseQueryResult,
 } from '@tanstack/react-query'
 
-import { getTaskDetail, getTaskList, postTask } from '@/apis/task.api'
-import type { GetTaskDetail, GetTaskList, PostTask } from '@/types/apis/board/task.api.types'
+import { getTaskDetail, getTaskList, patchTaskDescription, postTask } from '@/apis/task.api'
+import type {
+  GetTaskDetail,
+  GetTaskList,
+  PatchTaskDescription,
+  PostTask,
+} from '@/types/apis/board/task.api.types'
 
 export const taskQueryKeys = createQueryKeys('Task', {
   list: (projectId: number) => ({
@@ -45,5 +51,18 @@ export const useGetTaskDetail = (
   return useSuspenseQuery({
     queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
     queryFn: () => getTaskDetail(path),
+  })
+}
+
+export const usePatchTaskDescription = (
+  path: PatchTaskDescription['Path'],
+): UseMutationResult<PatchTaskDescription['Response'], Error, PatchTaskDescription['Body']> => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (body: PatchTaskDescription['Body']) => patchTaskDescription(path, body),
+    onSuccess: () =>
+      queryClient.refetchQueries({
+        queryKey: taskQueryKeys.detail(path.taskId, path.boardId).queryKey,
+      }),
   })
 }

@@ -3,18 +3,21 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/ko' // 한국어 로케일
 import { ChevronLeft } from 'lucide-react'
-import { Fragment, useEffect, useState, type JSX } from 'react'
+import { Fragment, useState, type JSX } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ZodError } from 'zod'
+import { toast } from 'sonner'
 
-import { getTaskDetail, getTaskDetailComments, postTaskDetailComment } from '@/apis/task.api'
 import Button from '@/components/atoms/Button'
 import Separator from '@/components/feature/projects/Separator'
 import { Textarea } from '@/components/ui/textarea'
 import { useGetTaskComments, usePostTaskComment } from '@/queries/comment.queries'
-import { useGetTaskDetail } from '@/queries/task.queries'
-import { type Comment, type Task } from '@/types/entities/board/board.entitites.types'
+import { useGetTaskDetail, usePatchTaskDescription } from '@/queries/task.queries'
+import { type Comment } from '@/types/entities/board/board.entitites.types'
 import { getAuthUser } from '@/utils/authToken'
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const modeArray = ['Edit', 'Default'] as const
+type Mode = (typeof modeArray)[number]
 
 const ProjectTaskPage = (): JSX.Element => {
   const navigate = useNavigate()
@@ -33,8 +36,14 @@ const ProjectTaskPage = (): JSX.Element => {
     boardId: Number(projectId),
     taskId: Number(taskId),
   })
+  const { mutate: patchDescription } = usePatchTaskDescription({
+    boardId: Number(projectId),
+    taskId: Number(taskId),
+  })
   const comments = commentData.data
   const [newComment, setNewComment] = useState<Comment['comment']>('')
+  const [newDescription, setNewDescription] = useState<string>(task.description ?? '')
+  const [mode, setMode] = useState<Mode>('Default')
 
   dayjs.extend(relativeTime)
   dayjs.locale('ko')
@@ -45,6 +54,21 @@ const ProjectTaskPage = (): JSX.Element => {
       { comment: newComment.trim() },
       {
         onSuccess: () => setNewComment(''),
+      },
+    )
+  }
+
+  const onEditConfirm = () => {
+    patchDescription(
+      { description: newDescription },
+      {
+        onSuccess: () => {
+          toast.success('수정이 완료되었습니다.')
+          setMode('Default')
+        },
+        onError: () => {
+          toast.error('처리 중 오류가 발생하였습니다.')
+        },
       },
     )
   }
@@ -63,24 +87,44 @@ const ProjectTaskPage = (): JSX.Element => {
       </div>
 
       <div className="flex justify-between text-lg font-semibold opacity-80">
-        <span>{task.assignees.map((a) => a.name).join(',')}</span>
+        <span>담당자: {task.assignees.map((a) => a.name).join(', ')}</span>
         <span className="flex gap-6">
-          <span>
-            <span>마감일:</span> <span>{dayjs(task.dueDate).format('YYYY.MM.DD')}</span>
-          </span>
-          <span>
-            <span>관련 파트:</span> <span>{task.positions.join(',')}</span>
-          </span>
+          <span>마감일: {dayjs(task.dueDate).format('YYYY.MM.DD')}</span>
+          <span>관련 파트: {task.positions.join(',')}</span>
         </span>
       </div>
       <Separator className="mt-[1.8125rem] mb-[2.9375rem]" />
 
-      <p className="flex justify-start text-left text-lg font-normal break-all">
-        {task.description}
-      </p>
-      {/* <button className="mt-3 cursor-pointer self-start text-lg font-medium opacity-50">
-        설명 편집
-      </button> */}
+      {mode === 'Edit' ? (
+        <>
+          <Textarea
+            className="h-36 text-left text-lg font-normal"
+            placeholder="세부사항을 입력하세요"
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
+          />
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" className="mt-3" onClick={() => setMode('Default')}>
+              취소
+            </Button>
+            <Button className="mt-3" onClick={onEditConfirm}>
+              저장
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          <p className="flex justify-start text-left text-lg font-normal break-all">
+            {task.description}
+          </p>
+          <button
+            className="mt-3 cursor-pointer self-start text-lg font-medium opacity-50"
+            onClick={() => setMode('Edit')}
+          >
+            설명 편집
+          </button>
+        </>
+      )}
 
       {/* 댓글 섹션 */}
       <section className="flex flex-1 flex-col">
